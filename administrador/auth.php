@@ -14,7 +14,7 @@ if (empty($errors)) {
     updateLastLogIn($user_id);
 
     
-    $session->msg("s", "Bienvenido al Sistema Único de Información y Gestión de la CEDH (SUIGCEDH)");
+    $session->msg("s", "Bienvenido al Sistema Interno de Control de Declaración Patrimonial de la CEDH (SICDEPA)");
     $user = current_user();
     $nivel = $user['user_level'];
     insertAccion($user['id_user'],'"'.$user['username'].'" inició sesión.',0);

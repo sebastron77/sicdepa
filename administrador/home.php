@@ -11,11 +11,11 @@ if (!$session->isUserLoggedIn(true)) {
     <?php echo display_msg($msg); ?>
   </div>
   <div class="col-md-12">
-    <div class="panel" style="background-color: #1E2630; border-radius: 15px;">
+    <div class="panel" style="background-color: #A338A8; border-radius: 15px;">
       <div class="jumbotron text-center"
-        style="background: #7263F0; border-radius: 15px; border: 1px solid rgb(114, 99, 240);">
+        style="background: #A338A8; border-radius: 15px; border: 1px solid #A338A8;">
         <h1 style="color: white;">Página principal</h1>
-        <h4 style="color: white">Sistema Único de Información y Gestión de la CEDH (SUIGCEDH)</h4>
+        <h4 style="color: white">Sistema Interno de Control de Declaración Patrimonial de la CEDH (SICDEPA)</h4>
       </div>
     </div>
   </div>

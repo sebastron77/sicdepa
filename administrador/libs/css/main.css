@@ -13,7 +13,7 @@
 }
 
 .titleSis {
-  font-family: 'Jost', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   flex-grow: 1;
   justify-content: center;
   align-items: center;
@@ -21,8 +21,8 @@
   text-align: center;
   position: relative;
   z-index: 1;
-  color: #5f8ce9;
-  font-size: 40px;
+  color: #2b2b2b;
+  font-size: 50px;
   padding: 5px;
   font-weight: bold;
   /* text-shadow: #949393 0.1em 0.1em 0.2em; */
@@ -243,7 +243,7 @@ dataTables_wrapper form-inline dt-bootstrap no-footer {
 header > .logo {
   font-family: 'Jost', sans-serif;
   /* font-size: 70px; */
-  color: rgb(255, 255, 255);
+  color: #3A3D56;
   text-align: center;
   font-weight: 300;
   text-transform: uppercase;
@@ -251,7 +251,7 @@ header > .logo {
   display: inline-block;
   width: 260px;
   height: 100%;
-  background: #370494;
+  background: rgb(255, 255, 255);
   line-height: 20px;
   /* text-indent: 1px; */
 }
@@ -345,7 +345,7 @@ header > .logo {
   display: block;
 }
 .sidebar ul li a:hover {
-  color: #7263f0;
+  color: #A338A8;
 }
 .sidebar ul li a,
 ul.submenu li a {
@@ -379,7 +379,7 @@ ul.submenu {
 }
 ul.submenu li a:hover {
   background-color: #b8bebf;
-  color: #5900ff;
+  color: #A338A8;
 }
 ul.submenu li a {
   padding-left: 30px;
@@ -393,7 +393,7 @@ ul.submenu li:before {
   left: 20px;
   top: 0;
   bottom: 0;
-  border: 1px dotted #6200ff;
+  border: 1px dotted #A338A8;
   border-width: 0 0 0 1px;
 }
 ul.submenu li a:before {
@@ -403,7 +403,7 @@ ul.submenu li a:before {
   width: 7px;
   left: 20px;
   top: 10px;
-  border-top: 1px dotted #6200ff;
+  border-top: 1px dotted #A338A8;
 }
 
 table td h6 {
@@ -971,10 +971,10 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 .table-striped tbody tr:nth-of-type(odd) {
-  background-color: #f2f2ff;
+  background-color: #e1edff;
 }
 .thead-purple {
-  background-color: #7263f0;
+  background-color: #324da2;
   color: white;
 }
 

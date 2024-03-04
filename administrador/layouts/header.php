@@ -3,7 +3,7 @@
 <html lang="es">
 
 <head>
-  <link rel="icon" href="medios/favicon16.ico" type="image/ico">
+  <link rel="icon" href="medios/favicon-32x32.png" type="image/ico">
   <meta charset="UTF-8">
   <title>
     <?php
@@ -11,11 +11,9 @@
       echo remove_junk($page_title);
     elseif (!empty($user))
       echo ucfirst($user['username']);
-    else echo "SUIGCEDH";
+    else echo "SICDEPA";
     ?>
   </title>
-
-  <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous"> -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker3.min.css" />
   <link rel="stylesheet" href="libs/css/main.css" />
@@ -26,14 +24,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
-
-  <!-- <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap" rel="stylesheet"> -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
-
-  <!-- <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/css/dataTables.bootstrap.min.css" />
-  <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.1.0/css/responsive.bootstrap.min.css" type="text/css" />
-  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.2.1/css/buttons.bootstrap.min.css" type="text/css" /> -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
   <script src="html2pdf.bundle.min.js"></script>
   <script src="script.js"></script>
@@ -41,15 +33,12 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
-  <!-- <link href="https://fonts.googleapis.com/css2?family=Questrial&display=swap" rel="stylesheet"> -->
 
   <link href="https://harvesthq.github.io/chosen/chosen.css" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script src="https://harvesthq.github.io/chosen/chosen.jquery.js"></script>
-
-
-  <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous"> -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+  <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"> -->
 
   <script language="javascript">
     function myFunction() {
@@ -205,13 +194,12 @@
 <body style="background-color: #E3E3E3; color: white;">
   <?php if ($session->isUserLoggedIn(true)) : ?>
     <header id="header">
-      <div class="logo pull-left"><img border="0" src="medios/mor.png" width="50px" title="CEDH" alt="" style="margin-top: 2.5%; margin-left: -50%" />
-        <p style="margin-top: -13%; margin-left: 25%; font-size:23px; font-weight:bold;"> SUIGCEDH</p>
+      <div class="logo pull-left"><img border="0" src="medios/2bg.png" width="27px" title="CEDH" alt="" style="margin-top: 5%; margin-left: -48%" />
+        <p style="margin-top: -12%; margin-left: 20%; font-size:35px; font-weight:bold;"> ICDEPA</p>
       </div>
       <div class="header-content">
         <div class="header-date pull-left">
-          <strong><?php //echo make_date_no_seg(); 
-                  ?></strong>
+          <strong><?php //echo make_date_no_seg(); ?></strong>
         </div>
         <div class="pull-right clearfix">
           <ul class="info-menu list-inline list-unstyled">
@@ -253,86 +241,6 @@
       <?php if ($user['user_level'] === '1') : ?>
         <!-- Sistemas (Administrador) -->
         <?php include_once('super_admin_menu.php'); ?>
-
-      <?php elseif ($user['user_level'] === '2') : ?>
-        <!-- Presidencia y Secretaría Técnica -->
-        <?php include_once('presidencia_secTecnica_menu.php'); ?>
-
-      <?php elseif ($user['user_level'] === '3') : ?>
-        <!-- Secretaría Ejecutiva -->
-        <?php include_once('secretaria_ejecutiva.php'); ?>
-
-      <?php elseif ($user['user_level'] === '4') : ?>
-        <!-- Área médica y psicológica -->
-        <?php include_once('area_medica_menu.php'); ?>
-
-      <?php elseif ($user['user_level'] === '5' || $user['user_level'] === '20' || $user['user_level'] === '50') : ?>
-        <!-- Orientación y quejas -->
-        <?php include_once('quejas_menu.php'); ?>
-
-      <?php elseif ($user['user_level'] === '6') : ?>
-        <!-- Orientación y quejas -->
-        <?php include_once('centro_estudios_menu.php'); ?>
-
-      <?php elseif ($user['user_level'] === '7') : ?>
-        <!-- Presidencia y Secretaría Técnica -->
-        <?php include_once('presidencia_secTecnica_menu.php'); ?>
-
-      <?php elseif ($user['user_level'] === '8') : ?>
-        <!-- Presidencia y Secretaría Técnica -->
-        <?php include_once('secParticular_menu.php'); ?>
-
-      <?php elseif ($user['user_level'] === '9') : ?>
-        <!-- Presidencia y Secretaría Técnica -->
-        <?php include_once('servTec_menu.php'); ?>
-
-      <?php elseif ($user['user_level'] === '10') : ?>
-        <!-- Presidencia y Secretaría Técnica -->
-        <?php include_once('transaparencia_menu.php'); ?>
-
-      <?php elseif ($user['user_level'] === '11') : ?>
-        <!-- Presidencia y Secretaría Técnica -->
-        <?php include_once('archivo_menu.php'); ?>
-
-      <?php elseif ($user['user_level'] === '12') : ?>
-        <!-- Presidencia y Secretaría Técnica -->
-        <?php include_once('desaparecidos_menu.php'); ?>
-
-      <?php elseif ($user['user_level'] === '13') : ?>
-        <!-- Presidencia y Secretaría Técnica -->
-        <?php include_once('sistemas_menu.php'); ?>
-
-      <?php elseif ($user['user_level'] === '14') : ?>
-        <!-- Presidencia y Secretaría Técnica -->
-        <?php include_once('administrativo_menu.php'); ?>
-
-      <?php elseif ($user['user_level'] === '15') : ?>
-        <!-- Presidencia y Secretaría Técnica -->
-        <?php include_once('comSocial_menu.php'); ?>
-
-      <?php elseif ($user['user_level'] === '16') : ?>
-        <!-- Presidencia y Secretaría Técnica -->
-        <?php include_once('orgInterno_menu.php'); ?>
-
-      <?php elseif ($user['user_level'] === '17') : ?>
-        <!-- Presidencia y Secretaría Técnica -->
-        <?php include_once('agendas_menu.php'); ?>
-
-      <?php elseif ($user['user_level'] === '18') : ?>
-        <!-- Presidencia y Secretaría Técnica -->
-        <?php include_once('oficialia_menu.php'); ?>
-		
-		<?php elseif ($user['user_level'] === '19') : ?>
-        <!-- Presidencia y Secretaría Técnica -->
-        <?php include_once('mediacion_menu.php'); ?>
-
-      <?php elseif ($user['user_level'] === '21') : ?>
-        <!-- Presidencia y Secretaría Técnica -->
-        <?php include_once('consejo_menu.php'); ?>
-
-      <?php elseif ($user['user_level'] === '51') : ?>
-        <!-- Presidencia y Secretaría Técnica -->
-        <?php include_once('operador_tecnica_menu.php'); ?>
 
       <?php endif; ?>
     </div>
