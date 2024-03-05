@@ -127,7 +127,7 @@ include_once('layouts/header.php'); ?>
 <div class="panel panel-default">
     <div class="panel-heading">
         <div class="form-group clearfix">
-            <a href="detalles_usuario.php" class="btn btn-md btn-success" data-toggle="tooltip" title="Regresar">
+            <a href="datos_curri_declarante.php" class="btn btn-md btn-success" data-toggle="tooltip" title="Regresar">
                 Regresar
             </a>
         </div>
@@ -211,15 +211,7 @@ include_once('layouts/header.php'); ?>
                 <div class="modal-content">
                     <span class="close2">&times;</span>
                     <div class="row">
-                        <!-- <?php if ($id_cat_esc == 4) { ?>
-                                <p style="margin-top: -10px; font-weight: bold;">SI ES CARRERA TÉCNICA ESPECIFIQUE:</p>
-                            <?php }
-                                if ($id_cat_esc == 5) { ?>
-                                <p style="margin-top: -10px; font-weight: bold;">SI ES LICENCIATURA, MAESTRÍA O DIPLOMADO ESPECIFIQUE:</p>
-                            <?php }
-                                if ($id_cat_esc == 6) { ?>
-                                <p style="margin-top: -10px; font-weight: bold;">SI ES DIPLOMADO ESPECIFIQUE:</p>
-                            <?php } ?> -->
+                        <p style="margin-top: -10px; font-weight: bold;">SI ES CARRERA TÉCNICA, LICENCIATURA, MAESTRÍA O DIPLOMADO ESPECIFIQUE:</p>
 
                         <div class="col-md-4">
                             <div class="form-group">
