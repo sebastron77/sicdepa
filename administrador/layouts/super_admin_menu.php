@@ -21,6 +21,7 @@
     <ul style="margin-top:25px" class="nav submenu">
       <li><a href="detalles_usuario.php" style="color:#3a3d44">Datos Generales</a></li>
       <li><a href="datos_curri_declarante.php" style="color:#3a3d44">Datos Curriculares</a></li>
+      <li><a href="exp_laboral.php" style="color:#3a3d44">Experiencia Laboral</a></li>
     </ul>
   </li>
   <li style="margin-top:13px;">

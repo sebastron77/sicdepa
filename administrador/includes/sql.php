@@ -44,6 +44,22 @@ function find_all_det_estudios()
   return $result;
 }
 
+function find_all_exp_laboral()
+{
+  $sql = "SELECT el.id_detalle_usuario, el.ninguno, el.id_cat_sector, cs.descripcion as sector, el.id_cat_poder, cp.descripcion as poder, 
+          el.id_cat_ambito, ca.descripcion as ambito, el.nombre_inst_empresa, el.unidad_admin_area, el.puesto_cargo, el.funcion_principal, el.ingreso, el.egreso
+          FROM rel_exp_laboral el
+          LEFT JOIN cat_sector cs
+          ON el.id_cat_sector = cs.id_cat_sector
+          LEFT JOIN cat_poder cp
+          ON el.id_cat_poder = cp.id_cat_poder
+          LEFT JOIN cat_ambito ca
+          ON el.id_cat_ambito = ca.id_cat_ambito
+          ORDER BY el.id_detalle_usuario ASC";
+  $result = find_by_sql($sql);
+  return $result;
+}
+
 function find_all_cat_localidades()
 {
   $sql = "SELECT * FROM cat_localidades WHERE estatus=1 ORDER BY descripcion ASC";
