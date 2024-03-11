@@ -46,8 +46,9 @@ function find_all_det_estudios()
 
 function find_all_exp_laboral()
 {
-  $sql = "SELECT el.id_detalle_usuario, el.ninguno, el.id_cat_sector, cs.descripcion as sector, el.id_cat_poder, cp.descripcion as poder, 
-          el.id_cat_ambito, ca.descripcion as ambito, el.nombre_inst_empresa, el.unidad_admin_area, el.puesto_cargo, el.funcion_principal, el.ingreso, el.egreso
+  $sql = "SELECT el.id_rel_exp_lab, el.id_detalle_usuario, el.ninguno, el.id_cat_sector, cs.descripcion as sector, el.id_cat_poder, cp.descripcion as poder, 
+          el.id_cat_ambito, ca.descripcion as ambito, el.nombre_inst_empresa, el.unidad_admin_area, el.puesto_cargo, el.funcion_principal, el.ingreso, 
+          el.egreso, du.nombre, du.apellido_paterno, du.apellido_materno, el.fecha_creacion
           FROM rel_exp_laboral el
           LEFT JOIN cat_sector cs
           ON el.id_cat_sector = cs.id_cat_sector
@@ -55,6 +56,8 @@ function find_all_exp_laboral()
           ON el.id_cat_poder = cp.id_cat_poder
           LEFT JOIN cat_ambito ca
           ON el.id_cat_ambito = ca.id_cat_ambito
+          LEFT JOIN detalles_usuario du
+          ON el.id_detalle_usuario = du.id_det_usuario
           ORDER BY el.id_detalle_usuario ASC";
   $result = find_by_sql($sql);
   return $result;
@@ -104,6 +107,7 @@ function find_by_id($table, $id, $nombre_id)
       return null;
   }
 }
+
 /*--------------------------------------------------------------*/
 /*  Funcion para encontrar datos por su id en una tabla
 /*--------------------------------------------------------------*/
@@ -142,6 +146,16 @@ function find_by_id_detalle($id)
   LEFT JOIN cat_municipios m
   ON d.municipio = m.id_cat_mun
   WHERE d.id_det_usuario='{$db->escape($id)}' LIMIT 1");
+  if ($result = $db->fetch_assoc($sql))
+    return $result;
+  else
+    return null;
+}
+
+function find_by_detalle_tabla($tabla, $id_detalle)
+{
+  global $db;
+  $sql = $db->query("SELECT COUNT(id_detalle_usuario) as total FROM {$db->escape($tabla)} WHERE id_detalle_usuario='{$db->escape($id_detalle)}'");
   if ($result = $db->fetch_assoc($sql))
     return $result;
   else
@@ -448,6 +462,27 @@ function find_all_cuentas()
   $sql .= "LEFT JOIN detalles_usuario d ON d.id_det_usuario = u.id_detalle_user ";
   $sql .= "LEFT JOIN grupo_usuarios g ";
   $sql .= "ON g.nivel_grupo=u.user_level ORDER BY d.nombre";
+  $result = find_by_sql($sql);
+  return $result;
+}
+
+function find_by_id_all_exp($id)
+{
+  $id = (int)$id;
+  $sql = "SELECT el.id_rel_exp_lab, el.id_detalle_usuario, el.ninguno, el.id_cat_sector, cs.descripcion as sector, el.id_cat_poder, cp.descripcion as poder, 
+  el.id_cat_ambito, ca.descripcion as ambito, el.nombre_inst_empresa, el.unidad_admin_area, el.puesto_cargo, el.funcion_principal, el.ingreso, 
+  el.egreso, du.nombre, du.apellido_paterno, du.apellido_materno, el.fecha_creacion
+  FROM rel_exp_laboral el
+  LEFT JOIN cat_sector cs
+  ON el.id_cat_sector = cs.id_cat_sector
+  LEFT JOIN cat_poder cp
+  ON el.id_cat_poder = cp.id_cat_poder
+  LEFT JOIN cat_ambito ca
+  ON el.id_cat_ambito = ca.id_cat_ambito
+  LEFT JOIN detalles_usuario du
+  ON el.id_detalle_usuario = du.id_det_usuario
+  WHERE id_detalle_usuario = $id
+  ORDER BY el.id_detalle_usuario ASC";
   $result = find_by_sql($sql);
   return $result;
 }
@@ -966,15 +1001,4 @@ function find_all_status($table)
   if (tableExists($table)) {
     return find_by_sql("SELECT * FROM " . $db->escape($table) . " WHERE estatus = 1");
   }
-}
-
-/*--------------------------------------------------------------*/
-/* Funcion para mostrar las acuerdo de recomendaciones
-/*--------------------------------------------------------------*/
-function find_acuerdo_rec($id)
-{
-  global $db;
-  $sql  = "SELECT * FROM acuerdos_recomendaciones 
-            WHERE id_recomendacion = '{$id}'";
-  return $db->query($sql);
 }
