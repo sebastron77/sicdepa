@@ -8,6 +8,7 @@ $cat_est_civ = find_all('cat_estado_civil');
 $cat_regimen_matrimonial = find_all('cat_regimen_matrimonial');
 $cat_nacionalidad = find_all('cat_nacionalidades');
 $cat_entidad_fed = find_all('cat_entidad_fed');
+page_require_level(3);
 ?>
 <?php header('Content-type: text/html; charset=utf-8');
 if (isset($_POST['add_detalle_usuario'])) {

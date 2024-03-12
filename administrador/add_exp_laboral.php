@@ -8,6 +8,7 @@ $id_detalle_usuario = $user['id_detalle_user'];
 $cat_sector = find_all('cat_sector');
 $cat_poder = find_all('cat_poder');
 $cat_ambito = find_all('cat_ambito');
+page_require_level(3);
 ?>
 <style>
     .modal {

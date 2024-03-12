@@ -12,6 +12,7 @@ if ($user['user_level'] >= 3) {
     $all_detalles2 = find_by_id_all_exp($user['id_detalle_user']);
     $total = find_by_detalle_tabla('rel_exp_laboral', $user['id_detalle_user']);
 }
+page_require_level(3);
 ?>
 <?php include_once('layouts/header.php'); ?>
 

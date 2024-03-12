@@ -12,6 +12,7 @@ $cat_escolaridad = find_all('cat_escolaridad');
 $cat_periodos = find_all('cat_periodos_cursados');
 $cat_estatus = find_all('cat_estatus_estudios');
 $cat_documentos = find_all('cat_documento_obtenido');
+page_require_level(3);
 ?>
 <style>
     .modal {

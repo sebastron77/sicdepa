@@ -7,8 +7,6 @@ require_once('includes/load.php');
 $all_users = find_all_cuentas();
 $user = current_user();
 $nivel = $user['user_level'];
-
-
 $id_usuario = $user['id_user'];
 $id_user = $user['id_user'];
 $busca_area = area_usuario($id_usuario);
@@ -61,7 +59,7 @@ page_require_level(1);
                 <td class="text-center"><?php echo count_id(); ?></td>
                 <!-- <td class="text-center"><?php echo remove_junk(ucwords($a_user['id'])) ?></td> -->
                 <td><?php echo remove_junk(ucwords($a_user['nombre'])) ?></td>
-                <td><?php echo remove_junk(ucwords($a_user['apellidos'])) ?></td>
+                <td><?php echo remove_junk(ucwords($a_user['apellido_paterno'] . ' ' . $a_user['apellido_materno'])) ?></td>
                 <td><?php echo remove_junk($a_user['username']) ?></td>
                 <?php if ($otro == 1) : ?>
                 <td class="text-center"><?php echo remove_junk(ucwords($a_user['nombre_grupo'])) ?></td>

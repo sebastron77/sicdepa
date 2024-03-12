@@ -385,7 +385,6 @@ function authenticate_v2($username = '', $password = '')
 function current_user()
 {
   static $current_user;
-  global $db;
   if (!$current_user) {
     if (isset($_SESSION['user_id'])) :
       $user_id = intval($_SESSION['user_id']);
@@ -399,10 +398,7 @@ function current_user()
 /*----------------------------------------------------------------------------------------*/
 function find_all_cuentas()
 {
-  global $db;
-  $results = array();
-  $sql = "SELECT u.id_user,u.id_detalle_user,d.nombre,d.apellidos,u.username,u.user_level,u.status,u.ultimo_login,";
-  $sql .= "g.nombre_grupo ";
+  $sql = "SELECT u.id_user,u.id_detalle_user,d.nombre,d.apellido_paterno,d.apellido_materno,u.username,u.user_level,u.status,u.ultimo_login,g.nombre_grupo ";
 
   $sql .= "FROM users u ";
   $sql .= "LEFT JOIN detalles_usuario d ON d.id_det_usuario = u.id_detalle_user ";
@@ -418,7 +414,6 @@ function find_all_cuentas()
 function find_all_cargos()
 {
   $sql = "SELECT u.id_cargos,u.nombre_cargo,u.id_area,u.estatus_cargo,a.nombre_area ";
-
   $sql .= "FROM cargos u ";
   $sql .= "LEFT JOIN area a ";
   $sql .= "ON u.id_area=a.id_area ORDER BY a.nombre_area";
@@ -632,12 +627,10 @@ function area_usuario($id_usuario)
   global $db;
   $id_usuario = (int)$id_usuario;
 
-  $sql = $db->query("SELECT g.nivel_grupo, a.id_area  
+  $sql = $db->query("SELECT g.nivel_grupo 
                       FROM  grupo_usuarios g
                       LEFT JOIN users u ON u.user_level = g.nivel_grupo
-                      LEFT JOIN detalles_usuario d ON u.id_detalle_user = d.id_det_usuario 
-                      LEFT JOIN cargos c ON c.id_cargos= d.id_cargo 
-                      LEFT JOIN area a ON a.id_area = c.id_area 
+                      LEFT JOIN detalles_usuario d ON u.id_detalle_user = d.id_det_usuario
                       WHERE u.id_user = '{$db->escape($id_usuario)}' LIMIT 1");
   if ($result = $db->fetch_assoc($sql))
     return $result;
@@ -904,6 +897,30 @@ function find_all_det_estudios()
           LEFT JOIN detalles_usuario us
           ON de.id_detalle_usuario = us.id_det_usuario
           ORDER BY de.id_detalle_usuario ASC";
+  $result = find_by_sql($sql);
+  return $result;
+}
+
+function find_by_id_estudios($id)
+{
+  $sql = "SELECT de.id_rel_detalle_estudios, de.id_detalle_usuario, esc.descripcion as escolaridad, de.inst_educativa, pc.descripcion as periodo_cursado,
+          dob.descripcion as doc_obt, de.ubic_inst, ef.descripcion as ent_fed, m.descripcion as municipio, de.carrera_area_con, ee.descripcion as estatus_est, de.num_ced_prof, us.nombre, us.apellido_paterno, us.apellido_materno, de.estatus_detalle
+          FROM rel_detalle_estudios de
+          LEFT JOIN cat_escolaridad esc
+          ON de.id_cat_escolaridad = esc.id_cat_escolaridad
+          LEFT JOIN cat_periodos_cursados pc
+          ON de.id_cat_periodo_cursado = pc.id_cat_periodo_cursado
+          LEFT JOIN cat_documento_obtenido dob
+          ON de.id_cat_documento_obtenido = dob.id_cat_documento_obtenido 
+          LEFT JOIN cat_entidad_fed ef
+          ON de.id_cat_ent_fed = ef.id_cat_ent_fed
+          LEFT JOIN cat_estatus_estudios ee
+          ON de.id_cat_estatus_estudios = ee.id_cat_estatus_estudios
+          LEFT JOIN cat_municipios m
+          ON de.id_cat_mun = m.id_cat_mun
+          LEFT JOIN detalles_usuario us
+          ON de.id_detalle_usuario = us.id_det_usuario
+          WHERE id_detalle_usuario = $id";
   $result = find_by_sql($sql);
   return $result;
 }

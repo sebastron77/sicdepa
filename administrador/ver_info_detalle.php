@@ -8,6 +8,7 @@ header('Content-Type: text/html; charset=UTF-8');
 $e_detalle = find_by_id_detalle((int) $_GET['id']);
 $user = current_user();
 $nivel = $user['user_level'];
+page_require_level(3);
 ?>
 <?php include_once('layouts/header.php'); ?>
 <div class="row">

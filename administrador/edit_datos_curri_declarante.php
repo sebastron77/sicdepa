@@ -13,6 +13,7 @@ $cat_periodos = find_all('cat_periodos_cursados');
 $cat_estatus = find_all('cat_estatus_estudios');
 $cat_documentos = find_all('cat_documento_obtenido');
 $estudios = find_by_id('rel_detalle_estudios', $_GET['id'], 'id_rel_detalle_estudios');
+page_require_level(3);
 ?>
 
 <?php

@@ -9,6 +9,7 @@ $cat_sector = find_all('cat_sector');
 $cat_poder = find_all('cat_poder');
 $cat_ambito = find_all('cat_ambito');
 $exp_lab = find_by_id('rel_exp_laboral', $_GET['id'], 'id_rel_exp_lab');
+page_require_level(3);
 ?>
 
 <?php

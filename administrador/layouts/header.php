@@ -243,6 +243,10 @@
         <?php include_once('super_admin_menu.php'); ?>
 
       <?php endif; ?>
+      <?php if ($user['user_level'] === '3') : ?>
+        <!-- Sistemas (Administrador) -->
+        <?php include_once('declarantes_menu.php'); ?>
+      <?php endif; ?>
     </div>
   <?php endif; ?>
 

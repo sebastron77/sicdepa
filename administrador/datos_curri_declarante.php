@@ -4,12 +4,13 @@ $page_title = 'Datos Curriculares';
 require_once('includes/load.php');
 ?>
 <?php
+page_require_level(3);
 $user = current_user();
 if ($user['user_level'] <= 2) {
     $all_detalles = find_all_det_estudios();
 }
 if ($user['user_level'] >= 3) {
-    $all_detalles = find_by_id('rel_detalle_estudios', $user['id_detalle_user'], 'id_detalle_usuario');
+    $all_detalles = find_by_id_estudios($user['id_detalle_user']);
 }
 ?>
 <?php include_once('layouts/header.php'); ?>
@@ -60,21 +61,9 @@ if ($user['user_level'] >= 3) {
                                 </td> -->
                                 <td class="text-center">
                                     <div class="btn-group">
-                                        <!-- <a href="ver_info_detalle.php?id=<?php echo (int)$a_detalle['id_rel_detalle_estudios']; ?>" class="btn btn-md btn-info" data-toggle="tooltip" title="Ver información" style="height: 32px; width: 32px;">
-                                            <span class="material-symbols-rounded" style="font-size: 20px; color: white; margin-top: 2px; margin-left: -3px;">visibility</span>
-                                        </a> -->
                                         <a href="edit_datos_curri_declarante.php?id=<?php echo (int)$a_detalle['id_rel_detalle_estudios']; ?>" class="btn btn-warning btn-md" title="Editar" data-toggle="tooltip" style="height: 32px; width: 32px;">
                                             <span class="material-symbols-rounded" style="font-size: 20px; color: black; margin-top: 2px; margin-left: -3px;">edit</span>
                                         </a>
-                                        <!-- <?php if ($a_detalle['estatus_detalle'] == 0) : ?>
-                                            <a href="activate_detalle_usuario.php?id=<?php echo (int)$a_detalle['id_rel_detalle_estudios']; ?>" class="btn btn-success btn-md" title="Activar" data-toggle="tooltip" style="height: 32px; width: 32px;">
-                                                <span class="material-symbols-rounded" style="font-size: 20px; color: white; margin-top: 2px; margin-left: -3px;">check</span>
-                                            </a>
-                                        <?php else : ?>
-                                            <a href="inactivate_detalle_usuario.php?id=<?php echo (int)$a_detalle['id_rel_detalle_estudios']; ?>" class="btn btn-danger btn-md" title="Inactivar" data-toggle="tooltip" style="height: 32px; width: 32px;">
-                                                <span class="material-symbols-rounded" style="font-size: 20px; color: white; margin-top: 2px; margin-left: -3px;">block</span>
-                                            </a>
-                                        <?php endif; ?> -->
                                     </div>
                                 </td>
                             </tr>
