@@ -124,13 +124,13 @@ if (isset($_POST['add_datos_curri_declarante'])) {
 include_once('layouts/header.php'); ?>
 <?php echo display_msg($msg); ?>
 <!-- <div class="row"> -->
+    <div class="form-group clearfix">
+        <a href="datos_curri_declarante.php" class="btn btn-md btn-success" data-toggle="tooltip" title="Regresar">
+            Regresar
+        </a>
+    </div>
 <div class="panel panel-default">
     <div class="panel-heading">
-        <div class="form-group clearfix">
-            <a href="datos_curri_declarante.php" class="btn btn-md btn-success" data-toggle="tooltip" title="Regresar">
-                Regresar
-            </a>
-        </div>
         <strong>
             <span class="material-symbols-outlined" style="color: #3a3d44">
                 school
@@ -204,7 +204,7 @@ include_once('layouts/header.php'); ?>
                             </div>
                         </div>
                     </div>
-                    <button type="submit" name="add_datos_curri_declarante" class="btn btn-primary btn-sm">Guardar</button>
+                    <button type="submit" name="add_datos_curri_declarante" style="width: 75px;" class="btn btn-primary btn-sm">Guardar</button>
                 </div>
             </div>
             <div id="myModal2" class="modal">
@@ -297,7 +297,7 @@ include_once('layouts/header.php'); ?>
                             </div>
                         </div>
                     </div>
-                    <button type="submit" name="add_datos_curri_declarante" class="btn btn-primary btn-sm">Guardar</button>
+                    <button type="submit" name="add_datos_curri_declarante" style="width: 70px;" class="btn btn-primary btn-sm">Guardar</button>
                 </div>
             </div>
         </form>

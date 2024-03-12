@@ -80,11 +80,11 @@ if ($user['user_level'] >= 3) {
                                         <td class="text-center"><?php echo '-' ?></td>
                                         <td class="text-center"><?php echo remove_junk($a_detalle2['fecha_creacion']) ?></td>
                                         <td class="text-center">
-                                            <div class="btn-group">
+                                            <!-- <div class="btn-group">
                                                 <a href="edit_exp_laboral.php?id=<?php echo (int)$a_detalle2['id_rel_exp_lab']; ?>" class="btn btn-warning btn-md" title="Editar" data-toggle="tooltip" style="height: 32px; width: 32px;">
                                                     <span class="material-symbols-rounded" style="font-size: 20px; color: black; margin-top: 2px; margin-left: -3px;">edit</span>
                                                 </a>
-                                            </div>
+                                            </div> -->
                                         </td>
                                     </tr>
                                 <?php endif; ?>
@@ -106,11 +106,13 @@ if ($user['user_level'] >= 3) {
                                     <td><?php echo remove_junk($a_detalle['nombre_inst_empresa']) ?></td>
                                     <td class="text-center"><?php echo remove_junk($a_detalle['fecha_creacion']) ?></td>
                                     <td class="text-center">
+                                        <?php if($a_detalle['ninguno'] == 0): ?>
                                         <div class="btn-group">
                                             <a href="edit_exp_laboral.php?id=<?php echo (int)$a_detalle['id_rel_exp_lab']; ?>" class="btn btn-warning btn-md" title="Editar" data-toggle="tooltip" style="height: 32px; width: 32px;">
                                                 <span class="material-symbols-rounded" style="font-size: 20px; color: black; margin-top: 2px; margin-left: -3px;">edit</span>
                                             </a>
                                         </div>
+                                        <?php endif; ?>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

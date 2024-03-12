@@ -12,7 +12,7 @@ $cat_escolaridad = find_all('cat_escolaridad');
 $cat_periodos = find_all('cat_periodos_cursados');
 $cat_estatus = find_all('cat_estatus_estudios');
 $cat_documentos = find_all('cat_documento_obtenido');
-$estudios = find_by_id('rel_detalle_estudios', $_GET['id'], 'id_rel_detalle_estudios')
+$estudios = find_by_id('rel_detalle_estudios', $_GET['id'], 'id_rel_detalle_estudios');
 ?>
 
 <?php
@@ -63,13 +63,13 @@ if (isset($_POST['update'])) {
 <?php
 include_once('layouts/header.php'); ?>
 <?php echo display_msg($msg); ?>
+<div class="form-group clearfix">
+    <a href="datos_curri_declarante.php" class="btn btn-md btn-success" data-toggle="tooltip" title="Regresar">
+        Regresar
+    </a>
+</div>
 <div class="panel panel-default">
     <div class="panel-heading">
-        <div class="form-group clearfix">
-            <a href="datos_curri_declarante.php" class="btn btn-md btn-success" data-toggle="tooltip" title="Regresar">
-                Regresar
-            </a>
-        </div>
         <strong>
             <span class="material-symbols-outlined" style="color: #3a3d44">
                 school
@@ -77,12 +77,13 @@ include_once('layouts/header.php'); ?>
             <p style="margin-top: -22px; margin-left: 32px;">Datos Curriculares del Declarante</p>
         </strong>
     </div>
+
     <div class="panel-body">
         <p style="margin-top: -10px; font-weight: bold;">ESCOLARIDAD</p>
         <form method="post" action="edit_datos_curri_declarante.php?id=<?php echo (int)$estudios['id_rel_detalle_estudios']; ?>">
             <?php if ($estudios['id_cat_escolaridad'] <= 3) : ?>
                 <div class="row">
-                    <p style="margin-top: -10px; font-weight: bold;">SI ES CARRERA TÉCNICA, LICENCIATURA, MAESTRÍA O DIPLOMADO ESPECIFIQUE:</p>
+                    <p style="margin-top: -10px; font-weight: bold;">SI ES PRIMARIA, SECUNDARIA O BACHILLERATO ESPECIFIQUE:</p>
                 </div>
                 <div class="row">
                     <div class="col-md-4">
@@ -239,7 +240,7 @@ include_once('layouts/header.php'); ?>
                     </div>
                 </div>
             <?php endif; ?>
-            <button type="submit" name="update" class="btn btn-primary btn-sm">Guardar</button>
+            <button type="submit" name="update" class="btn btn-primary btn-md">Guardar</button>
         </form>
     </div>
 </div>

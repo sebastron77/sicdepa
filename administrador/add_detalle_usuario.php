@@ -64,6 +64,9 @@ if (isset($_POST['add_detalle_usuario'])) {
 <?php header('Content-type: text/html; charset=utf-8');
 include_once('layouts/header.php'); ?>
 <?php echo display_msg($msg); ?>
+<a href="detalles_usuario.php" style="margin-top: -10px; margin-bottom: 10px;" class="btn btn-md btn-success" data-toggle="tooltip" title="Regresar">
+    Regresar
+</a>
 <div class="row">
     <div class="panel panel-default">
         <div class="panel-heading">
@@ -248,9 +251,6 @@ include_once('layouts/header.php'); ?>
                 </div>
         </div>
         <div class="form-group clearfix">
-            <a href="detalles_usuario.php" class="btn btn-md btn-success" data-toggle="tooltip" title="Regresar">
-                Regresar
-            </a>
             <button type="submit" name="add_detalle_usuario" class="btn btn-primary">Guardar</button>
         </div>
         </form>

@@ -67,6 +67,9 @@ if (isset($_POST['update'])) {
 }
 ?>
 <?php include_once('layouts/header.php'); ?>
+<a href="detalles_usuario.php" style="margin-top: -10px; margin-bottom: 10px;" class="btn btn-md btn-success" data-toggle="tooltip" title="Regresar">
+    Regresar
+</a>
 <div class="row">
     <div class="col-md-12"> <?php echo display_msg($msg); ?> </div>
     <div class="col-md-12">
@@ -270,9 +273,6 @@ if (isset($_POST['update'])) {
                         </div>
                     </div>
                     <div class="form-group clearfix">
-                        <a href="detalles_usuario.php" class="btn btn-md btn-success" data-toggle="tooltip" title="Regresar">
-                            Regresar
-                        </a>
                         <button type="submit" name="update" class="btn btn-info">Actualizar</button>
                     </div>
                 </form>

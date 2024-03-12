@@ -20,49 +20,6 @@ function find_all_order($table, $order)
   }
 }
 
-function find_all_det_estudios()
-{
-  $sql = "SELECT de.id_rel_detalle_estudios, de.id_detalle_usuario, esc.descripcion as escolaridad, de.inst_educativa, pc.descripcion as periodo_cursado,
-          dob.descripcion as doc_obt, de.ubic_inst, ef.descripcion as ent_fed, m.descripcion as municipio, de.carrera_area_con, ee.descripcion as estatus_est, de.num_ced_prof, us.nombre, us.apellido_paterno, us.apellido_materno, de.estatus_detalle
-          FROM rel_detalle_estudios de
-          LEFT JOIN cat_escolaridad esc
-          ON de.id_cat_escolaridad = esc.id_cat_escolaridad
-          LEFT JOIN cat_periodos_cursados pc
-          ON de.id_cat_periodo_cursado = pc.id_cat_periodo_cursado
-          LEFT JOIN cat_documento_obtenido dob
-          ON de.id_cat_documento_obtenido = dob.id_cat_documento_obtenido 
-          LEFT JOIN cat_entidad_fed ef
-          ON de.id_cat_ent_fed = ef.id_cat_ent_fed
-          LEFT JOIN cat_estatus_estudios ee
-          ON de.id_cat_estatus_estudios = ee.id_cat_estatus_estudios
-          LEFT JOIN cat_municipios m
-          ON de.id_cat_mun = m.id_cat_mun
-          LEFT JOIN detalles_usuario us
-          ON de.id_detalle_usuario = us.id_det_usuario
-          ORDER BY de.id_detalle_usuario ASC";
-  $result = find_by_sql($sql);
-  return $result;
-}
-
-function find_all_exp_laboral()
-{
-  $sql = "SELECT el.id_rel_exp_lab, el.id_detalle_usuario, el.ninguno, el.id_cat_sector, cs.descripcion as sector, el.id_cat_poder, cp.descripcion as poder, 
-          el.id_cat_ambito, ca.descripcion as ambito, el.nombre_inst_empresa, el.unidad_admin_area, el.puesto_cargo, el.funcion_principal, el.ingreso, 
-          el.egreso, du.nombre, du.apellido_paterno, du.apellido_materno, el.fecha_creacion
-          FROM rel_exp_laboral el
-          LEFT JOIN cat_sector cs
-          ON el.id_cat_sector = cs.id_cat_sector
-          LEFT JOIN cat_poder cp
-          ON el.id_cat_poder = cp.id_cat_poder
-          LEFT JOIN cat_ambito ca
-          ON el.id_cat_ambito = ca.id_cat_ambito
-          LEFT JOIN detalles_usuario du
-          ON el.id_detalle_usuario = du.id_det_usuario
-          ORDER BY el.id_detalle_usuario ASC";
-  $result = find_by_sql($sql);
-  return $result;
-}
-
 function find_all_cat_localidades()
 {
   $sql = "SELECT * FROM cat_localidades WHERE estatus=1 ORDER BY descripcion ASC";
@@ -134,28 +91,18 @@ function find_by_id_detalle($id)
                       d.id_cat_estado_civil, cec.descripcion as estado_civil, d.id_cat_regimen_matrimonial, crm.descripcion as regimen_matrimonial, d.pais_nac,
                       d.nacionalidad, n.descripcion as nacionalidad, d.entidad_nac, en.descripcion as ent_nac, d.telefono, d.lugar_ubica_dom, d.calle_num,
                       d.colonia, d.municipio, m.descripcion as mun, d.tel_part, d.entidad_resid, en.descripcion as ent_resid, d.cod_post, d.estatus_detalle
-  FROM detalles_usuario d 
-  LEFT JOIN cat_estado_civil cec 
-  ON d.id_cat_estado_civil = cec.id_cat_estado_civil 
-  LEFT JOIN cat_regimen_matrimonial crm
-  ON d.id_cat_regimen_matrimonial = crm.id_cat_regimen_matrimonial
-  LEFT JOIN cat_nacionalidades n
-  ON d.nacionalidad = n.id_cat_nacionalidad
-  LEFT JOIN cat_entidad_fed en
-  ON d.entidad_nac = en.id_cat_ent_fed
-  LEFT JOIN cat_municipios m
-  ON d.municipio = m.id_cat_mun
-  WHERE d.id_det_usuario='{$db->escape($id)}' LIMIT 1");
-  if ($result = $db->fetch_assoc($sql))
-    return $result;
-  else
-    return null;
-}
-
-function find_by_detalle_tabla($tabla, $id_detalle)
-{
-  global $db;
-  $sql = $db->query("SELECT COUNT(id_detalle_usuario) as total FROM {$db->escape($tabla)} WHERE id_detalle_usuario='{$db->escape($id_detalle)}'");
+                      FROM detalles_usuario d 
+                      LEFT JOIN cat_estado_civil cec 
+                      ON d.id_cat_estado_civil = cec.id_cat_estado_civil 
+                      LEFT JOIN cat_regimen_matrimonial crm
+                      ON d.id_cat_regimen_matrimonial = crm.id_cat_regimen_matrimonial
+                      LEFT JOIN cat_nacionalidades n
+                      ON d.nacionalidad = n.id_cat_nacionalidad
+                      LEFT JOIN cat_entidad_fed en
+                      ON d.entidad_nac = en.id_cat_ent_fed
+                      LEFT JOIN cat_municipios m
+                      ON d.municipio = m.id_cat_mun
+                      WHERE d.id_det_usuario='{$db->escape($id)}' LIMIT 1");
   if ($result = $db->fetch_assoc($sql))
     return $result;
   else
@@ -241,7 +188,6 @@ function inactivate_area_cargo($id)
   $db->query($sql);
   return ($db->affected_rows() > 0) ? true : false;
 }
-
 
 /*---------------------------------*/
 /* Funcion para inactivar un grupo */
@@ -466,26 +412,6 @@ function find_all_cuentas()
   return $result;
 }
 
-function find_by_id_all_exp($id)
-{
-  $id = (int)$id;
-  $sql = "SELECT el.id_rel_exp_lab, el.id_detalle_usuario, el.ninguno, el.id_cat_sector, cs.descripcion as sector, el.id_cat_poder, cp.descripcion as poder, 
-  el.id_cat_ambito, ca.descripcion as ambito, el.nombre_inst_empresa, el.unidad_admin_area, el.puesto_cargo, el.funcion_principal, el.ingreso, 
-  el.egreso, du.nombre, du.apellido_paterno, du.apellido_materno, el.fecha_creacion
-  FROM rel_exp_laboral el
-  LEFT JOIN cat_sector cs
-  ON el.id_cat_sector = cs.id_cat_sector
-  LEFT JOIN cat_poder cp
-  ON el.id_cat_poder = cp.id_cat_poder
-  LEFT JOIN cat_ambito ca
-  ON el.id_cat_ambito = ca.id_cat_ambito
-  LEFT JOIN detalles_usuario du
-  ON el.id_detalle_usuario = du.id_det_usuario
-  WHERE id_detalle_usuario = $id
-  ORDER BY el.id_detalle_usuario ASC";
-  $result = find_by_sql($sql);
-  return $result;
-}
 /*-------------------------------------------------------------------------------------------------------------------------------*/
 /* Funcion que encuentra todos los cargos y se relaciona con la tabla areas, para obtener el nombre de esta en funcion del cargo */
 /*-------------------------------------------------------------------------------------------------------------------------------*/
@@ -579,17 +505,17 @@ function page_require_level($require_level)
   $login_level = find_by_groupLevel($current_user['user_level']);
   //si el usuario no esta logueado
   if (!$session->isUserLoggedIn(true)) :
-    $session->msg('d', 'Por favor, inicia sesión...');
+    $session->msg('d', 'Por favor, inicia sesión.');
     redirect('index.php', false);
   //si estatus de grupo de usuario esta desactivado
   elseif (@$login_level['estatus_grupo'] === 0) : //Si se quita el arroba muestra un notice
-    $session->msg('d', 'Este nivel de usuario esta inactivo!');
+    $session->msg('d', '¡Este nivel de usuario esta inactivo!');
     redirect('home.php', false);
   //checa si el nivel de usuario es menor o igual al requerido
   elseif ($current_user['user_level'] <= (int)$require_level) :
     return true;
   else :
-    $session->msg("d", "¡Lo siento! no tienes permiso para ver la página.");
+    $session->msg("d", "¡Lo siento!, no tienes permiso para ver la página.");
     redirect('home.php', false);
   endif;
 }
@@ -603,17 +529,17 @@ function page_require_level_exacto($require_level)
   $login_level = find_by_groupLevel($current_user['user_level']);
   //si el usuario no esta logueado
   if (!$session->isUserLoggedIn(true)) :
-    $session->msg('d', 'Por favor, inicia sesión...');
+    $session->msg('d', 'Por favor, inicia sesión.');
     redirect('index.php', false);
   //si estatus de grupo de usuario esta desactivado
   elseif (@$login_level['estatus_grupo'] === 0) : //Si se quita el arroba muestra un notice
-    $session->msg('d', 'Este nivel de usuario esta inactivo!');
+    $session->msg('d', '¡Este nivel de usuario esta inactivo!');
     redirect('home.php', false);
   //checa si el nivel de usuario es menor o igual al requerido
   elseif ($current_user['user_level'] == $require_level) :
     return true;
   else :
-    $session->msg("d", "¡Lo siento! no tienes permiso para ver la página.");
+    $session->msg("d", "¡Lo siento!, no tienes permiso para ver la página.");
     redirect('home.php', false);
   endif;
 }
@@ -773,7 +699,6 @@ function cargo_usuario($id_usuario)
     return null;
 }
 
-
 /*----------------------------------------------------------------------*/
 /* Funcion para checar cual nivel de usuario tiene acceso a cada pagina */
 /*----------------------------------------------------------------------*/
@@ -803,99 +728,6 @@ function insertAccion($user_id, $accion, $id_accion)
   return ($result && $db->affected_rows() === 1 ? true : false);
 }
 
-function niv_est($tipo)
-{
-  global $db;
-  $tipo = (int)$tipo;
-  $sql  = "SELECT oc.nivel_estudios, es.descripcion, COUNT(oc.id_or_can) as total, es.color_estadistica ";
-  $sql  .= "FROM orientacion_canalizacion oc  ";
-  $sql  .= "LEFT JOIN cat_escolaridad es ON es.id_cat_escolaridad = oc.nivel_estudios ";
-  $sql  .= "WHERE oc.tipo_solicitud = '{$db->escape($tipo)}' ";
-  $sql  .= "GROUP BY oc.nivel_estudios;";
-  return find_by_sql($sql);
-}
-
-function genero($tipo)
-{
-  global $db;
-  $tipo = (int)$tipo;
-  $sql  = "SELECT oc.sexo, gen.descripcion, COUNT(oc.id_or_can) as total, gen.color_estadistica ";
-  $sql  .= "FROM orientacion_canalizacion oc  ";
-  $sql  .= "LEFT JOIN cat_genero gen ON gen.id_cat_gen = oc.sexo ";
-  $sql  .= "WHERE oc.tipo_solicitud = '{$db->escape($tipo)}' ";
-  $sql  .= "GROUP BY oc.sexo;";
-  return find_by_sql($sql);
-}
-
-function lengua($tipo)
-{
-  global $db;
-  $tipo = (int)$tipo;
-  $sql  = "SELECT lengua, COUNT(id_or_can) as total ";
-  $sql  .= "FROM orientacion_canalizacion ";
-  $sql  .= "WHERE tipo_solicitud = '{$db->escape($tipo)}' ";
-  $sql  .= "GROUP BY lengua;";
-  return find_by_sql($sql);
-}
-
-function grupos_vuln($tipo)
-{
-  global $db;
-  $tipo = (int)$tipo;
-  $sql  = "SELECT oc.grupo_vulnerable, gv.descripcion, COUNT(oc.id_or_can) as total, gv.color_estadistica ";
-  $sql  .= "FROM orientacion_canalizacion oc  ";
-  $sql  .= "LEFT JOIN cat_grupos_vuln gv ON gv.id_cat_grupo_vuln = oc.grupo_vulnerable ";
-  $sql  .= "WHERE oc.tipo_solicitud = '{$db->escape($tipo)}' ";
-  $sql  .= "GROUP BY oc.grupo_vulnerable;";
-  return find_by_sql($sql);
-}
-
-function entidad($tipo)
-{
-  global $db;
-  $tipo = (int)$tipo;
-  $sql  = "SELECT oc.entidad, ef.descripcion, COUNT(oc.id_or_can) as total, ef.color_estadistica ";
-  $sql  .= "FROM orientacion_canalizacion oc ";
-  $sql  .= "LEFT JOIN cat_entidad_fed ef ON ef.id_cat_ent_fed = oc.entidad ";
-  $sql  .= "WHERE oc.tipo_solicitud = '{$db->escape($tipo)}' ";
-  $sql  .= "GROUP BY oc.entidad;";
-  return find_by_sql($sql);
-}
-
-function municipio($tipo)
-{
-  global $db;
-  $tipo = (int)$tipo;
-  $sql  = "SELECT municipio_localidad, COUNT(id_or_can) as total ";
-  $sql  .= "FROM orientacion_canalizacion ";
-  $sql  .= "WHERE tipo_solicitud = '{$db->escape($tipo)}' ";
-  $sql  .= "GROUP BY municipio_localidad;";
-  return find_by_sql($sql);
-}
-
-function ocupacion($tipo)
-{
-  global $db;
-  $tipo = (int)$tipo;
-  $sql  = "SELECT oc.ocupacion, co.descripcion, COUNT(oc.id_or_can) as total, co.color_estadistica ";
-  $sql  .= "FROM orientacion_canalizacion oc ";
-  $sql  .= "LEFT JOIN cat_ocupaciones co ON co.id_cat_ocup = oc.ocupacion ";
-  $sql  .= "WHERE oc.tipo_solicitud = '{$db->escape($tipo)}' ";
-  $sql  .= "GROUP BY oc.ocupacion;";
-  return find_by_sql($sql);
-}
-
-function autoridad($tipo)
-{
-  global $db;
-  $tipo = (int)$tipo;
-  $sql  = "SELECT oc.institucion_canaliza, ca.nombre_autoridad as descripcion, COUNT(oc.id_or_can) as total ";
-  $sql  .= "FROM orientacion_canalizacion oc ";
-  $sql  .= "LEFT JOIN cat_autoridades ca ON ca.id_cat_aut = oc.institucion_canaliza ";
-  $sql  .= "WHERE oc.tipo_solicitud = '{$db->escape($tipo)}' ";
-  $sql  .= "GROUP BY oc.institucion_canaliza;";
-  return find_by_sql($sql);
-}
 /*--------------------------------------------------------------*/
 /* Funcion para sacar realacion area-usuario
 /*--------------------------------------------------------------*/
@@ -910,19 +742,18 @@ function find_area_usuario()
   return $db->query($sql);
 }
 
-
 /*------------------------------------------------------------------*/
 /* Obtiene Datos generales del usuario*/
 /*------------------------------------------------------------------*/
 function find_gralesUser($user)
 {
   global $db;
-  $query = "SELECT id_user, id_detalle_user	, nombre, apellidos, sexo, id_cargo, nombre_cargo, d.id_area, nombre_area    
-FROM  users b  
-LEFT JOIN detalles_usuario c ON b.id_detalle_user= c.id_det_usuario  
-LEFT JOIN cargos d ON d.id_cargos= c.id_cargo
-LEFT JOIN area e ON e.id_area= d.id_area
-WHERE b.id_user= " . $user;
+  $query = "SELECT id_user, id_detalle_user	, nombre, apellidos, sexo, id_cargo, nombre_cargo, d.id_area, nombre_area 
+  FROM  users b  
+  LEFT JOIN detalles_usuario c ON b.id_detalle_user= c.id_det_usuario  
+  LEFT JOIN cargos d ON d.id_cargos= c.id_cargo
+  LEFT JOIN area e ON e.id_area= d.id_area
+  WHERE b.id_user= " . $user;
 
   $sql = $db->query($query);
   if ($result = $db->fetch_assoc($sql))
@@ -942,7 +773,6 @@ function find_all_area_orden($table)
     return find_by_sql("SELECT * FROM " . $db->escape($table) . " ORDER BY nombre_area");
   }
 }
-
 
 /*------------------------------------------------------------------*/
 /* Funcion para encontrar el ultimo id la tabla */
@@ -1001,4 +831,79 @@ function find_all_status($table)
   if (tableExists($table)) {
     return find_by_sql("SELECT * FROM " . $db->escape($table) . " WHERE estatus = 1");
   }
+}
+
+function find_by_id_all_exp($id)
+{
+  $id = (int)$id;
+  $sql = "SELECT el.id_rel_exp_lab, el.id_detalle_usuario, el.ninguno, el.id_cat_sector, cs.descripcion as sector, el.id_cat_poder, cp.descripcion as poder, 
+  el.id_cat_ambito, ca.descripcion as ambito, el.nombre_inst_empresa, el.unidad_admin_area, el.puesto_cargo, el.funcion_principal, el.ingreso, el.egreso, 
+  du.nombre, du.apellido_paterno, du.apellido_materno, el.fecha_creacion
+  FROM rel_exp_laboral el
+  LEFT JOIN cat_sector cs
+  ON el.id_cat_sector = cs.id_cat_sector
+  LEFT JOIN cat_poder cp
+  ON el.id_cat_poder = cp.id_cat_poder
+  LEFT JOIN cat_ambito ca
+  ON el.id_cat_ambito = ca.id_cat_ambito
+  LEFT JOIN detalles_usuario du
+  ON el.id_detalle_usuario = du.id_det_usuario
+  WHERE id_detalle_usuario = $id
+  ORDER BY el.id_detalle_usuario ASC";
+  $result = find_by_sql($sql);
+  return $result;
+}
+
+function find_by_detalle_tabla($tabla, $id_detalle)
+{
+  global $db;
+  $sql = $db->query("SELECT COUNT(id_detalle_usuario) as total FROM {$db->escape($tabla)} WHERE id_detalle_usuario='{$db->escape($id_detalle)}'");
+  if ($result = $db->fetch_assoc($sql))
+    return $result;
+  else
+    return null;
+}
+
+function find_all_exp_laboral()
+{
+  $sql = "SELECT el.id_rel_exp_lab, el.id_detalle_usuario, el.ninguno, el.id_cat_sector, cs.descripcion as sector, el.id_cat_poder, cp.descripcion as poder, 
+          el.id_cat_ambito, ca.descripcion as ambito, el.nombre_inst_empresa, el.unidad_admin_area, el.puesto_cargo, el.funcion_principal, el.ingreso,
+          el.egreso, du.nombre, du.apellido_paterno, du.apellido_materno, el.fecha_creacion
+          FROM rel_exp_laboral el
+          LEFT JOIN cat_sector cs
+          ON el.id_cat_sector = cs.id_cat_sector
+          LEFT JOIN cat_poder cp
+          ON el.id_cat_poder = cp.id_cat_poder
+          LEFT JOIN cat_ambito ca
+          ON el.id_cat_ambito = ca.id_cat_ambito
+          LEFT JOIN detalles_usuario du
+          ON el.id_detalle_usuario = du.id_det_usuario
+          ORDER BY el.id_detalle_usuario ASC";
+  $result = find_by_sql($sql);
+  return $result;
+}
+
+
+function find_all_det_estudios()
+{
+  $sql = "SELECT de.id_rel_detalle_estudios, de.id_detalle_usuario, esc.descripcion as escolaridad, de.inst_educativa, pc.descripcion as periodo_cursado,
+          dob.descripcion as doc_obt, de.ubic_inst, ef.descripcion as ent_fed, m.descripcion as municipio, de.carrera_area_con, ee.descripcion as estatus_est, de.num_ced_prof, us.nombre, us.apellido_paterno, us.apellido_materno, de.estatus_detalle
+          FROM rel_detalle_estudios de
+          LEFT JOIN cat_escolaridad esc
+          ON de.id_cat_escolaridad = esc.id_cat_escolaridad
+          LEFT JOIN cat_periodos_cursados pc
+          ON de.id_cat_periodo_cursado = pc.id_cat_periodo_cursado
+          LEFT JOIN cat_documento_obtenido dob
+          ON de.id_cat_documento_obtenido = dob.id_cat_documento_obtenido 
+          LEFT JOIN cat_entidad_fed ef
+          ON de.id_cat_ent_fed = ef.id_cat_ent_fed
+          LEFT JOIN cat_estatus_estudios ee
+          ON de.id_cat_estatus_estudios = ee.id_cat_estatus_estudios
+          LEFT JOIN cat_municipios m
+          ON de.id_cat_mun = m.id_cat_mun
+          LEFT JOIN detalles_usuario us
+          ON de.id_detalle_usuario = us.id_det_usuario
+          ORDER BY de.id_detalle_usuario ASC";
+  $result = find_by_sql($sql);
+  return $result;
 }
