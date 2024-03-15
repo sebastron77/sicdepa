@@ -61,7 +61,7 @@ include_once('layouts/header.php'); ?>
     <div class="panel-heading">
         <strong>
             <span class="material-symbols-outlined" style="color: #3a3d44">
-                school
+                work
             </span>
             <p style="margin-top: -22px; margin-left: 32px;">Datos Curriculares del Declarante</p>
         </strong>

@@ -22,6 +22,8 @@
       <li><a href="detalles_usuario.php" style="color:#3a3d44">Datos Generales</a></li>
       <li><a href="datos_curri_declarante.php" style="color:#3a3d44">Datos Curriculares</a></li>
       <li><a href="exp_laboral.php" style="color:#3a3d44">Experiencia Laboral</a></li>
+      <li><a href="datos_conyuge.php">Datos Cónyuge/Dependiente</a></li>
+      <li><a href="encargo_inicia.php">Encargo Inicia</a></li>
     </ul>
   </li>
   <li style="margin-top:13px;">
@@ -48,11 +50,11 @@
       <span style="position: absolute; top: 50%; left: 50%; margin:-11px 0 0 -85px;">Gestión de catálogos</span>
     </a>
     <ul style="margin-top:25px" class="nav submenu">
-      <li><a href="areas.php">Áreas</a> </li>
-      <li><a href="cargos.php">Cargos en la CEDH</a> </li>
-      <li><a href="cat_escolaridad.php">Escolaridad</a> </li>
-      <li><a href="cat_genero.php">Género</a> </li>
-      <li><a href="cat_ocupaciones.php">Ocupaciones</a> </li>
+      <li><a href="areas.php">Áreas</a></li>
+      <li><a href="cargos.php">Cargos en la CEDH</a></li>
+      <li><a href="cat_escolaridad.php">Escolaridad</a></li>
+      <li><a href="cat_genero.php">Género</a></li>
+      <li><a href="cat_ocupaciones.php">Ocupaciones</a></li>
     </ul>
   </li>
 

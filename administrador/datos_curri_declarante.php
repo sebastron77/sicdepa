@@ -27,7 +27,7 @@ if ($user['user_level'] >= 3) {
             <div class="panel-heading clearfix">
                 <strong>
                     <span class="glyphicon glyphicon-th"></span>
-                    <span>Información Curricular</span>
+                    <span style="font-size: 15px;">Información Curricular</span>
                 </strong>
                 <a href="add_datos_curri_declarante.php" class="btn btn-info pull-right">Agregar información</a>
             </div>

@@ -876,7 +876,6 @@ function find_all_exp_laboral()
   return $result;
 }
 
-
 function find_all_det_estudios()
 {
   $sql = "SELECT de.id_rel_detalle_estudios, de.id_detalle_usuario, esc.descripcion as escolaridad, de.inst_educativa, pc.descripcion as periodo_cursado,
@@ -923,4 +922,72 @@ function find_by_id_estudios($id)
           WHERE id_detalle_usuario = $id";
   $result = find_by_sql($sql);
   return $result;
+}
+
+function find_all_conyuge()
+{
+  $sql = "SELECT dc.id_rel_detalle_cony_dependientes, dc.ninguno, dc.id_detalle_usuario, dc.nombre_completo, dc.parentesco, dc.extranjero, dc.curp, dc.dependiente_econ,
+          dc.desemp_admin_pub, dc.depen_ent_desemp_ap, dc.habita_domicilio, dc.dom_si_no_habita, du.nombre, du.apellido_paterno, du.apellido_materno, 
+          dc.fecha_creacion
+          FROM rel_detalle_cony_dependientes dc
+          LEFT JOIN detalles_usuario du
+          ON dc.id_detalle_usuario = du.id_det_usuario
+          ORDER BY dc.id_detalle_usuario ASC";
+  $result = find_by_sql($sql);
+  return $result;
+}
+function find_by_id_all_cony($id)
+{
+  $id = (int)$id;
+  $sql = "SELECT dc.id_rel_detalle_cony_dependientes, dc.ninguno, dc.id_detalle_usuario, dc.nombre_completo, dc.parentesco, dc.extranjero, dc.curp, dc.dependiente_econ,
+  dc.desemp_admin_pub, dc.depen_ent_desemp_ap, dc.habita_domicilio, dc.dom_si_no_habita, du.nombre, du.apellido_paterno, du.apellido_materno, dc.fecha_creacion
+  FROM rel_detalle_cony_dependientes dc
+  LEFT JOIN detalles_usuario du
+  ON dc.id_detalle_usuario = du.id_det_usuario
+  WHERE id_detalle_usuario = $id
+  ORDER BY dc.id_detalle_usuario ASC";
+  $result = find_by_sql($sql);
+  return $result;
+}
+
+function find_all_encargo_ini()
+{
+  $sql = "SELECT enc.id_encargo_inicia, enc.id_detalle_usuario, enc.dependencia_entidad, enc.nombre_emp_car_com, enc.honorarios, enc.no_hono_niv_encargo, 
+          enc.id_area_adscripcion,enc.fecha_toma_pos_enc, enc.lugar_ubica, enc.si_extranjero_pais, enc.localidad_colonia, enc.id_cat_ent_fed, enc.id_cat_mun, enc.cod_post, enc.tel_oficina, enc.extension, enc.id_cat_func_realiza, enc.otro, enc.fecha_creacion, du.nombre, du.apellido_paterno, 
+          du.apellido_materno, a.nombre_area as area, ef.descripcion as ent_fed, m.descripcion as mun
+          FROM encargo_ini_mod_conc enc
+          LEFT JOIN detalles_usuario du
+          ON enc.id_detalle_usuario = du.id_det_usuario
+          LEFT JOIN area a
+          ON enc.id_area_adscripcion = a.id_area
+          LEFT JOIN cat_entidad_fed ef
+          ON enc.id_cat_ent_fed = ef.id_cat_ent_fed
+          LEFT JOIN cat_municipios m
+          ON enc.id_cat_mun = m.id_cat_mun
+          ORDER BY enc.id_detalle_usuario ASC";
+  $result = find_by_sql($sql);
+  return $result;
+}
+
+function find_by_id_all_encargo_ini($id)
+{
+  global $db;
+  $sql = $db->query("SELECT enc.id_encargo_inicia, enc.id_detalle_usuario, enc.dependencia_entidad, enc.nombre_emp_car_com, enc.honorarios, enc.no_hono_niv_encargo, 
+  enc.id_area_adscripcion, enc.fecha_toma_pos_enc, enc.lugar_ubica, enc.si_extranjero_pais, enc.localidad_colonia, enc.id_cat_ent_fed, enc.id_cat_mun, 
+  enc.cod_post, enc.tel_oficina, enc.extension, enc.id_cat_func_realiza, enc.otro, enc.fecha_creacion, du.nombre, du.apellido_paterno, du.apellido_materno, 
+  a.nombre_area as area, ef.descripcion as ent_fed, m.descripcion as mun
+  FROM encargo_ini_mod_conc enc
+  LEFT JOIN detalles_usuario du
+  ON enc.id_detalle_usuario = du.id_det_usuario
+  LEFT JOIN area a
+  ON enc.id_area_adscripcion = a.id_area
+  LEFT JOIN cat_entidad_fed ef
+  ON enc.id_cat_ent_fed = ef.id_cat_ent_fed
+  LEFT JOIN cat_municipios m
+  ON enc.id_cat_mun = m.id_cat_mun
+  WHERE enc.id_encargo_inicia = '$id' LIMIT 1");
+  if ($result = $db->fetch_assoc($sql))
+    return $result;
+  else
+    return null;
 }

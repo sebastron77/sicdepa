@@ -95,7 +95,7 @@ include_once('layouts/header.php'); ?>
             <div class="panel-body">
                 <strong>
                     <span class="material-symbols-outlined" style="margin-top: -50px; color: #3a3d44; font-size: 25px;">
-                        school
+                        work
                     </span>
                     <p style="margin-top: -53px; margin-left: 32px; font-size: 20px;">Experiencia Laboral</p>
                 </strong>
@@ -188,8 +188,8 @@ include_once('layouts/header.php'); ?>
                         </div>
                     </div>
 
-                    <a href="exp_laboral.php" class="btn btn-md btn-success" title="Regresar">
-                        Regresar
+                    <a href="exp_laboral.php" class="btn btn-md btn-success" title="Cerrar">
+                        Cerrar
                     </a>
                     <button type="submit" name="add_exp_laboral" class="btn btn-primary btn-md">Guardar</button>
                 </form>

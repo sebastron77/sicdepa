@@ -27,10 +27,10 @@ page_require_level(3);
         <strong>
           <span class="glyphicon glyphicon-th"></span>
           <?php if ($nivel_user <= 2) : ?>
-            <span>Lista de Declarantes de la CEDH</span>
+            <span style="font-size: 15px;">Lista de Declarantes de la CEDH</span>
           <?php endif ?>
           <?php if ($nivel_user >= 3) : ?>
-            <span>Información del Declarante</span>
+            <span style="font-size: 15px;">Información del Declarante</span>
           <?php endif ?>
         </strong>
         <?php if ($otro == 1 || $nivel_user == 1) : ?>
