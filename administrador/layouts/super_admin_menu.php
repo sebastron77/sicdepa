@@ -24,6 +24,7 @@
       <li><a href="exp_laboral.php" style="color:#3a3d44">Experiencia Laboral</a></li>
       <li><a href="datos_conyuge.php">Datos Cónyuge/Dependiente</a></li>
       <li><a href="encargo_inicia.php">Encargo Inicia</a></li>
+      <li><a href="rem_mens.php">Remuneración Mensual Declarante</a></li>
     </ul>
   </li>
   <li style="margin-top:13px;">
