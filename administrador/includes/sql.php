@@ -991,3 +991,31 @@ function find_by_id_all_encargo_ini($id)
   else
     return null;
 }
+
+function find_all_remun_cargo()
+{
+  $sql = "SELECT rr.id_rel_detalle_renum, rr.id_detalle_usuario, rr.renum_mens, rr.nombre_act_indus, rr.act_indus, rr.nombre_act_fin, rr.act_finan, 
+          rr.tipo_serv_prof, rr.serv_prof, rr.otros_info, rr.otros, rr.subtotal2, rr.subtotal1_2, rr.cony_deduce_imp, rr.ingr_cony, rr.suma_ab, du.nombre,
+          du.apellido_paterno, du.apellido_materno
+          FROM rel_detalle_renum rr
+          LEFT JOIN detalles_usuario du
+          ON rr.id_detalle_usuario = du.id_det_usuario
+          ORDER BY rr.id_detalle_usuario ASC";
+  $result = find_by_sql($sql);
+  return $result;
+}
+function find_by_id_all_remun($id)
+{
+  global $db;
+  $sql = $db->query("SELECT rr.id_rel_detalle_renum, rr.id_detalle_usuario, rr.renum_mens, rr.nombre_act_indus, rr.act_indus, rr.nombre_act_fin, 
+                    rr.act_finan, rr.tipo_serv_prof, rr.serv_prof, rr.otros_info, rr.otros, rr.subtotal2, rr.subtotal1_2, rr.cony_deduce_imp, 
+                    rr.ingr_cony, rr.suma_ab, du.nombre, du.apellido_paterno, du.apellido_materno
+                    FROM rel_detalle_renum rr
+                    LEFT JOIN detalles_usuario du
+                    ON rr.id_detalle_usuario = du.id_det_usuario
+                    WHERE rr.id_detalle_usuario = '$id' LIMIT 1");
+  if ($result = $db->fetch_assoc($sql))
+    return $result;
+  else
+    return null;
+}

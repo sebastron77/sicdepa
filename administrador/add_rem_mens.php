@@ -37,10 +37,14 @@ page_require_level(3);
 if (isset($_POST['add_rem_mens'])) {
 
     if (empty($errors)) {
-        $remun_mens = remove_junk($db->escape($_POST['remun_mens']));
+        $renum_mens = remove_junk($db->escape($_POST['renum_mens']));
+        $nombre_act_indus = remove_junk($db->escape($_POST['nombre_act_indus']));
         $act_indus = remove_junk($db->escape($_POST['act_indus']));
+        $nombre_act_fin = remove_junk($db->escape($_POST['nombre_act_fin']));
         $act_finan = remove_junk($db->escape($_POST['act_finan']));
+        $tipo_serv_prof = remove_junk($db->escape($_POST['tipo_serv_prof']));
         $serv_prof = remove_junk($db->escape($_POST['serv_prof']));
+        $otros_info = remove_junk($db->escape($_POST['otros_info']));
         $otros = remove_junk($db->escape($_POST['otros']));
         $subtotal2 = remove_junk($db->escape($_POST['subtotal2']));
         $subtotal1_2 = remove_junk($db->escape($_POST['subtotal1_2']));
@@ -48,23 +52,32 @@ if (isset($_POST['add_rem_mens'])) {
         $ingr_cony = remove_junk($db->escape($_POST['ingr_cony']));
         $suma_ab = remove_junk($db->escape($_POST['suma_ab']));
 
-        $monto_solo1 = str_replace("$", "", $remun_mens);
+        $monto_solo1 = str_replace("$", "", $renum_mens);
+        $monto_solo2 = str_replace("$", "", $act_indus);
+        $monto_solo3 = str_replace("$", "", $act_finan);
+        $monto_solo4 = str_replace("$", "", $serv_prof);
+        $monto_solo5 = str_replace("$", "", $otros);
+        $monto_solo6 = str_replace("$", "", $subtotal2);
+        $monto_solo7 = str_replace("$", "", $subtotal1_2);
+        $monto_solo8 = str_replace("$", "", $ingr_cony);
+        $monto_solo9 = str_replace("$", "", $suma_ab);
 
-        $query = "INSERT INTO rel_detalle_renum_mens (";
-        $query .= "id_detalle_usuario, remun_mens, act_indus, act_finan, serv_prof, otros, subtotal2, subtotal1_2, cony_deduce_imp, ingr_cony, suma_ab,
-                    fecha_creacion";
+        $query = "INSERT INTO rel_detalle_renum (";
+        $query .= "id_detalle_usuario, renum_mens, nombre_act_indus, act_indus, nombre_act_fin, act_finan, tipo_serv_prof, serv_prof, otros_info, otros,
+                    subtotal2, subtotal1_2, cony_deduce_imp, ingr_cony, suma_ab, fecha_creacion";
         $query .= ") VALUES (";
-        $query .= " '{$id_detalle_usuario}', '{$monto_solo1}', '{$act_indus}', '{$act_finan}', '{$serv_prof}', '{$otros}', '{$subtotal2}', '{$subtotal1_2}', 
-                    '{$cony_deduce_imp}', '{$ingr_cony}', '{$suma_ab}', NOW()";
+        $query .= " '{$id_detalle_usuario}', '{$monto_solo1}', '{$nombre_act_indus}', '{$monto_solo2}', '{$nombre_act_fin}', '{$monto_solo3}', 
+                    '{$tipo_serv_prof}', '{$monto_solo4}', '{$otros_info}', '{$monto_solo5}', '{$monto_solo6}', '{$monto_solo7}', '{$cony_deduce_imp}', 
+                    '{$monto_solo8}', '{$monto_solo9}', NOW()";
         $query .= ")";
 
         if ($db->query($query)) {
             $session->msg('s', "La información de la remuneración del cargo que inicia ha sido agregada con éxito.");
             insertAccion($user['id_user'], '"' . $user['username'] . '" agregó remun_mens. que inicia: ' . '.', 1);
-            redirect('add_rem_mens.php', false);
+            redirect('rem_mens.php', false);
         } else {
             $session->msg('d', ' No se pudo agregar la remuneración del cargo que inicia.');
-            redirect('add_rem_mens.php', false);
+            redirect('rem_mens.php', false);
         }
     } else {
         $session->msg("d", $errors);
@@ -96,28 +109,28 @@ include_once('layouts/header.php'); ?>
                                 <label>I. REMUNERACIÓN MENSUAL NETA DEL DECLARANTE POR SU CARGO PÚBLICO (DEDUCE IMPUESTOS)</label>
                                 <label style="font-size: 10px; margin-left: 1.5%;">(Por concepto de sueldos, honorarios, compensaciones, bonos, aguinaldos y otras prestaciones)</label>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-2" style="margin-top: -8px;">
                                 <div class="form-group">
-                                    <label for="remun_mens">Subtotal I</label>
-                                    <input type="text" class="form-control" name="remun_mens" id="currency-field" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency">
+                                    <label for="renum_mens">Subtotal I</label>
+                                    <input type="text" class="form-control montodos" name="renum_mens" id="currency-field renum_mens" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" onchange="sumar2();">
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row" style="margin-top: -8px;">
                             <label>II. OTROS INGRESOS MENSUALES NETOS DEL DECLARANTE (SUMA DEL II.1 AL II.4)</label>
                         </div>
                         <div class="row" style="margin-left: 2%;">
                             <label style="font-size: 12px;">II. 1 Por actividad industrial y/o comercial</label>
                             <div class="col-md-7">
                                 <label style="font-size: 12px;">Especifica nombre o razón social y tipo de negocio (deduce impuestos)</label>
-                                <input class="form-control" type="text" name="nombre_act_fin" id="nombre_act_fin">
+                                <input class="form-control" type="text" name="nombre_act_indus" id="nombre_act_indus">
                             </div>
                             <div class="col-md-2">
                                 <label style="font-size: 12px;">Monto</label>
-                                <input type="text" class="form-control" name="remun_mens" id="currency-field" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency">
+                                <input type="text" class="form-control monto" name="act_indus" id="currency-field act_indus" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" onchange="sumar();">
                             </div>
                         </div>
-                        <div class="row" style="margin-left: 2%; margin-top: 1%;">
+                        <div class="row" style="margin-left: 2%; margin-top: 10px;">
                             <label style="font-size: 12px;">II. 2 Por actividad financiera (rendimientos de contratos bancarios o de valores)</label>
                             <div class="col-md-7">
                                 <label style="font-size: 12px;">(Deduce Impuestos)</label>
@@ -125,69 +138,68 @@ include_once('layouts/header.php'); ?>
                             </div>
                             <div class="col-md-2">
                                 <label style="font-size: 12px;">Monto</label>
-                                <input type="text" class="form-control" name="remun_mens" id="currency-field" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency">
+                                <input type="text" class="form-control monto" name="act_finan" id="currency-field act_finan" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" onchange="sumar();">
                             </div>
                         </div>
-                        <div class="row" style="margin-left: 2%; margin-top: 1%;">
+                        <div class="row" style="margin-left: 2%; margin-top: 10px;">
                             <label style="font-size: 12px;">II. 3 Por servicios profesionales, participación en consejos, consultorías o asesorías</label>
                             <div class="col-md-7">
                                 <label style="font-size: 12px;">Especifica el tipo de servicio y el contratante (Deduce Impuestos)</label>
-                                <input class="form-control" type="text" name="nombre_act_fin" id="nombre_act_fin">
+                                <input class="form-control" type="text" name="tipo_serv_prof" id="tipo_serv_prof">
                             </div>
                             <div class="col-md-2">
                                 <label style="font-size: 12px;">Monto</label>
-                                <input type="text" class="form-control" name="remun_mens" id="currency-field" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency">
+                                <input type="text" class="form-control monto" name="serv_prof" id="currency-field serv_prof" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" onchange="sumar();">
                             </div>
                         </div>
-                        <div class="row" style="margin-left: 2%; margin-top: 1%;">
+                        <div class="row" style="margin-left: 2%; margin-top: 8px;">
                             <label style="font-size: 12px;">II. 4 Otros (arrendamientos, regalías, sorteos, concursos, donaciones, etc.) Especifica</label>
                             <div class="col-md-7">
                                 <label style="font-size: 12px;">(Deduce Impuestos)</label>
-                                <input class="form-control" type="text" name="nombre_act_fin" id="nombre_act_fin">
+                                <input class="form-control" type="text" name="otros_info" id="otros_info">
                             </div>
                             <div class="col-md-2">
                                 <label style="font-size: 12px;">Monto</label>
-                                <input type="text" class="form-control" name="remun_mens" id="currency-field" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency">
+                                <input type="text" class="form-control monto" name="otros" id="currency-field otros" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" onchange="sumar();">
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-2" style="margin-left: 66.5%; margin-top: 2%;">
+                            <div class="col-md-2" style="margin-left: 66.5%; margin-top: 8px;">
                                 <label style="font-size: 12px;">Subtotal II</label>
-                                <input type="text" class="form-control" name="remun_mens" id="currency-field" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency">
+                                <input type="text" class="form-control montodos" name="subtotal2" id="subtotal2" readonly onchange="sumar2();">
                             </div>
                         </div>
                         <div class="row" style="margin-top: 50px;">
                             <div class="col-md-3">
-                                <label style="font-size: 12px;">A. INGRESO MENSUAL NETO DEL DECLARANTE</label>
+                                <label style="font-size: 12px; margin-top: -25px;">A. INGRESO MENSUAL NETO DEL DECLARANTE</label>
                             </div>
-                            <div class="col-md-2" style="margin-left: 66.5%; margin-top: -55px">
-                                <label style="font-size: 12px;">Suma del subtotal I y subtotal II</label>
-                                <input type="text" class="form-control" name="remun_mens" id="currency-field" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency">
+                            <div class="col-md-2" style="margin-left: 66.5%; margin-top: -35px">
+                                <label style="font-size: 12px; margin-top: -10px">Suma del subtotal I y subtotal II</label>
+                                <input type="text" class="form-control montotres" name="subtotal1_2" id="subtotal1_2" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency"  onchange="sumar3();" readonly>
                             </div>
                         </div>
                         <div class="row" style="margin-top: 20px;">
                             <div class="col-md-7">
-                                <label style="font-size: 12px;">B. INGRESO MENSUAL NETO DEL CÓNYUGE CONCUBINA O CONCUBINARIO Y/O DEPENDIENTES ECONÓMICOS (DEDUCE IMPUESTOS)</label>
-                                <input class="form-control" type="text" name="" id="">
+                                <label style="font-size: 12px; margin-top: -5px;">B. INGRESO MENSUAL NETO DEL CÓNYUGE CONCUBINA O CONCUBINARIO Y/O DEPENDIENTES ECONÓMICOS (DEDUCE IMPUESTOS)</label>
+                                <input class="form-control" type="text" name="cony_deduce_imp" id="cony_deduce_imp">
                             </div>
-                            <div class="col-md-2" style="margin-left: 66.5%; margin-top: -55px">
+                            <div class="col-md-2" style="margin-left: 66.5%; margin-top: -53px">
                                 <label style="font-size: 12px;">Monto</label>
-                                <input type="text" class="form-control" name="remun_mens" id="currency-field" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency">
+                                <input type="text" class="form-control montotres" name="ingr_cony" id="currnrency-field ingr_cony" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" onchange="sumar3();">
                             </div>
                         </div>
-                        <div class="row" style="margin-top: 20px;">
+                        <div class="row" style="margin-top: 50px;">
                             <div class="col-md-7">
-                                <label style="font-size: 12px;">C. TOTAL DE INGRESO MENSUAL NETO DEL DECLARANTE, CÓNYUGE, CONCUBINA, CONCUBINARIO Y/O DEPENDIENTES ECONÓMICOS</label>
-                                <input class="form-control" type="text" name="" id="">
+                                <label style="font-size: 12px;" style="margin-top: -20px;">C. TOTAL DE INGRESO MENSUAL NETO DEL DECLARANTE, CÓNYUGE, CONCUBINA, CONCUBINARIO Y/O DEPENDIENTES ECONÓMICOS</label>
                             </div>
                             <div class="col-md-2" style="margin-left: 66.5%; margin-top: -55px">
                                 <label style="font-size: 12px;">Suma de A y B</label>
-                                <input type="text" class="form-control" name="remun_mens" id="currency-field" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency">
+                                <input type="text" class="form-control" name="suma_ab" id="suma_ab" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" readonly>
                             </div>
                         </div>
                     </div><br>
 
-                    <a href="encargo_inicia.php" class="btn btn-md btn-success" title="Cerrar">
+                    <a href="rem_mens.php" class="btn btn-md btn-success" title="Cerrar">
                         Cerrar
                     </a>
                     <button type="submit" name="add_rem_mens" class="btn btn-primary btn-md">Guardar</button>
@@ -197,6 +209,57 @@ include_once('layouts/header.php'); ?>
     </div>
 </div>
 <script>
+    function sumar2() {
+        const $subtotal1_2 = document.getElementById('subtotal1_2');
+        let subtotaldos = 0;
+        document.querySelectorAll("input.montodos").forEach(function(element) {
+            // Eliminar símbolos de moneda y comas antes de sumar
+            const valuedos = element.value.replace("$", "").replace(/,/g, "");
+            if (valuedos !== '') {
+                // alert(value);
+                subtotaldos += parseFloat(valuedos);
+                // alert(subtotaldos);
+            }
+        });
+        $subtotal1_2.value = "$" + subtotaldos; // Redondear a 2 decimales
+    }
+
+    function sumar() {
+
+        const $subtotal2 = document.getElementById('subtotal2');
+        let subtotal = 0;
+        document.querySelectorAll("input.monto").forEach(function(element) {
+            // Eliminar símbolos de moneda y comas antes de sumar
+            const value = element.value.replace("$", "").replace(/,/g, "");
+            if (value !== '') {
+                // alert(value);
+                subtotal += parseFloat(value);
+
+            }
+        });
+
+        $subtotal2.value = "$" + subtotal; // Redondear a 2 decimales
+        sumar2();
+    }
+
+    function sumar3() {
+
+        const $suma_ab = document.getElementById('suma_ab');
+        let subtotal_ab = 0;
+        document.querySelectorAll("input.montotres").forEach(function(element) {
+            // Eliminar símbolos de moneda y comas antes de sumar
+            const valuetres = element.value.replace("$", "").replace(/,/g, "");
+            if (valuetres !== '') {
+                // alert(value);
+                subtotal_ab += parseFloat(valuetres);
+
+            }
+        });
+
+        $suma_ab.value = "$" + subtotal_ab; // Redondear a 2 decimales
+        sumar2();
+    }
+
     // Jquery Dependency
     $("input[data-type='currency']").on({
         keyup: function() {

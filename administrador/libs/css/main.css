@@ -494,7 +494,7 @@ button#export_data.btn.btn-excel {
 }
 
 select {
-  color: #3a3d44;
+  color: #3a3d44;  
 }
 
 option {
@@ -524,6 +524,7 @@ input.form-control {
   font-size: 14px;
   font-family: "Montserrat", sans-serif;
   background: #e3e3e3;
+  height: 30px;
   /* border-color:#0d0d0f; */
   color: #3a3d44;
 }
@@ -555,6 +556,7 @@ select.form-control {
   font-family: "Montserrat", sans-serif;
   background: #e3e3e3;
   color: #3a3d44;
+  height: 30px;
 }
 
 select.form-control:focus {
