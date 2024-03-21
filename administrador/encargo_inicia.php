@@ -9,7 +9,7 @@ if ($user['user_level'] <= 2) {
     $all_detalles = find_all_encargo_ini();
 }
 if ($user['user_level'] >= 3) {
-    $all_detalles2 = find_by_id_all_exp($user['id_detalle_user']);
+    $all_detalles2 = find_by_id_all_encargo_ini($user['id_detalle_user']);
     $total = find_by_id_all_encargo_ini('encargo_ini_mod_conc', $user['id_detalle_user']);
 }
 page_require_level(3);
@@ -50,14 +50,13 @@ page_require_level(3);
                             <?php foreach ($all_detalles2 as $a_detalle2) : ?>
                                 <tr>
                                     <td class="text-center"><?php echo remove_junk(ucwords($a_detalle2['id_encargo_inicia'])) ?></td>
-                                    <td><?php echo 'Sí' ?></td>
                                     <td><?php echo remove_junk(ucwords($a_detalle2['nombre'] . ' ' . $a_detalle2['apellido_paterno'] . ' ' . $a_detalle2['apellido_materno'])) ?></td>
                                     <td class="text-center"><?php echo remove_junk($a_detalle2['dependencia_entidad']) ?></td>
                                     <td class="text-center"><?php echo remove_junk($a_detalle2['no_hono_niv_encargo']) ?></td>
                                     <td class="text-center"><?php echo remove_junk($a_detalle2['area']) ?></td>
                                     <td class="text-center">
                                         <div class="btn-group">
-                                            <a href="edit_exp_laboral.php?id=<?php echo (int)$a_detalle2['id_rel_exp_lab']; ?>" class="btn btn-warning btn-md" title="Editar" data-toggle="tooltip" style="height: 32px; width: 32px;">
+                                            <a href="edit_exp_laboral.php?id=<?php echo (int)$a_detalle2['id_encargo_inicia']; ?>" class="btn btn-warning btn-md" title="Editar" data-toggle="tooltip" style="height: 32px; width: 32px;">
                                                 <span class="material-symbols-rounded" style="font-size: 20px; color: black; margin-top: 2px; margin-left: -3px;">edit</span>
                                             </a>
                                         </div>

@@ -52,11 +52,17 @@ page_require_level(3);
                                     <tr>
                                         <td class="text-center"><?php echo remove_junk(ucwords($a_detalle2['id_rel_detalle_cony_dependientes'])) ?></td>
                                         <td><?php echo remove_junk(ucwords($a_detalle2['nombre'] . ' ' . $a_detalle2['apellido_paterno'] . ' ' . $a_detalle2['apellido_materno'])) ?></td>
+                                        <td class="text-center"><?php echo remove_junk($a_detalle2['nombre_completo']) ?></td>
                                         <td class="text-center"><?php echo remove_junk($a_detalle2['parentesco']) ?></td>
-                                        <td class="text-center"><?php echo remove_junk($a_detalle2['dependiente_econ']) ?></td>
+                                        <?php if ($a_detalle2['dependiente_econ'] == 0) : ?>
+                                            <td class="text-center">No</td>
+                                        <?php endif; ?>
+                                        <?php if ($a_detalle2['dependiente_econ'] == 1) : ?>
+                                            <td class="text-center">Sí</td>
+                                        <?php endif; ?>
                                         <td class="text-center">
                                             <div class="btn-group">
-                                                <a href="edit_exp_laboral.php?id=<?php echo (int)$a_detalle2['id_rel_exp_lab']; ?>" class="btn btn-warning btn-md" title="Editar" data-toggle="tooltip" style="height: 32px; width: 32px;">
+                                                <a href="edit_exp_laboral.php?id=<?php echo (int)$a_detalle2['id_rel_detalle_cony_dependientes']; ?>" class="btn btn-warning btn-md" title="Editar" data-toggle="tooltip" style="height: 32px; width: 32px;">
                                                     <span class="material-symbols-rounded" style="font-size: 20px; color: black; margin-top: 2px; margin-left: -3px;">edit</span>
                                                 </a>
                                             </div>
@@ -90,11 +96,11 @@ page_require_level(3);
                                     <td><?php echo remove_junk(ucwords($a_detalle['nombre'] . ' ' . $a_detalle['apellido_paterno'] . ' ' . $a_detalle['apellido_materno'])) ?></td>
                                     <td class="text-center"><?php echo remove_junk($a_detalle['nombre_completo']) ?></td>
                                     <td class="text-center"><?php echo remove_junk($a_detalle['parentesco']) ?></td>
-                                    <?php if($a_detalle['dependiente_econ'] == 0): ?>
-                                    <td class="text-center">No</td>
+                                    <?php if ($a_detalle['dependiente_econ'] == 0) : ?>
+                                        <td class="text-center">No</td>
                                     <?php endif; ?>
-                                    <?php if($a_detalle['dependiente_econ'] == 1): ?>
-                                    <td class="text-center">Sí</td>
+                                    <?php if ($a_detalle['dependiente_econ'] == 1) : ?>
+                                        <td class="text-center">Sí</td>
                                     <?php endif; ?>
                                     <td class="text-center">
                                         <?php if ($a_detalle['ninguno'] == 0) : ?>

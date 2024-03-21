@@ -826,6 +826,17 @@ function find_all_status($table)
   }
 }
 
+
+function find_by_detalle_tabla($tabla, $id_detalle)
+{
+  global $db;
+  $sql = $db->query("SELECT COUNT(id_detalle_usuario) as total FROM {$db->escape($tabla)} WHERE id_detalle_usuario='{$db->escape($id_detalle)}'");
+  if ($result = $db->fetch_assoc($sql))
+    return $result;
+  else
+    return null;
+}
+
 function find_by_id_all_exp($id)
 {
   $id = (int)$id;
@@ -846,17 +857,6 @@ function find_by_id_all_exp($id)
   $result = find_by_sql($sql);
   return $result;
 }
-
-function find_by_detalle_tabla($tabla, $id_detalle)
-{
-  global $db;
-  $sql = $db->query("SELECT COUNT(id_detalle_usuario) as total FROM {$db->escape($tabla)} WHERE id_detalle_usuario='{$db->escape($id_detalle)}'");
-  if ($result = $db->fetch_assoc($sql))
-    return $result;
-  else
-    return null;
-}
-
 function find_all_exp_laboral()
 {
   $sql = "SELECT el.id_rel_exp_lab, el.id_detalle_usuario, el.ninguno, el.id_cat_sector, cs.descripcion as sector, el.id_cat_poder, cp.descripcion as poder, 
@@ -971,11 +971,10 @@ function find_all_encargo_ini()
 
 function find_by_id_all_encargo_ini($id)
 {
-  global $db;
-  $sql = $db->query("SELECT enc.id_encargo_inicia, enc.id_detalle_usuario, enc.dependencia_entidad, enc.nombre_emp_car_com, enc.honorarios, enc.no_hono_niv_encargo, 
-  enc.id_area_adscripcion, enc.fecha_toma_pos_enc, enc.lugar_ubica, enc.si_extranjero_pais, enc.localidad_colonia, enc.id_cat_ent_fed, enc.id_cat_mun, 
-  enc.cod_post, enc.tel_oficina, enc.extension, enc.id_cat_func_realiza, enc.otro, enc.fecha_creacion, du.nombre, du.apellido_paterno, du.apellido_materno, 
-  a.nombre_area as area, ef.descripcion as ent_fed, m.descripcion as mun
+  $sql = "SELECT enc.id_encargo_inicia, enc.id_detalle_usuario, enc.dependencia_entidad, enc.nombre_emp_car_com, enc.honorarios, 
+  enc.no_hono_niv_encargo, enc.id_area_adscripcion, enc.fecha_toma_pos_enc, enc.lugar_ubica, enc.si_extranjero_pais, enc.localidad_colonia, enc.id_cat_ent_fed,
+  enc.id_cat_mun, enc.cod_post, enc.tel_oficina, enc.extension, enc.id_cat_func_realiza, enc.otro, enc.fecha_creacion, du.nombre, du.apellido_paterno, 
+  du.apellido_materno, a.nombre_area as area, ef.descripcion as ent_fed, m.descripcion as mun
   FROM encargo_ini_mod_conc enc
   LEFT JOIN detalles_usuario du
   ON enc.id_detalle_usuario = du.id_det_usuario
@@ -985,11 +984,9 @@ function find_by_id_all_encargo_ini($id)
   ON enc.id_cat_ent_fed = ef.id_cat_ent_fed
   LEFT JOIN cat_municipios m
   ON enc.id_cat_mun = m.id_cat_mun
-  WHERE enc.id_encargo_inicia = '$id' LIMIT 1");
-  if ($result = $db->fetch_assoc($sql))
-    return $result;
-  else
-    return null;
+  WHERE enc.id_detalle_usuario = '$id'";
+  $result = find_by_sql($sql);
+  return $result;
 }
 
 function find_all_remun_cargo()
@@ -1006,16 +1003,13 @@ function find_all_remun_cargo()
 }
 function find_by_id_all_remun($id)
 {
-  global $db;
-  $sql = $db->query("SELECT rr.id_rel_detalle_renum, rr.id_detalle_usuario, rr.renum_mens, rr.nombre_act_indus, rr.act_indus, rr.nombre_act_fin, 
+  $sql = "SELECT rr.id_rel_detalle_renum, rr.id_detalle_usuario, rr.renum_mens, rr.nombre_act_indus, rr.act_indus, rr.nombre_act_fin, 
                     rr.act_finan, rr.tipo_serv_prof, rr.serv_prof, rr.otros_info, rr.otros, rr.subtotal2, rr.subtotal1_2, rr.cony_deduce_imp, 
                     rr.ingr_cony, rr.suma_ab, du.nombre, du.apellido_paterno, du.apellido_materno
                     FROM rel_detalle_renum rr
                     LEFT JOIN detalles_usuario du
                     ON rr.id_detalle_usuario = du.id_det_usuario
-                    WHERE rr.id_detalle_usuario = '$id' LIMIT 1");
-  if ($result = $db->fetch_assoc($sql))
-    return $result;
-  else
-    return null;
+                    WHERE rr.id_detalle_usuario = '$id'";
+  $result = find_by_sql($sql);
+  return $result;
 }
