@@ -16,6 +16,7 @@
             <li><a href="datos_conyuge.php">Datos Cónyuge</a></li>
             <li><a href="encargo_inicia.php">Encargo Inicia</a></li>
             <li><a href="rem_mens.php">Remuneración Mensual Declarante</a></li>
+            <li><a href="rem_anio_ant.php">Remuneración Año Anterior</a></li>
         </ul>
     </li>
 </ul>
