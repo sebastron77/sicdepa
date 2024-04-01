@@ -141,16 +141,16 @@ if (isset($_POST['add_rem_anio_ant'])) {
                     act_finan,tipo_serv_prof, serv_prof, otros_info, otros, subtotal2, subtotal1_2, cony_deduce_imp, ingr_anual_cony, suma_ab, fecha_creacion";
         $query .= ") VALUES (";
         $query .= " '{$id_detalle_usuario}', '{$bool}', '{$inicio_periodo}', '{$fin_periodo}', '{$monto_solo1}', '{$nombre_act_indus}', '{$monto_solo2}', '{$nombre_act_fin}', '{$monto_solo3}', 
-                    '{$tipo_serv_prof}', '{$monto_solo4}', '{$otros_info}', '{$monto_solo51}', '{$monto_solo6}', '{$monto_solo7}', '{$cony_deduce_imp}', 
+                    '{$tipo_serv_prof}', '{$monto_solo4}', '{$otros_info}', '{$monto_solo5}', '{$monto_solo6}', '{$monto_solo7}', '{$cony_deduce_imp}', 
                     '{$monto_solo8}', '{$monto_solo9}', NOW()";
         $query .= ")";
 
         if ($db->query($query)) {
-            $session->msg('s', "La información de la remuneración del cargo que inicia ha sido agregada con éxito.");
-            insertAccion($user['id_user'], '"' . $user['username'] . '" agregó remun. mens. que inicia: ' . '.', 1);
+            $session->msg('s', "La información de la situación patrimonial del año inmediato anterior ha sido agregada con éxito.");
+            insertAccion($user['id_user'], '"' . $user['username'] . '" agregó remun. anio anterior: ' . '.', 1);
             redirect('rem_anio_ant.php', false);
         } else {
-            $session->msg('d', ' No se pudo agregar la remuneración del cargo que inicia.');
+            $session->msg('d', ' No se pudo agregar la información de la situación patrimonial del año inmediato anterior.');
             redirect('rem_anio_ant.php', false);
         }
     } else {

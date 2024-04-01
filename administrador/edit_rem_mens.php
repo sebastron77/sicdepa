@@ -244,6 +244,7 @@ include_once('layouts/header.php'); ?>
         });
 
         $subtotal1_2.value = "$" + (subtotaldos).toFixed(2); // Redondear a 2 decimales
+        sumar3();
     }
 
     function sumar() {

@@ -15,7 +15,7 @@ if((int) $_GET['a']==0){
 	$IDaccion =3;
 }else{
 	////inactiva comunidad
-	 $action_id = inactivate_by_id('cat_escolaridad',(int)$_GET['id'],'estatus','id_cat_escolaridad');    
+	$action_id = inactivate_by_id('cat_escolaridad',(int)$_GET['id'],'estatus','id_cat_escolaridad');    
 	$mnj .=" desactivada correctamente.";
 	$accion .=" desactivo ";
 	$IDaccion =4;

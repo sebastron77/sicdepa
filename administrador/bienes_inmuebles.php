@@ -1,15 +1,15 @@
 <?php
 // error_reporting(E_ALL ^ E_NOTICE);
-$page_title = 'Situación Patrimonial Año Anterior';
+$page_title = 'Bienes Inmuebles';
 require_once('includes/load.php');
 ?>
 <?php
 $user = current_user();
 if ($user['user_level'] <= 2) {
-    $all_detalles = find_all_remun_anio_ant();
+    $all_detalles = find_all_bienes();
 }
 if ($user['user_level'] >= 3) {
-    $all_detalles2 = find_by_id_all_remun_anio_ant($user['id_detalle_user']);
+    $all_detalles2 = find_by_id_bienes($user['id_detalle_user']);
 }
 page_require_level(3);
 ?>
@@ -27,9 +27,9 @@ page_require_level(3);
             <div class="panel-heading clearfix">
                 <strong>
                     <span class="glyphicon glyphicon-th"></span>
-                    <span style="font-size: 15px;">Información de Declaración Patrimonial en el Año Inmediato Anterior</span>
+                    <span style="font-size: 15px;">Bienes Inmuebles del Declarante, Cónyuge, Concubina o Concubinario y/o Dependientes Económicos</span>
                 </strong>
-                <a href="add_rem_anio_ant.php" class="btn btn-info pull-right">Agregar información</a>
+                <a href="add_bienes_inmuebles.php" class="btn btn-info pull-right">Agregar información</a>
             </div>
 
             <div class="panel-body">
@@ -37,12 +37,11 @@ page_require_level(3);
                     <thead class="thead-purple">
                         <tr style="height: 10px;"">
                             <th style=" width: 1%;" class="text-center">#</th>
-                            <th style="width: 10%;" class="text-center">Declarante</th>
-                            <th style="width: 5%;" class="text-center">Remuneración Anual Año Anterior</th>
-                            <th style="width: 5%;" class="text-center">Actividad Industrial</th>
-                            <th style="width: 5%;" class="text-center">Actividad Financiera</th>
-                            <th style="width: 5%;" class="text-center">Servicios Profesionales</th>
-                            <th style="width: 5%;" class="text-center">Otros</th>
+                            <th style=" width: 15%;" class="text-center">Declarante</th>
+                            <th style="width: 8%;" class="text-center">Tipo Operación</th>
+                            <th style="width: 8%;" class="text-center">Bien Inmueble</th>
+                            <th style="width: 10%;" class="text-center">Titular</th>
+                            <th style="width: 5%;" class="text-center">Fecha Adquisición</th>
                             <th style="width: 1%;" class="text-center">Acciones</th>
                         </tr>
                     </thead>
@@ -50,16 +49,15 @@ page_require_level(3);
                         <?php if ($user['user_level'] >= 3) : ?>
                             <?php foreach ($all_detalles2 as $a_detalle2) : ?>
                                 <tr>
-                                    <td class="text-center"><?php echo remove_junk(ucwords($a_detalle2['id_rel_detalle_renum_anio_ant'])) ?></td>
+                                    <td class="text-center"><?php echo remove_junk(ucwords($a_detalle2['id_rel_detalle_bienes'])) ?></td>
                                     <td><?php echo remove_junk(ucwords($a_detalle2['nombre'] . ' ' . $a_detalle2['apellido_paterno'] . ' ' . $a_detalle2['apellido_materno'])) ?></td>
-                                    <td class="text-center">$<?php echo ucwords($a_detalle2['renum_anual_neta'])?></td>
-                                    <td class="text-center">$<?php echo ucwords($a_detalle2['act_indus']) ?></td>
-                                    <td class="text-center">$<?php echo ucwords($a_detalle2['act_finan']) ?></td>
-                                    <td class="text-center">$<?php echo ucwords($a_detalle2['serv_prof']) ?></td>
-                                    <td class="text-center">$<?php echo ucwords($a_detalle2['otros']) ?></td>
+                                    <td><?php echo remove_junk(ucwords($a_detalle2['tipo_operacion'])) ?></td>
+                                    <td><?php echo remove_junk(ucwords($a_detalle2['bien_inmueble'])) ?></td>
+                                    <td><?php echo remove_junk(ucwords($a_detalle2['titular'])) ?></td>
+                                    <td><?php echo remove_junk(ucwords($a_detalle2['fecha_adquisicion'])) ?></td>
                                     <td class="text-center">
                                         <div class="btn-group">
-                                            <a href="edit_rem_anio_ant.php?id=<?php echo (int)$a_detalle2['id_rel_detalle_renum_anio_ant']; ?>" class="btn btn-warning btn-md" title="Editar" data-toggle="tooltip" style="height: 32px; width: 32px;">
+                                            <a href="edit_bienes_inmuebles.php?id=<?php echo (int)$a_detalle2['id_rel_detalle_bienes']; ?>" class="btn btn-warning btn-md" title="Editar" data-toggle="tooltip" style="height: 32px; width: 32px;">
                                                 <span class="material-symbols-rounded" style="font-size: 20px; color: black; margin-top: 2px; margin-left: -3px;">edit</span>
                                             </a>
                                         </div>
@@ -70,16 +68,15 @@ page_require_level(3);
                         <?php if ($user['user_level'] <= 2) : ?>
                             <?php foreach ($all_detalles as $a_detalle) : ?>
                                 <tr>
-                                    <td class="text-center"><?php echo remove_junk(ucwords($a_detalle['id_rel_detalle_renum_anio_ant'])) ?></td>
+                                    <td class="text-center"><?php echo remove_junk(ucwords($a_detalle['id_rel_detalle_bienes'])) ?></td>
                                     <td><?php echo remove_junk(ucwords($a_detalle['nombre'] . ' ' . $a_detalle['apellido_paterno'] . ' ' . $a_detalle['apellido_materno'])) ?></td>
-                                    <td class="text-center">$<?php echo remove_junk(ucwords($a_detalle['renum_anual_neta'])) ?></td>
-                                    <td class="text-center">$<?php echo remove_junk(ucwords($a_detalle['act_indus'])) ?></td>
-                                    <td class="text-center">$<?php echo remove_junk(ucwords($a_detalle['act_finan'])) ?></td>
-                                    <td class="text-center">$<?php echo remove_junk(ucwords($a_detalle['serv_prof'])) ?></td>
-                                    <td class="text-center">$<?php echo remove_junk(ucwords($a_detalle['otros'])) ?></td>
+                                    <td><?php echo remove_junk(ucwords($a_detalle['tipo_operacion'])) ?></td>
+                                    <td><?php echo remove_junk(ucwords($a_detalle['bien_inmueble'])) ?></td>
+                                    <td><?php echo remove_junk(ucwords($a_detalle['titular'])) ?></td>
+                                    <td><?php echo remove_junk(ucwords($a_detalle['fecha_adquisicion'])) ?></td>
                                     <td class="text-center">
                                         <div class="btn-group">
-                                            <a href="edit_rem_anio_ant.php?id=<?php echo (int)$a_detalle['id_rel_detalle_renum_anio_ant']; ?>" class="btn btn-warning btn-md" title="Editar" data-toggle="tooltip" style="height: 32px; width: 32px;">
+                                            <a href="edit_bienes_inmuebles.php?id=<?php echo (int)$a_detalle['id_rel_detalle_bienes']; ?>" class="btn btn-warning btn-md" title="Editar" data-toggle="tooltip" style="height: 32px; width: 32px;">
                                                 <span class="material-symbols-rounded" style="font-size: 20px; color: black; margin-top: 2px; margin-left: -3px;">edit</span>
                                             </a>
                                         </div>

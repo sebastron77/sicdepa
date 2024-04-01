@@ -26,6 +26,8 @@
       <li><a href="encargo_inicia.php">Encargo Inicia</a></li>
       <li><a href="rem_mens.php">Remuneración Mensual Declarante</a></li>
       <li><a href="rem_anio_ant.php">Remuneración Año Anterior</a></li>
+      <li><a href="bienes_inmuebles.php">Bienes Inmuebles</a></li>
+      <li><a href="vehiculos.php">Vehículos del declarante</a></li>
     </ul>
   </li>
   <li style="margin-top:13px;">
