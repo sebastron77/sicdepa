@@ -19,6 +19,7 @@
             <li><a href="rem_anio_ant.php">Remuneración Año Anterior</a></li>
             <li><a href="bienes_inmuebles.php">Bienes Inmuebles</a></li>
             <li><a href="vehiculos.php">Vehículos del declarante</a></li>
+            <li><a href="bienes_muebles.php">Bienes muebles</a></li>
         </ul>
     </li>
 </ul>

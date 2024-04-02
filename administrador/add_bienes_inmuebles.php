@@ -462,7 +462,7 @@ include_once('layouts/header.php'); ?>
                         </div>
                     </div>
 
-                    <a href="datos_conyuge.php" class="btn btn-md btn-success" title="Cerrar">
+                    <a href="bienes_inmuebles.php" class="btn btn-md btn-success" title="Cerrar">
                         Cerrar
                     </a>
                     <button type="submit" name="add_bienes_inmuebles" class="btn btn-primary btn-md">Guardar</button>

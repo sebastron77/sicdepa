@@ -1,7 +1,13 @@
 {
     "cSpell.words": [
+        "adquisicion",
+        "concubinario",
         "Concubinario",
-        "glyphicon"
+        "creacion",
+        "datatable",
+        "descripcion",
+        "glyphicon",
+        "operacion"
     ],
     "workbench.colorCustomizations": {
         "activityBar.activeBackground": "#2d2d2d",
@@ -22,5 +28,6 @@
         "titleBar.inactiveBackground": "#14141499",
         "titleBar.inactiveForeground": "#e7e7e799"
     },
-    "peacock.color": "#141414"
+    "peacock.color": "#141414",
+    "markdown.validate.enabled": true
 }

@@ -1105,3 +1105,39 @@ function find_by_id_vehiculos($id)
 $result = find_by_sql($sql);
 return $result;
 }
+
+function find_all_bienes_muebles()
+{
+  $sql = "SELECT rr.id_rel_detalle_bien_mueble, rr.id_detalle_usuario, rr.id_cat_tipo_operacion, rr.id_cat_tipo_bien, rr.id_cat_titular, rr.fecha_adquisicion,
+          cto.descripcion as tipo_operacion, tb.descripcion as bien_mueble, ct.descripcion as titular, du.nombre, du.apellido_paterno, du.apellido_materno
+          FROM rel_detalle_bien_mueble rr
+          LEFT JOIN detalles_usuario du
+          ON rr.id_detalle_usuario = du.id_det_usuario
+          LEFT JOIN cat_tipo_operacion cto
+          ON rr.id_cat_tipo_operacion = cto.id_cat_tipo_operacion
+          LEFT JOIN cat_tipo_bien_mueble tb
+          ON rr.id_cat_tipo_bien = tb.id_cat_tipo_bien_mueble
+          LEFT JOIN cat_titular ct
+          ON rr.id_cat_titular = ct.id_cat_titular
+          ORDER BY rr.id_detalle_usuario ASC";
+  $result = find_by_sql($sql);
+  return $result;
+}
+function find_by_id_bienes_muebles($id)
+{
+  $sql = "SELECT rr.id_rel_detalle_bien_mueble, rr.id_detalle_usuario, rr.id_cat_tipo_operacion, rr.id_cat_tipo_bien, rr.id_cat_titular, rr.fecha_adquisicion,
+          cto.descripcion as tipo_operacion, tb.descripcion as bien_mueble, ct.descripcion as titular, du.nombre, du.apellido_paterno, du.apellido_materno
+  FROM rel_detalle_bien_mueble rr
+  LEFT JOIN detalles_usuario du
+  ON rr.id_detalle_usuario = du.id_det_usuario
+  LEFT JOIN cat_tipo_operacion cto
+  ON rr.id_cat_tipo_operacion = cto.id_cat_tipo_operacion
+  LEFT JOIN cat_tipo_bien_mueble tb
+  ON rr.id_cat_tipo_bien = tb.id_cat_tipo_bien_mueble
+  LEFT JOIN cat_titular ct
+  ON rr.id_cat_titular = ct.id_cat_titular
+  WHERE rr.id_detalle_usuario = '$id'
+  ORDER BY rr.id_detalle_usuario ASC";
+$result = find_by_sql($sql);
+return $result;
+}
