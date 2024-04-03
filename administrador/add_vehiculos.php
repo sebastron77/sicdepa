@@ -102,7 +102,7 @@ if (isset($_POST['add_vehiculos'])) {
 
         $("#addRow").click(function() {
             var html = '';
-            html += '<id="inputFormRow">';
+            html += '<div id="inputFormRow">';
             html += '   <div class="row" style="margin-bottom: 5px;">';
             html += '	    <div class="col-md-2">';
             html += '	        <button type="button" class="btn btn-outline-danger" id="removeRow" > ';

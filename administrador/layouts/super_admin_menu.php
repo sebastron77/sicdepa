@@ -29,6 +29,7 @@
       <li><a href="bienes_inmuebles.php">Bienes Inmuebles</a></li>
       <li><a href="vehiculos.php">Vehículos del declarante</a></li>
       <li><a href="bienes_muebles.php">Bienes muebles</a></li>
+      <li><a href="cuentas.php">Cuentas bancarias e inversiones</a></li>
     </ul>
   </li>
   <li style="margin-top:13px;">
