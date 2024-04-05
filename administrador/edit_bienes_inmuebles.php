@@ -74,7 +74,7 @@ if (isset($_POST['update'])) {
         $result = $db->query($sql);
         if ($result && $db->affected_rows() === 1) {
             $session->msg('s', "La información de bienes e inmuebles ha sido editada con éxito.");
-            insertAccion($user['id_user'], '"' . $user['username'] . '" editó remun. anio anterior' . $detalles['id_rel_detalle_bienes'] . '.', 1);
+            insertAccion($user['id_user'], '"' . $user['username'] . '" editó bien inmueble' . $detalles['id_rel_detalle_bienes'] . '.', 1);
             redirect('edit_bienes_inmuebles.php?id=' . (int)$detalles['id_rel_detalle_bienes'], false);
         } else {
             $session->msg('d', ' No se pudo editar la información de bienes e inmuebles.');

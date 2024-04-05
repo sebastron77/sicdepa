@@ -1177,3 +1177,39 @@ function find_by_id_cuentasBanc($id)
 $result = find_by_sql($sql);
 return $result;
 }
+
+function find_all_adeudos()
+{
+  $sql = "SELECT rr.id_cat_rel_detalle_adeudos, rr.id_detalle_usuario, rr.id_cat_tipo_operacion, rr.id_cat_titular, rr.ninguno, rr.id_cat_tipo_adeudo,
+          cto.descripcion as tipo_operacion, ct.descripcion as titular, du.nombre, du.apellido_paterno, du.apellido_materno, cta.descripcion as adeudo
+          FROM rel_detalle_adeudos rr
+          LEFT JOIN detalles_usuario du
+          ON rr.id_detalle_usuario = du.id_det_usuario
+          LEFT JOIN cat_tipo_operacion cto
+          ON rr.id_cat_tipo_operacion = cto.id_cat_tipo_operacion
+          LEFT JOIN cat_titular ct
+          ON rr.id_cat_titular = ct.id_cat_titular
+          LEFT JOIN cat_tipo_adeudo cta
+          ON rr.id_cat_tipo_adeudo = cta.id_cat_tipo_adeudo
+          ORDER BY rr.id_detalle_usuario ASC";
+  $result = find_by_sql($sql);
+  return $result;
+}
+function find_by_id_adeudos($id)
+{
+  $sql = "SELECT rr.id_cat_rel_detalle_adeudos, rr.id_detalle_usuario, rr.id_cat_tipo_operacion, rr.id_cat_titular, rr.ninguno, rr.id_cat_tipo_adeudo,
+          cto.descripcion as tipo_operacion, ct.descripcion as titular, du.nombre, du.apellido_paterno, du.apellido_materno, cta.descripcion as adeudo
+          FROM rel_detalle_adeudos rr
+          LEFT JOIN detalles_usuario du
+          ON rr.id_detalle_usuario = du.id_det_usuario
+          LEFT JOIN cat_tipo_operacion cto
+          ON rr.id_cat_tipo_operacion = cto.id_cat_tipo_operacion
+          LEFT JOIN cat_titular ct
+          ON rr.id_cat_titular = ct.id_cat_titular
+          LEFT JOIN cat_tipo_adeudo cta
+          ON rr.id_cat_tipo_adeudo = cta.id_cat_tipo_adeudo
+          WHERE rr.id_detalle_usuario = '$id'
+          ORDER BY rr.id_detalle_usuario ASC";
+$result = find_by_sql($sql);
+return $result;
+}
