@@ -1036,8 +1036,8 @@ function find_by_id_all_remun_anio_ant($id)
   ON rr.id_detalle_usuario = du.id_det_usuario
   WHERE rr.id_detalle_usuario = '$id'
   ORDER BY rr.id_detalle_usuario ASC";
-$result = find_by_sql($sql);
-return $result;
+  $result = find_by_sql($sql);
+  return $result;
 }
 function find_all_bienes()
 {
@@ -1071,8 +1071,8 @@ function find_by_id_bienes($id)
   ON rr.id_cat_titular = ct.id_cat_titular
   WHERE rr.id_detalle_usuario = '$id'
   ORDER BY rr.id_detalle_usuario ASC";
-$result = find_by_sql($sql);
-return $result;
+  $result = find_by_sql($sql);
+  return $result;
 }
 function find_all_vehiculos()
 {
@@ -1102,8 +1102,8 @@ function find_by_id_vehiculos($id)
   ON rr.id_cat_titular = ct.id_cat_titular
   WHERE rr.id_detalle_usuario = '$id'
   ORDER BY rr.id_detalle_usuario ASC";
-$result = find_by_sql($sql);
-return $result;
+  $result = find_by_sql($sql);
+  return $result;
 }
 
 function find_all_bienes_muebles()
@@ -1138,8 +1138,8 @@ function find_by_id_bienes_muebles($id)
   ON rr.id_cat_titular = ct.id_cat_titular
   WHERE rr.id_detalle_usuario = '$id'
   ORDER BY rr.id_detalle_usuario ASC";
-$result = find_by_sql($sql);
-return $result;
+  $result = find_by_sql($sql);
+  return $result;
 }
 
 function find_all_cuentasBanc()
@@ -1174,8 +1174,8 @@ function find_by_id_cuentasBanc($id)
           ON rr.id_cat_titular = ct.id_cat_titular
           WHERE rr.id_detalle_usuario = '$id'
           ORDER BY rr.id_detalle_usuario ASC";
-$result = find_by_sql($sql);
-return $result;
+  $result = find_by_sql($sql);
+  return $result;
 }
 
 function find_all_adeudos()
@@ -1210,6 +1210,97 @@ function find_by_id_adeudos($id)
           ON rr.id_cat_tipo_adeudo = cta.id_cat_tipo_adeudo
           WHERE rr.id_detalle_usuario = '$id'
           ORDER BY rr.id_detalle_usuario ASC";
-$result = find_by_sql($sql);
-return $result;
+  $result = find_by_sql($sql);
+  return $result;
+}
+
+function find_all_conflicto()
+{
+  $sql = "SELECT rr.id_rel_detalle_conflicto_declarante, rr.id_detalle_usuario, rr.id_cat_tipo_operacion, rr.ninguno, cto.descripcion as tipo_operacion, 
+          du.nombre, du.apellido_paterno, du.apellido_materno, fa.descripcion as frec_anual, pj.descripcion as pers_jurid, rc.descripcion as resp_conf,
+          nv.descripcion as natur_vinc, pd.descripcion as particip_direc, tc. descripcion as tipo_colab, rr.de_acuerdo_publica
+          FROM rel_detalle_conflicto_declarante rr
+          LEFT JOIN detalles_usuario du
+          ON rr.id_detalle_usuario = du.id_det_usuario
+          LEFT JOIN cat_tipo_op_conf cto
+          ON rr.id_cat_tipo_operacion = cto.id_cat_tipo_op_conf
+          LEFT JOIN cat_frec_anual fa
+          ON rr.id_cat_frec_anual = fa.id_cat_frec_anual
+          LEFT JOIN cat_tipo_pers_jurid pj
+          ON rr.id_cat_tipo_pers_jur = pj.id_cat_tipo_pers_jurid
+          LEFT JOIN cat_tipo_resp_conf rc
+          ON rr.id_cat_resp_conf = rc.id_cat_tipo_resp_conf
+          LEFT JOIN cat_natur_vinc nv
+          ON rr.id_cat_natur_vinc = nv.id_cat_natur_vinc
+          LEFT JOIN cat_particip_direc pd
+          ON rr.id_cat_particip_direc = pd.id_cat_particip_direc
+          LEFT JOIN cat_tipo_colab tc
+          ON rr.id_cat_tipo_colab = tc.id_cat_tipo_colab
+          ORDER BY rr.id_detalle_usuario ASC";
+  $result = find_by_sql($sql);
+  return $result;
+}
+function find_by_id_conflicto($id)
+{
+  $sql = "SELECT rr.id_rel_detalle_conflicto_declarante, rr.id_detalle_usuario, rr.id_cat_tipo_operacion, rr.ninguno, cto.descripcion as tipo_operacion, 
+          du.nombre, du.apellido_paterno, du.apellido_materno, fa.descripcion as frec_anual, pj.descripcion as pers_jurid, rc.descripcion as resp_conf,
+          nv.descripcion as natur_vinc, pd.descripcion as particip_direc, tc.descripcion as tipo_colab, rr.de_acuerdo_publica
+          FROM rel_detalle_conflicto_declarante rr
+          LEFT JOIN detalles_usuario du
+          ON rr.id_detalle_usuario = du.id_det_usuario
+          LEFT JOIN cat_tipo_op_conf cto
+          ON rr.id_cat_tipo_operacion = cto.id_cat_tipo_op_conf
+          LEFT JOIN cat_frec_anual fa
+          ON rr.id_cat_frec_anual = fa.id_cat_frec_anual
+          LEFT JOIN cat_tipo_pers_jurid pj
+          ON rr.id_cat_tipo_pers_jur = pj.id_cat_tipo_pers_jurid
+          LEFT JOIN cat_tipo_resp_conf rc
+          ON rr.id_cat_resp_conf = rc.id_cat_tipo_resp_conf
+          LEFT JOIN cat_natur_vinc nv
+          ON rr.id_cat_natur_vinc = nv.id_cat_natur_vinc
+          LEFT JOIN cat_particip_direc pd
+          ON rr.id_cat_particip_direc = pd.id_cat_particip_direc
+          LEFT JOIN cat_tipo_colab tc
+          ON rr.id_cat_tipo_colab = tc.id_cat_tipo_colab
+          WHERE rr.id_detalle_usuario = '$id'
+          ORDER BY rr.id_detalle_usuario ASC";
+  $result = find_by_sql($sql);
+  return $result;
+}
+function find_all_conflicto_econ()
+{
+  $sql = "SELECT rr.id_rel_detalle_conflicto_part_econom, rr.id_detalle_usuario, rr.id_cat_tipo_operacion, rr.ninguno, cto.descripcion as tipo_operacion, 
+          du.nombre, du.apellido_paterno, du.apellido_materno, rc.descripcion as resp_conf, pd.descripcion as particip_direc, rr.nombre_empresa, 
+          rc.descripcion as resp_conf
+          FROM rel_detalle_conflicto_part_econom rr
+          LEFT JOIN detalles_usuario du
+          ON rr.id_detalle_usuario = du.id_det_usuario
+          LEFT JOIN cat_tipo_op_conf cto
+          ON rr.id_cat_tipo_operacion = cto.id_cat_tipo_op_conf
+          LEFT JOIN cat_tipo_resp_conf rc
+          ON rr.id_cat_resp_conf = rc.id_cat_tipo_resp_conf
+          LEFT JOIN cat_particip_direc pd
+          ON rr.id_cat_particip_direc = pd.id_cat_particip_direc
+          ORDER BY rr.id_detalle_usuario ASC";
+  $result = find_by_sql($sql);
+  return $result;
+}
+function find_by_id_conflicto_econ($id)
+{
+  $sql = "SELECT rr.id_rel_detalle_conflicto_part_econom, rr.id_detalle_usuario, rr.id_cat_tipo_operacion, rr.ninguno, cto.descripcion as tipo_operacion, 
+          du.nombre, du.apellido_paterno, du.apellido_materno, rc.descripcion as resp_conf, pd.descripcion as particip_direc, rr.nombre_empresa, 
+          rc.descripcion as resp_conf
+          FROM rel_detalle_conflicto_part_econom rr
+          LEFT JOIN detalles_usuario du
+          ON rr.id_detalle_usuario = du.id_det_usuario
+          LEFT JOIN cat_tipo_op_conf cto
+          ON rr.id_cat_tipo_operacion = cto.id_cat_tipo_op_conf
+          LEFT JOIN cat_tipo_resp_conf rc
+          ON rr.id_cat_resp_conf = rc.id_cat_tipo_resp_conf
+          LEFT JOIN cat_particip_direc pd
+          ON rr.id_cat_particip_direc = pd.id_cat_particip_direc
+          WHERE rr.id_detalle_usuario = '$id'
+          ORDER BY rr.id_detalle_usuario ASC";
+  $result = find_by_sql($sql);
+  return $result;
 }
