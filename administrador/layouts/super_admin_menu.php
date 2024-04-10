@@ -32,7 +32,7 @@
       <li><a href="cuentas.php">Cuentas bancarias e inversiones</a></li>
       <li><a href="adeudos.php">Adeudos del Declarante</a></li>
       <li><a href="conflicto.php">Conflictos de intereses</a></li>
-      <li><a href="conflicto_econ.php">Conflictos de interes económico</a></li>
+      <li><a href="conflicto_econ.php">Conflictos de interes económicos</a></li>
     </ul>
   </li>
   <li style="margin-top:13px;">

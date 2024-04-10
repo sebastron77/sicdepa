@@ -63,12 +63,12 @@ if (isset($_POST['update'])) {
 ?>
 <?php
 include_once('layouts/header.php'); ?>
-<?php echo display_msg($msg); ?>
 <div class="form-group clearfix">
     <a href="encargo_inicia.php" class="btn btn-md btn-success" data-toggle="tooltip" title="Regresar">
         Regresar
     </a>
 </div>
+<?php echo display_msg($msg); ?>
 <div class="panel panel-default">
     <div class="panel-heading">
         <strong>

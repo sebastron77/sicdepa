@@ -23,7 +23,7 @@
             <li><a href="cuentas.php">Cuentas bancarias e inversiones</a></li>
             <li><a href="adeudos.php">Adeudos del Declarante</a></li>
             <li><a href="conflicto.php">Posible conflictos de intereses</a></li>
-            <li><a href="conflicto_econ.php">Posible conflictos de intereses económico</a></li>
+            <li><a href="conflicto_econ.php">Posible conflictos de intereses económicos</a></li>
         </ul>
     </li>
 </ul>

@@ -73,7 +73,7 @@ if (isset($_POST['add_encargo_inicia'])) {
         if ($db->query($query)) {
             $session->msg('s', "La información del encargo que inicia ha sido agregada con éxito.");
             insertAccion($user['id_user'], '"' . $user['username'] . '" agregó el encargo que inicia: ' . '.', 1);
-            redirect('add_encargo_inicia.php', false);
+            redirect('encargo_inicia.php', false);
         } else {
             $session->msg('d', ' No se pudo agregar el encargo que inicia.');
             redirect('add_encargo_inicia.php', false);
@@ -86,12 +86,12 @@ if (isset($_POST['add_encargo_inicia'])) {
 ?>
 <?php
 include_once('layouts/header.php'); ?>
-<?php echo display_msg($msg); ?>
 <div class="modal">
     <div class="modal-content">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="form-group clearfix">
+                    <?php echo display_msg($msg); ?>
                 </div>
             </div>
             <div class="panel-body">

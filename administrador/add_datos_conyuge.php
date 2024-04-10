@@ -74,7 +74,7 @@ if (isset($_POST['add_datos_conyuge'])) {
         if ($db->query($query)) {
             $session->msg('s', "La información de el/los cónyuge(s), concubina y/o dependiente(s) económico(s) ha sido agregada con éxito.");
             insertAccion($user['id_user'], '"' . $user['username'] . '" agregó su cony., concu., depen. econo.: ' . '.', 1);
-            redirect('add_datos_conyuge.php', false);
+            redirect('datos_conyuge.php', false);
         } else {
             $session->msg('d', ' No se pudo agregar la información.');
             redirect('add_datos_conyuge.php', false);
@@ -189,12 +189,13 @@ if (isset($_POST['add_datos_conyuge'])) {
 </script>
 <?php
 include_once('layouts/header.php'); ?>
-<?php echo display_msg($msg); ?>
+
 <div class="modal">
     <div class="modal-content">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="form-group clearfix">
+                <?php echo display_msg($msg); ?>
                 </div>
             </div>
             <div class="panel-body">

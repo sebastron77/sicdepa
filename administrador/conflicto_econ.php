@@ -27,7 +27,7 @@ page_require_level(3);
             <div class="panel-heading clearfix">
                 <strong>
                     <span class="glyphicon glyphicon-th"></span>
-                    <span style="font-size: 15px;">Declaración de posible conflicto de interés</span>
+                    <span style="font-size: 15px;">Declaración de posible conflicto de interés por participaciones económicas</span>
                 </strong>
                 <a href="add_conflicto_econ.php" class="btn btn-info pull-right">Agregar información</a>
             </div>
