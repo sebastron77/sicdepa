@@ -8,6 +8,7 @@ $id_detalle_usuario = $user['id_detalle_user'];
 $areas = find_all('area');
 $ent_feds = find_all('cat_entidad_fed');
 $municipios = find_all('cat_municipios');
+$id_rel_declaracion = find_by_id_dec((int)$id_detalle_usuario);
 page_require_level(3);
 ?>
 <style>
@@ -40,7 +41,6 @@ page_require_level(3);
 if (isset($_POST['add_encargo_inicia'])) {
 
     if (empty($errors)) {
-        // $ninguno = remove_junk($db->escape($_POST['ninguno']));
         $dependencia_entidad = remove_junk($db->escape($_POST['dependencia_entidad']));
         $nombre_emp_car_com = remove_junk($db->escape($_POST['nombre_emp_car_com']));
         $honorarios = remove_junk($db->escape($_POST['honorarios']));
@@ -58,22 +58,27 @@ if (isset($_POST['add_encargo_inicia'])) {
         // Convertimos el array de opciones en una cadena separada por comas
         $id_cat_func_realiza = implode(",", $_POST['id_cat_func_realiza']);
         $otro = remove_junk($db->escape($_POST['otro']));
+        $declaracion = (int)$id_rel_declaracion['id_rel_declaracion'];
 
         $query = "INSERT INTO encargo_ini_mod_conc (";
-        $query .= "id_detalle_usuario, dependencia_entidad, nombre_emp_car_com, honorarios, no_hono_niv_encargo, id_area_adscripcion, fecha_toma_pos_enc, 
+        $query .= "id_detalle_usuario, id_rel_declaracion, dependencia_entidad, nombre_emp_car_com, honorarios, no_hono_niv_encargo, id_area_adscripcion, fecha_toma_pos_enc, 
                         lugar_ubica, si_extranjero_pais, localidad_colonia, id_cat_ent_fed, id_cat_mun, cod_post, tel_oficina, extension, id_cat_func_realiza,
                         otro, fecha_creacion";
         $query .= ") VALUES (";
-        $query .= " '{$id_detalle_usuario}', '{$dependencia_entidad}', '{$nombre_emp_car_com}', '{$honorarios}', '{$no_hono_niv_encargo}', 
-                        '{$id_area_adscripcion}', '{$fecha_toma_pos_enc}', '{$lugar_ubica}', '{$si_extranjero_pais}', '{$localidad_colonia}', 
-                        '{$id_cat_ent_fed}', '{$id_cat_mun}', '{$cod_post}', '{$tel_oficina}', '{$extension}', '{$id_cat_func_realiza}', '{$otro}', 
-                        NOW()";
+        $query .= " '{$id_detalle_usuario}', '{$declaracion}', '{$dependencia_entidad}', '{$nombre_emp_car_com}', '{$honorarios}', '{$no_hono_niv_encargo}', 
+                    '{$id_area_adscripcion}', '{$fecha_toma_pos_enc}', '{$lugar_ubica}', '{$si_extranjero_pais}', '{$localidad_colonia}', 
+                    '{$id_cat_ent_fed}', '{$id_cat_mun}', '{$cod_post}', '{$tel_oficina}', '{$extension}', '{$id_cat_func_realiza}', '{$otro}', 
+                    NOW()";
         $query .= ")";
 
-        if ($db->query($query)) {
-            $session->msg('s', "La información del encargo que inicia ha sido agregada con éxito.");
+        $sql2 = "UPDATE bandera_continuacion SET fecha_actualizacion = NOW() WHERE id_rel_declaracion ='{$db->escape($declaracion)}'";
+        $result2 = $db->query($sql2);
+
+        if (($db->query($query)) && ($result2)) {
+            $session->msg('s', "La información del encargo que inicia ha sido agregada con éxito. Continúa con la remuneración mensual.");
             insertAccion($user['id_user'], '"' . $user['username'] . '" agregó el encargo que inicia: ' . '.', 1);
-            redirect('encargo_inicia.php', false);
+            updateLastArchivo('rem_mens.php', $declaracion);
+            redirect('rem_mens.php', false);
         } else {
             $session->msg('d', ' No se pudo agregar el encargo que inicia.');
             redirect('add_encargo_inicia.php', false);

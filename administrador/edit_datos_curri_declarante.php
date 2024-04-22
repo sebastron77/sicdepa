@@ -13,6 +13,7 @@ $cat_periodos = find_all('cat_periodos_cursados');
 $cat_estatus = find_all('cat_estatus_estudios');
 $cat_documentos = find_all('cat_documento_obtenido');
 $estudios = find_by_id('rel_detalle_estudios', $_GET['id'], 'id_rel_detalle_estudios');
+$id_rel_declaracion = find_by_id_dec((int)$id_detalle_usuario);
 page_require_level(3);
 ?>
 
@@ -21,13 +22,16 @@ if (isset($_POST['update'])) {
 
     if (empty($errors)) {
         $id = (int)$estudios['id_rel_detalle_estudios'];
+
+        $declaracion = (int)$id_rel_declaracion['id_rel_declaracion'];
+
         if ($estudios['id_cat_escolaridad'] <= 3) {
             $inst_educativa1 = remove_junk($db->escape($_POST['inst_educativa1']));
             $id_cat_periodo_cursado1 = remove_junk($db->escape($_POST['id_cat_periodo_cursado1']));
             $id_cat_documento_obtenido1 = remove_junk($db->escape($_POST['id_cat_documento_obtenido1']));
             $id_cat_estatus_estudios1 = remove_junk($db->escape($_POST['id_cat_estatus_estudios1']));
 
-            $sql = "UPDATE rel_detalle_estudios SET inst_educativa='{$inst_educativa1}', id_cat_estatus_estudios='{$id_cat_estatus_estudios1}', id_cat_periodo_cursado='{$id_cat_periodo_cursado1}', id_cat_documento_obtenido='{$id_cat_documento_obtenido1}' 
+            $sql = "UPDATE rel_detalle_estudios SET id_rel_declaracion='{$declaracion}', inst_educativa='{$inst_educativa1}', id_cat_estatus_estudios='{$id_cat_estatus_estudios1}', id_cat_periodo_cursado='{$id_cat_periodo_cursado1}', id_cat_documento_obtenido='{$id_cat_documento_obtenido1}' 
             WHERE id_rel_detalle_estudios ='{$db->escape($id)}'";
         }
         if ($estudios['id_cat_escolaridad'] >= 4) {
@@ -41,15 +45,19 @@ if (isset($_POST['update'])) {
             $carrera_area_con = remove_junk($db->escape($_POST['carrera_area_con']));
             $num_ced_prof = remove_junk($db->escape($_POST['num_ced_prof']));
 
-            $sql = "UPDATE rel_detalle_estudios SET inst_educativa='{$inst_educativa}', id_cat_periodo_cursado='{$id_cat_periodo_cursado}', id_cat_documento_obtenido='{$id_cat_documento_obtenido}', ubic_inst='{$ubic_inst}', id_cat_ent_fed='{$id_cat_ent_fed}', id_cat_mun='{$id_cat_mun}', carrera_area_con='{$carrera_area_con}', id_cat_estatus_estudios='{$id_cat_estatus_estudios}', num_ced_prof='{$num_ced_prof}' WHERE id_rel_detalle_estudios ='{$db->escape($id)}'";
+            $sql = "UPDATE rel_detalle_estudios SET id_rel_declaracion='{$declaracion}', inst_educativa='{$inst_educativa}', id_cat_periodo_cursado='{$id_cat_periodo_cursado}', id_cat_documento_obtenido='{$id_cat_documento_obtenido}', ubic_inst='{$ubic_inst}', id_cat_ent_fed='{$id_cat_ent_fed}', id_cat_mun='{$id_cat_mun}', carrera_area_con='{$carrera_area_con}', id_cat_estatus_estudios='{$id_cat_estatus_estudios}', num_ced_prof='{$num_ced_prof}' WHERE id_rel_detalle_estudios ='{$db->escape($id)}'";
         }
         $result = $db->query($sql);
+        $sql2 = "UPDATE bandera_continuacion SET fecha_actualizacion = NOW() WHERE id_rel_declaracion ='{$db->escape($declaracion)}'";
 
-        if ($db->query($query)) {
+        $result2 = $db->query($sql2);
+
+        if (($db->query($query)) && ($result2 && $db->affected_rows() === 1)) {
             //sucess
-            $session->msg('s', "La información de experiencia laboral ha sido editada con éxito.");
+            $session->msg('s', "La información de los datos curriculares del declarante ha sido editada con éxito. Continúa con la información de tu experiencia laboral.");
             insertAccion($user['id_user'], '"' . $user['username'] . '" editó su escolaridad: ' . $id_cat_esc . '.', 2);
-            redirect('edit_datos_curri_declarante.php?id=' . (int)$estudios['id_rel_detalle_estudios'], false);
+            // updateLastArchivo('edit_datos_curri_declarante.php', $declaracion);
+            redirect('exp_laboral.php', false);
         } else {
             //failed
             $session->msg('d', ' No se pudo editar la información.');

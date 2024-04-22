@@ -155,7 +155,7 @@ p {
 
 .panel-default > .panel-heading {
   background-color: #ffffff;
-  border-bottom: 2.5px solid #bb3ea6;
+  /* border-bottom: 2.5px solid #bb3ea6; */
   font-size: 14px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -887,7 +887,7 @@ span.red {
 
 div.alert.alert-success {
   font-size: 20px;
-  background: #7163f050;
+  background: rgba(63, 52, 160, 0.685);
   /* border-color: #176939; */
   color: white;
   border: 0px;

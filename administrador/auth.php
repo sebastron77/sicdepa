@@ -22,7 +22,7 @@ if (empty($errors)) {
       redirect('admin.php', false);
     }
     if ($nivel >= 2) {
-      redirect('home.php', false);
+      redirect('admin.php', false);
     }
 
 

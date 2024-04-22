@@ -16,6 +16,7 @@ $cat_est_civ = find_all('cat_estado_civil');
 $cat_regimen_matrimonial = find_all('cat_regimen_matrimonial');
 $cat_nacionalidad = find_all('cat_nacionalidades');
 $cat_entidad_fed = find_all('cat_entidad_fed');
+$id_rel_declaracion = find_by_id('rel_declaracion', (int)$_GET['id'], 'id_detalle_usuario');
 page_require_level(3);
 ?>
 
@@ -45,18 +46,24 @@ if (isset($_POST['update'])) {
         $entidad_resid = remove_junk($db->escape($_POST['entidad_resid']));
         $cod_post = remove_junk($db->escape($_POST['cod_post']));
 
-        $sql = "UPDATE detalles_usuario SET nombre='{$nombre}', apellido_paterno='{$apellido_paterno}', apellido_materno='{$apellido_materno}', curp='{$curp}', 
-            rfc='{$rfc}', correo_laboral='{$correo_laboral}', correo_personal='{$correo_personal}', id_cat_estado_civil='{$id_cat_estado_civil}', 
-            id_cat_regimen_matrimonial='{$id_cat_regimen_matrimonial}', pais_nac='{$pais_nac}', nacionalidad='{$nacionalidad}', entidad_nac='{$entidad_nac}', 
-            telefono='{$telefono}', lugar_ubica_dom='{$lugar_ubica_dom}', calle_num='{$calle_num}', colonia='{$colonia}', municipio='{$municipio}', 
-            tel_part='{$tel_part}', entidad_resid='{$entidad_resid}', cod_post='{$cod_post}'
-            WHERE id_det_usuario='{$db->escape($id)}'";
+        $declaracion = (int)$id_rel_declaracion['id_rel_declaracion'];
+
+        $sql = "UPDATE detalles_usuario SET id_rel_declaracion='{$declaracion}', nombre='{$nombre}', apellido_paterno='{$apellido_paterno}',
+                apellido_materno='{$apellido_materno}', curp='{$curp}', rfc='{$rfc}', correo_laboral='{$correo_laboral}', correo_personal='{$correo_personal}', id_cat_estado_civil='{$id_cat_estado_civil}', id_cat_regimen_matrimonial='{$id_cat_regimen_matrimonial}', pais_nac='{$pais_nac}', 
+                nacionalidad='{$nacionalidad}', entidad_nac='{$entidad_nac}', telefono='{$telefono}', lugar_ubica_dom='{$lugar_ubica_dom}', 
+                calle_num='{$calle_num}', colonia='{$colonia}', municipio='{$municipio}', tel_part='{$tel_part}', entidad_resid='{$entidad_resid}', 
+                cod_post='{$cod_post}'
+                WHERE id_det_usuario='{$db->escape($id)}'";
         $result = $db->query($sql);
 
-        if ($result && $db->affected_rows() === 1) {
-            $session->msg('s', "Información Actualizada ");
+        $sql2 = "UPDATE bandera_continuacion SET fecha_actualizacion = NOW() WHERE id_rel_declaracion ='{$db->escape($declaracion)}'";
+        $result2 = $db->query($sql2);
+
+        if (($result && $db->affected_rows() === 1) && ($result2 && $db->affected_rows() === 1)) {
+            $session->msg('s', "Los datos generales del declarante han sido actualizados. Continúa con tu información Curricular");
             insertAccion($user['id_user'], '"' . $user['username'] . '" editó al trabajador(a): ' . $nombre . ' ' . $apellidos . '.', 2);
-            redirect('edit_detalle_usuario.php?id=' . (int)$e_detalle['id_det_usuario'], false);
+            // updateLastArchivo('edit_detalle_usuario.php', $declaracion);
+            redirect('datos_curri_declarante.php', false);
         } else {
             $session->msg('d', ' Lo siento no se actualizaron los datos.');
             redirect('edit_detalle_usuario.php?id=' . (int)$e_detalle['id_det_usuario'], false);
@@ -80,7 +87,7 @@ if (isset($_POST['update'])) {
                     <span class="material-symbols-outlined" style="color: #3a3d44">
                         contacts
                     </span>
-                    <p style="margin-top: -30px; margin-left: 25px;">Actualizar datos generales del declarante: <?php echo (ucwords($e_detalle['nombre'])); ?> <?php echo ($e_detalle['apellido_paterno'] . ' ' . $e_detalle['apellido_materno']); ?></p>
+                    <p style="margin-top: -30px; margin-left: 25px;">Actualizar datos generales del declarante</p>
                 </strong>
             </div>
             <div class="panel-body">

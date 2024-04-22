@@ -9,6 +9,7 @@ $cat_sector = find_all('cat_sector');
 $cat_poder = find_all('cat_poder');
 $cat_ambito = find_all('cat_ambito');
 $exp_lab = find_by_id('rel_exp_laboral', $_GET['id'], 'id_rel_exp_lab');
+$id_rel_declaracion = find_by_id_dec((int)$id_detalle_usuario);
 page_require_level(3);
 ?>
 
@@ -27,17 +28,22 @@ if (isset($_POST['update'])) {
         $ingreso = remove_junk($db->escape($_POST['ingreso']));
         $egreso = remove_junk($db->escape($_POST['egreso']));
 
-        $sql = "UPDATE rel_exp_laboral SET id_cat_sector='{$id_cat_sector}', id_cat_poder='{$id_cat_poder}', id_cat_ambito='{$id_cat_ambito}', 
-                nombre_inst_empresa='{$nombre_inst_empresa}', unidad_admin_area='{$unidad_admin_area}', puesto_cargo='{$puesto_cargo}', 
-                funcion_principal='{$funcion_principal}', ingreso='{$ingreso}', egreso='{$egreso}'
-                WHERE id_rel_exp_lab ='{$db->escape($id)}'";
-        $result = $db->query($sql);
+        $declaracion = (int)$id_rel_declaracion['id_rel_declaracion'];
 
-        if ($db->query($query)) {
+        $sql = "UPDATE rel_exp_laboral SET id_rel_declaracion='{$declaracion}', id_cat_sector='{$id_cat_sector}', id_cat_poder='{$id_cat_poder}', 
+                id_cat_ambito='{$id_cat_ambito}', nombre_inst_empresa='{$nombre_inst_empresa}', unidad_admin_area='{$unidad_admin_area}', 
+                puesto_cargo='{$puesto_cargo}', funcion_principal='{$funcion_principal}', ingreso='{$ingreso}', egreso='{$egreso}'
+                WHERE id_rel_exp_lab ='{$db->escape($id)}'";
+                $sql2 = "UPDATE bandera_continuacion SET fecha_actualizacion = NOW() WHERE id_rel_declaracion ='{$db->escape($declaracion)}'";
+        $result = $db->query($sql);
+        $result2 = $db->query($sql2);
+
+        if (($db->query($query)) && ($result2 && $db->affected_rows() === 1)) {
             //sucess
-            $session->msg('s', "La información de experiencia laboral ha sido editada con éxito.");
+            $session->msg('s', "La información de experiencia laboral ha sido editada con éxito. Continúa con la información del cónyuge.");
             insertAccion($user['id_user'], '"' . $user['username'] . '" editó su experiencia laboral: ' . $id . '.', 2);
-            redirect('edit_exp_laboral.php?id=' . (int)$exp_lab['id_rel_exp_lab'], false);
+            // updateLastArchivo('edit_exp_laboral.php', $declaracion);
+            redirect('datos_conyuge.php', false);
         } else {
             //failed
             $session->msg('d', ' No se pudo editar la información.');

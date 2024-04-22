@@ -68,6 +68,20 @@ function find_by_id($table, $id, $nombre_id)
 /*--------------------------------------------------------------*/
 /*  Funcion para encontrar datos por su id en una tabla
 /*--------------------------------------------------------------*/
+function find_by_id_dec($id)
+{
+  global $db;
+  $id = (int)$id;
+  $sql = $db->query("SELECT * FROM rel_declaracion WHERE id_detalle_usuario='{$db->escape($id)}' ORDER BY fecha_creacion DESC LIMIT 1");
+  if ($result = $db->fetch_assoc($sql))
+    return $result;
+  else
+    return null;
+}
+
+/*--------------------------------------------------------------*/
+/*  Funcion para encontrar datos por su id en una tabla
+/*--------------------------------------------------------------*/
 function find_by_id_user($table, $id, $nombre_id)
 {
   global $db;
@@ -717,6 +731,14 @@ function insertAccion($user_id, $accion, $id_accion)
 {
   global $db;
   $sql = "INSERT INTO registro_actividades (id_usuarios, fecha_accion, descripcion, accion) VALUES ({$user_id}, NOW(),'{$accion}', {$id_accion});";
+  $result = $db->query($sql);
+  return ($result && $db->affected_rows() === 1 ? true : false);
+}
+
+function updateLastArchivo($nombre_archivo, $id)
+{
+  global $db;
+  $sql = "UPDATE bandera_continuacion SET ultimo_archivo = '{$nombre_archivo}' WHERE id_rel_declaracion = '{$id}'";
   $result = $db->query($sql);
   return ($result && $db->affected_rows() === 1 ? true : false);
 }

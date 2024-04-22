@@ -52,11 +52,11 @@ page_require_level(3);
                                 <tr>
                                     <td class="text-center"><?php echo remove_junk(ucwords($a_detalle2['id_rel_detalle_renum'])) ?></td>
                                     <td><?php echo remove_junk(ucwords($a_detalle2['nombre'] . ' ' . $a_detalle2['apellido_paterno'] . ' ' . $a_detalle2['apellido_materno'])) ?></td>
-                                    <td class="text-center"><?php echo remove_junk(ucwords($a_detalle2['renum_mens'])) ?></td>
-                                    <td class="text-center"><?php echo remove_junk(ucwords($a_detalle2['act_indus'])) ?></td>
-                                    <td class="text-center"><?php echo remove_junk(ucwords($a_detalle2['act_finan'])) ?></td>
-                                    <td class="text-center"><?php echo remove_junk(ucwords($a_detalle2['serv_prof'])) ?></td>
-                                    <td class="text-center"><?php echo remove_junk(ucwords($a_detalle2['otros'])) ?></td>
+                                    <td class="text-center">$<?php echo remove_junk(ucwords($a_detalle2['renum_mens'])) ?></td>
+                                    <td class="text-center">$<?php echo remove_junk(ucwords($a_detalle2['act_indus'])) ?></td>
+                                    <td class="text-center">$<?php echo remove_junk(ucwords($a_detalle2['act_finan'])) ?></td>
+                                    <td class="text-center">$<?php echo remove_junk(ucwords($a_detalle2['serv_prof'])) ?></td>
+                                    <td class="text-center">$<?php echo remove_junk(ucwords($a_detalle2['otros'])) ?></td>
                                     <td class="text-center">
                                         <div class="btn-group">
                                             <a href="edit_rem_mens.php?id=<?php echo (int)$a_detalle2['id_rel_detalle_renum']; ?>" class="btn btn-warning btn-md" title="Editar" data-toggle="tooltip" style="height: 32px; width: 32px;">
@@ -72,11 +72,11 @@ page_require_level(3);
                                 <tr>
                                     <td class="text-center"><?php echo remove_junk(ucwords($a_detalle['id_rel_detalle_renum'])) ?></td>
                                     <td><?php echo remove_junk(ucwords($a_detalle['nombre'] . ' ' . $a_detalle['apellido_paterno'] . ' ' . $a_detalle['apellido_materno'])) ?></td>
-                                    <td class="text-center"><?php echo remove_junk(ucwords($a_detalle['renum_mens'])) ?></td>
-                                    <td class="text-center"><?php echo remove_junk(ucwords($a_detalle['act_indus'])) ?></td>
-                                    <td class="text-center"><?php echo remove_junk(ucwords($a_detalle['act_finan'])) ?></td>
-                                    <td class="text-center"><?php echo remove_junk(ucwords($a_detalle['serv_prof'])) ?></td>
-                                    <td class="text-center"><?php echo remove_junk(ucwords($a_detalle['otros'])) ?></td>
+                                    <td class="text-center">$<?php echo remove_junk(ucwords($a_detalle['renum_mens'])) ?></td>
+                                    <td class="text-center">$<?php echo remove_junk(ucwords($a_detalle['act_indus'])) ?></td>
+                                    <td class="text-center">$<?php echo remove_junk(ucwords($a_detalle['act_finan'])) ?></td>
+                                    <td class="text-center">$<?php echo remove_junk(ucwords($a_detalle['serv_prof'])) ?></td>
+                                    <td class="text-center">$<?php echo remove_junk(ucwords($a_detalle['otros'])) ?></td>
                                     <td class="text-center">
                                         <div class="btn-group">
                                             <a href="edit_rem_mens.php?id=<?php echo (int)$a_detalle['id_rel_detalle_renum']; ?>" class="btn btn-warning btn-md" title="Editar" data-toggle="tooltip" style="height: 32px; width: 32px;">

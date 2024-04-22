@@ -5,6 +5,7 @@ require_once('includes/load.php');
 
 $user = current_user();
 $id_detalle_usuario = $user['id_detalle_user'];
+$id_rel_declaracion = find_by_id_dec((int)$id_detalle_usuario);
 page_require_level(3);
 ?>
 <style>
@@ -38,11 +39,13 @@ if (isset($_POST['add_datos_conyuge'])) {
 
     if (empty($errors)) {
         $ninguno = remove_junk($db->escape($_POST['ninguno']));
+        $declaracion = (int)$id_rel_declaracion['id_rel_declaracion'];
+
         if ($ninguno == 'on') {
             $query = "INSERT INTO rel_detalle_cony_dependientes (";
-            $query .= "id_detalle_usuario, ninguno, fecha_creacion";
+            $query .= "id_detalle_usuario, id_rel_declaracion, ninguno, fecha_creacion";
             $query .= ") VALUES (";
-            $query .= " '{$id_detalle_usuario}', 1, NOW()";
+            $query .= " '{$id_detalle_usuario}', '{$declaracion}', 1, NOW()";
             $query .= ")";
         }
         if ($ninguno != 'on') {
@@ -56,14 +59,14 @@ if (isset($_POST['add_datos_conyuge'])) {
             $desemp_admin_pub = $_POST['desemp_admin_pub'];
             $depen_ent_desmp_ap = $_POST['depen_ent_desemp_ap'];
             $habita_domicilio = $_POST['habita_domicilio'];
-            $dom_si_no_habita = $_POST['dom_si_no_habita'];
+            $dom_si_no_habita = $_POST['dom_si_no_habita'];            
 
             for ($i = 0; $i < sizeof($nombre2); $i = $i + 1) {
                 $query1 = "INSERT INTO rel_detalle_cony_dependientes (";
-                $query1 .= "id_detalle_usuario, ninguno, nombre_completo, parentesco, extranjero, curp, dependiente_econ, desemp_admin_pub, depen_ent_desemp_ap, 
-                        habita_domicilio, dom_si_no_habita, fecha_creacion";
+                $query1 .= "id_detalle_usuario, id_rel_declaracion, ninguno, nombre_completo, parentesco, extranjero, curp, dependiente_econ, desemp_admin_pub,
+                            depen_ent_desemp_ap, habita_domicilio, dom_si_no_habita, fecha_creacion";
                 $query1 .= ") VALUES (";
-                $query1 .= " '{$id_detalle_usuario}', 0, '$nombre_completo[$i]', '$parentesco[$i]', '$extranjero[$i]', '$curp[$i]', 
+                $query1 .= " '{$id_detalle_usuario}', '{$declaracion}', 0, '$nombre_completo[$i]', '$parentesco[$i]', '$extranjero[$i]', '$curp[$i]', 
                             '$dependiente_econ[$i]', '$desemp_admin_pub[$i]', '$depen_ent_desmp_ap[$i]', '$habita_domicilio[$i]', 
                             '$dom_si_no_habita[$i]', NOW()";
                 $query1 .= ")";
@@ -71,10 +74,14 @@ if (isset($_POST['add_datos_conyuge'])) {
             }
         }
 
-        if ($db->query($query)) {
-            $session->msg('s', "La información de el/los cónyuge(s), concubina y/o dependiente(s) económico(s) ha sido agregada con éxito.");
+        $sql2 = "UPDATE bandera_continuacion SET fecha_actualizacion = NOW() WHERE id_rel_declaracion ='{$db->escape($declaracion)}'";
+        $result2 = $db->query($sql2);
+
+        if (($db->query($query)) && ($result2)) {
+            $session->msg('s', "La información de el/los cónyuge(s), concubina y/o dependiente(s) económico(s) ha sido agregada con éxito. Continúa con la información del encargo que inicias.");
             insertAccion($user['id_user'], '"' . $user['username'] . '" agregó su cony., concu., depen. econo.: ' . '.', 1);
-            redirect('datos_conyuge.php', false);
+            updateLastArchivo('encargo_inicia.php', $declaracion);
+            redirect('encargo_inicia.php', false);
         } else {
             $session->msg('d', ' No se pudo agregar la información.');
             redirect('add_datos_conyuge.php', false);

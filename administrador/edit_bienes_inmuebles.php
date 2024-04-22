@@ -12,6 +12,7 @@ $obras = find_all('cat_si_obra');
 $adquisiciones = find_all('cat_forma_adquisicion');
 $titulares = find_all('cat_titular');
 $cesionarios = find_all('cat_rel_cesionario');
+$id_rel_declaracion = find_by_id_dec((int)$id_detalle_usuario);
 page_require_level(3);
 ?>
 <style>
@@ -62,20 +63,23 @@ if (isset($_POST['update'])) {
         $ubicacion_inmueble = $_POST['ubicacion_inmueble'];
         $si_es_obra = $_POST['si_es_obra'];
         $si_venta = $_POST['si_venta'];
+        $declaracion = (int)$id_rel_declaracion['id_rel_declaracion'];
 
-        $sql = "UPDATE rel_detalle_bienes_inmuebles SET id_cat_tipo_operacion='{$id_cat_tipo_operacion}', id_cat_tipo_bien='{$id_cat_tipo_bien}', 
-                cat_si_obra='{$cat_si_obra}', superficie_terreno='{$superficie_terreno}', superficie_construccion='{$superficie_construccion}', 
-                id_cat_forma_adquisicion='{$id_cat_forma_adquisicion}', nombre_razon_soc='{$nombre_razon_soc}', id_cat_titular='{$id_cat_titular}', 
-                id_cat_relacion_ces_don_her='{$id_cat_relacion_ces_don_her}', si_otro ='{$si_otro}', valor_inmueble='{$valor_inmueble}', 
-                tipo_moneda='{$tipo_moneda}', fecha_adquisicion='{$fecha_adquisicion}', datos_registro='{$datos_registro}',
-                ubicacion_inmueble='{$ubicacion_inmueble}', si_es_obra='{$si_es_obra}', si_venta='{$si_venta}'
+        $sql = "UPDATE rel_detalle_bienes_inmuebles SET id_rel_declaracion='{$declaracion}', id_cat_tipo_operacion='{$id_cat_tipo_operacion}', 
+                id_cat_tipo_bien='{$id_cat_tipo_bien}', cat_si_obra='{$cat_si_obra}', superficie_terreno='{$superficie_terreno}', 
+                superficie_construccion='{$superficie_construccion}', id_cat_forma_adquisicion='{$id_cat_forma_adquisicion}', 
+                nombre_razon_soc='{$nombre_razon_soc}', id_cat_titular='{$id_cat_titular}', id_cat_relacion_ces_don_her='{$id_cat_relacion_ces_don_her}', si_otro ='{$si_otro}', valor_inmueble='{$valor_inmueble}', tipo_moneda='{$tipo_moneda}', fecha_adquisicion='{$fecha_adquisicion}', datos_registro='{$datos_registro}', ubicacion_inmueble='{$ubicacion_inmueble}', si_es_obra='{$si_es_obra}', si_venta='{$si_venta}'
                 WHERE id_rel_detalle_bienes ='{$db->escape($id)}'";
 
+        $sql2 = "UPDATE bandera_continuacion SET fecha_actualizacion = NOW() WHERE id_rel_declaracion ='{$db->escape($declaracion)}'";
+
         $result = $db->query($sql);
+        $result2 = $db->query($sql2);
+
         if ($result && $db->affected_rows() === 1) {
-            $session->msg('s', "La información de bienes e inmuebles ha sido editada con éxito.");
+            $session->msg('s', "La información de bienes e inmuebles ha sido editada con éxito. Continúa con los vehículos.");
             insertAccion($user['id_user'], '"' . $user['username'] . '" editó bien inmueble' . $detalles['id_rel_detalle_bienes'] . '.', 1);
-            redirect('edit_bienes_inmuebles.php?id=' . (int)$detalles['id_rel_detalle_bienes'], false);
+            redirect('vehiculos.php', false);
         } else {
             $session->msg('d', ' No se pudo editar la información de bienes e inmuebles.');
             redirect('edit_bienes_inmuebles.php?id=' . (int)$detalles['id_rel_detalle_bienes'], false);
@@ -187,7 +191,7 @@ include_once('layouts/header.php'); ?>
                             <div class="col-md-4 d-flex flex-column justify-content-end">
                                 <div class="form-group">
                                     <label for="nombre_razon_soc" style="text-align: justify;">Indicar el nombre o razón social del cesionario, del autor de la donación o del autor de la herencia, permuta, rifa, sorteo o del vendedor o enajenante con el titular y llenar los dos rubros siguientes (Para efectos de posible conflicto de interés)</label>
-                                    <input class=" form-control" type="text" name="nombre_razon_soc" id="nombre_razon_soc"  value="<?php echo $detalles['nombre_razon_soc'] ?>">
+                                    <input class=" form-control" type="text" name="nombre_razon_soc" id="nombre_razon_soc" value="<?php echo $detalles['nombre_razon_soc'] ?>">
                                 </div>
                             </div>
                             <div class="col-md-2 d-flex flex-column justify-content-end">
@@ -221,7 +225,7 @@ include_once('layouts/header.php'); ?>
                             <div class="col-md-4 d-flex flex-column justify-content-end">
                                 <div class="form-group">
                                     <label for="si_otro" style="text-align: justify;">En caso de elegir “otro” especificar la relación del cesionario, del autor de la donación o del autor de la herencia, permuta, rifa, sorteo o del vendedor o enajenante con el titular</label>
-                                    <input class="form-control" type=" text" name="si_otro" id="si_otro"  value="<?php echo $detalles['si_otro'] ?>">
+                                    <input class="form-control" type=" text" name="si_otro" id="si_otro" value="<?php echo $detalles['si_otro'] ?>">
                                 </div>
                             </div>
                         </div>
@@ -229,25 +233,25 @@ include_once('layouts/header.php'); ?>
                             <div class="col-md-3 d-flex flex-column justify-content-end">
                                 <div class="form-group">
                                     <label for="valor_inmueble" style="text-align: justify;">Valor del inmueble conforme a escritura pública o contrato (no actualizar a valor presente) SIN CENTAVOS</label>
-                                    <input class="form-control" type=" text" name="valor_inmueble" id="valor_inmueble"  value="<?php echo $detalles['valor_inmueble'] ?>">
+                                    <input class="form-control" type=" text" name="valor_inmueble" id="valor_inmueble" value="<?php echo $detalles['valor_inmueble'] ?>">
                                 </div>
                             </div>
                             <div class="col-md-3 d-flex flex-column justify-content-end">
                                 <div class="form-group">
                                     <label for="tipo_moneda" style="text-align: justify;">Tipo de moneda (especificar)</label>
-                                    <input class="form-control" type=" text" name="tipo_moneda" id="tipo_moneda"  value="<?php echo $detalles['tipo_moneda'] ?>">
+                                    <input class="form-control" type=" text" name="tipo_moneda" id="tipo_moneda" value="<?php echo $detalles['tipo_moneda'] ?>">
                                 </div>
                             </div>
                             <div class="col-md-2 d-flex flex-column justify-content-end">
                                 <div class="form-group">
                                     <label for="fecha_adquisicion" style="text-align: justify;">Fecha de adquisición</label>
-                                    <input class="form-control" type="date" name="fecha_adquisicion" id="fecha_adquisicion"  value="<?php echo $detalles['fecha_adquisicion'] ?>">
+                                    <input class="form-control" type="date" name="fecha_adquisicion" id="fecha_adquisicion" value="<?php echo $detalles['fecha_adquisicion'] ?>">
                                 </div>
                             </div>
                             <div class="col-md-4 d-flex flex-column justify-content-end">
                                 <div class="form-group">
                                     <label for="datos_registro" style="text-align: justify;">Datos del registro público de la propiedad: folio real u otro dato que permita a la identificación del mismo</label>
-                                    <input class="form-control" type="text" name="datos_registro" id="datos_registro"  value="<?php echo $detalles['datos_registro'] ?>">
+                                    <input class="form-control" type="text" name="datos_registro" id="datos_registro" value="<?php echo $detalles['datos_registro'] ?>">
                                 </div>
                             </div>
                         </div>

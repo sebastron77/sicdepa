@@ -10,6 +10,7 @@ $operaciones = find_all('cat_tipo_operacion');
 $adquisiciones = find_all('cat_forma_adquisicion');
 $titulares = find_all('cat_titular');
 $cesionarios = find_all('cat_rel_cesionario');
+$id_rel_declaracion = find_by_id_dec((int)$id_detalle_usuario);
 page_require_level(3);
 ?>
 <style>
@@ -60,19 +61,23 @@ if (isset($_POST['update'])) {
         $id_cat_titular = $_POST['id_cat_titular'];
         $si_vent_forma_oper = $_POST['si_vent_forma_oper'];
         $si_sinies_tipo = $_POST['si_sinies_tipo'];
+        $declaracion = (int)$id_rel_declaracion['id_rel_declaracion'];
 
-        $sql = "UPDATE rel_detalle_automotores SET id_cat_tipo_operacion='{$id_cat_tipo_operacion}', marca='{$marca}', tipo='{$tipo}', modelo='{$modelo}', 
-                num_serie='{$num_serie}', donde_registrado='{$donde_registrado}', ent_fed_pais='{$ent_fed_pais}', id_cat_forma_adquis='{$id_cat_forma_adquis}', 
-                nombre_cesionario='{$nombre_cesionario}', id_cat_rel_cesionario ='{$id_cat_rel_cesionario}', otro_especifica='{$otro_especifica}', 
-                valor_momento_compra='{$valor_momento_compra}', tipo_moneda='{$tipo_moneda}', fecha_adquisicion='{$fecha_adquisicion}', 
-                id_cat_titular='{$id_cat_titular}', si_vent_forma_oper='{$si_vent_forma_oper}', si_sinies_tipo='{$si_sinies_tipo}'
+        $sql = "UPDATE rel_detalle_automotores SET id_rel_declaracion='{$declaracion}', id_cat_tipo_operacion='{$id_cat_tipo_operacion}', marca='{$marca}', 
+                tipo='{$tipo}', modelo='{$modelo}', num_serie='{$num_serie}', donde_registrado='{$donde_registrado}', ent_fed_pais='{$ent_fed_pais}', id_cat_forma_adquis='{$id_cat_forma_adquis}', nombre_cesionario='{$nombre_cesionario}', id_cat_rel_cesionario ='{$id_cat_rel_cesionario}', otro_especifica='{$otro_especifica}', valor_momento_compra='{$valor_momento_compra}', tipo_moneda='{$tipo_moneda}', 
+                fecha_adquisicion='{$fecha_adquisicion}', id_cat_titular='{$id_cat_titular}', si_vent_forma_oper='{$si_vent_forma_oper}', 
+                si_sinies_tipo='{$si_sinies_tipo}'
                 WHERE id_rel_detalle_automotores ='{$db->escape($id)}'";
+                $sql2 = "UPDATE bandera_continuacion SET fecha_actualizacion = NOW() WHERE id_rel_declaracion ='{$db->escape($declaracion)}'";
 
         $result = $db->query($sql);
-        if ($result && $db->affected_rows() === 1) {
-            $session->msg('s', "La información del vehículo ha sido editada con éxito.");
+        $result2 = $db->query($sql2);
+
+        if (($result && $db->affected_rows() === 1) && ($result2 && $db->affected_rows() === 1)) {
+            $session->msg('s', "La información del vehículo ha sido editada con éxito. Continúa con bienes muebles.");
             insertAccion($user['id_user'], '"' . $user['username'] . '" editó vehiculo' . $detalles['id_rel_detalle_automotores'] . '.', 1);
-            redirect('edit_vehiculos.php?id=' . (int)$detalles['id_rel_detalle_automotores'], false);
+            // updateLastArchivo('bienes_muebles.php', $declaracion);
+            redirect('bienes_muebles.php', false);
         } else {
             $session->msg('d', ' No se pudo editar la información del vehículo.');
             redirect('edit_vehiculos.php?id=' . (int)$detalles['id_rel_detalle_automotores'], false);

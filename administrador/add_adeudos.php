@@ -8,6 +8,7 @@ $id_detalle_usuario = $user['id_detalle_user'];
 $operaciones = find_all('cat_tipo_operacion');
 $titulares = find_all('cat_titular');
 $adeudos = find_all('cat_tipo_adeudo');
+$id_rel_declaracion = find_by_id_dec((int)$id_detalle_usuario);
 page_require_level(3);
 ?>
 
@@ -42,11 +43,12 @@ page_require_level(3);
 if (isset($_POST['add_adeudos'])) {
     if (empty($errors)) {
         $ninguno = remove_junk($db->escape($_POST['ninguno']));
+        $declaracion = (int)$id_rel_declaracion['id_rel_declaracion'];
         if ($ninguno == 'on') {
             $query = "INSERT INTO rel_detalle_adeudos (";
-            $query .= "id_detalle_usuario, ninguno, fecha_creacion";
+            $query .= "id_detalle_usuario, id_rel_declaracion, ninguno, fecha_creacion";
             $query .= ") VALUES (";
-            $query .= " '{$id_detalle_usuario}', 1, NOW()";
+            $query .= " '{$id_detalle_usuario}', '{$declaracion}', 1, NOW()";
             $query .= ")";
         }
         if ($ninguno != 'on') {
@@ -67,21 +69,26 @@ if (isset($_POST['add_adeudos'])) {
 
             for ($i = 0; $i < sizeof($id_cat_tipo_operacion); $i = $i + 1) {
                 $query1 = "INSERT INTO rel_detalle_adeudos (";
-                $query1 .= "id_detalle_usuario, ninguno, id_cat_tipo_operacion, id_cat_tipo_adeudo, num_cuenta, mexico, inst_razon_soc, extranjero, 
-                            pais_inst_razon_soc, fecha_otorgamiento, monto_orig_adeudo, tipo_moneda_or, saldo_inso, tipo_moneda_ins, id_cat_plazo_adeudo, 
-                            id_cat_titular, fecha_creacion";
+                $query1 .= "id_detalle_usuario, id_rel_declaracion, ninguno, id_cat_tipo_operacion, id_cat_tipo_adeudo, num_cuenta, mexico, inst_razon_soc,
+                            extranjero, pais_inst_razon_soc, fecha_otorgamiento, monto_orig_adeudo, tipo_moneda_or, saldo_inso, tipo_moneda_ins, 
+                            id_cat_plazo_adeudo, id_cat_titular, fecha_creacion";
                 $query1 .= ") VALUES (";
-                $query1 .= "'{$id_detalle_usuario}', 0, '$id_cat_tipo_operacion[$i]', '$id_cat_tipo_adeudo[$i]', '$num_cuenta[$i]', '$mexico[$i]', 
-                            '$inst_razon_soc[$i]', '$extranjero[$i]', '$pais_inst_razon_soc[$i]', '$fecha_otorgamiento[$i]', '$monto_orig_adeudo[$i]', 
-                            '$tipo_moneda_or[$i]', '$saldo_inso[$i]', '$tipo_moneda_ins[$i]', '$id_cat_plazo_adeudo[$i]', '$id_cat_titular[$i]', NOW()";
+                $query1 .= "'{$id_detalle_usuario}', '{$declaracion}', 0, '$id_cat_tipo_operacion[$i]', '$id_cat_tipo_adeudo[$i]', '$num_cuenta[$i]', 
+                            '$mexico[$i]', '$inst_razon_soc[$i]', '$extranjero[$i]', '$pais_inst_razon_soc[$i]', '$fecha_otorgamiento[$i]', 
+                            '$monto_orig_adeudo[$i]',  '$tipo_moneda_or[$i]', '$saldo_inso[$i]', '$tipo_moneda_ins[$i]', '$id_cat_plazo_adeudo[$i]', 
+                            '$id_cat_titular[$i]', NOW()";
                 $query1 .= ")";
                 $db->query($query1);
             }
         }
-        if ($db->query($query)) {
-            $session->msg('s', "La información de los adeudos ha sido agregada con éxito.");
+        $sql2 = "UPDATE bandera_continuacion SET fecha_actualizacion = NOW() WHERE id_rel_declaracion ='{$db->escape($declaracion)}'";
+        $result2 = $db->query($sql2);
+        
+        if (($db->query($query)) && ($result2)) {
+            $session->msg('s', "La información de los adeudos ha sido agregada con éxito. Continúa con los posibles conflictos de interés (si los hay).");
             insertAccion($user['id_user'], '"' . $user['username'] . '" agregó adeudo.', 1);
-            redirect('adeudos.php', false);
+            updateLastArchivo('conflicto.php', $declaracion);
+            redirect('conflicto.php', false);
         } else {
             $session->msg('d', ' No se pudo agregar la información.');
             redirect('adeudos.php', false);
@@ -116,7 +123,7 @@ if (isset($_POST['add_adeudos'])) {
             html += '               <select class="form-control" id="id_cat_tipo_operacion" name="id_cat_tipo_operacion[]">';
             html += '                   <option value="">Escoge una opción</option>';
             html += '                   <?php foreach ($operaciones as $operacion) : ?>';
-            html += '                       <?php $x = $operacion['id_cat_tipo_operacion'];?>';
+            html += '                       <?php $x = $operacion['id_cat_tipo_operacion']; ?>';
             html += '                       <?php if ($x != 2 && $x != 3 && $x != 5 && $x != 8) : ?>';
             html += '                           <option value="<?php echo $operacion['id_cat_tipo_operacion']; ?>"><?php echo ucwords($operacion['descripcion']); ?></option>';
             html += '                       <?php endif; ?>';
@@ -373,7 +380,8 @@ include_once('layouts/header.php'); ?>
                                 <div class="col-md-2 d-flex flex-column justify-content-end">
                                     <div class="form-group">
                                         <label for="id_cat_plazo_adeudo">Plazo del adeudo<p style="font-size:9px">-Vehículos (meses)</p>
-                                            <p style="font-size:9px; margin-top:-10px;">-Crédito Hipotecario (años)</p></label>
+                                            <p style="font-size:9px; margin-top:-10px;">-Crédito Hipotecario (años)</p>
+                                        </label>
                                         <input class="form-control" type="text" name="id_cat_plazo_adeudo[]" id="id_cat_plazo_adeudo">
                                     </div>
                                 </div>

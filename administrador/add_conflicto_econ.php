@@ -11,6 +11,7 @@ $sociedades = find_all('cat_soc_part');
 $resps_conf = find_all('cat_tipo_resp_conf');
 $parti_direc = find_all('cat_particip_direc');
 $soc_part = find_all('cat_soc_part');
+$id_rel_declaracion = find_by_id_dec((int)$id_detalle_usuario);
 page_require_level(3);
 ?>
 
@@ -111,11 +112,12 @@ page_require_level(3);
 if (isset($_POST['add_conflicto_econ'])) {
     if (empty($errors)) {
         $ninguno = remove_junk($db->escape($_POST['ninguno']));
+        $declaracion = (int)$id_rel_declaracion['id_rel_declaracion'];
         if ($ninguno == 'on') {
             $query = "INSERT INTO rel_detalle_conflicto_part_econom (";
-            $query .= "id_detalle_usuario, ninguno, fecha_creacion";
+            $query .= "id_detalle_usuario, id_rel_declaracion, ninguno, fecha_creacion";
             $query .= ") VALUES (";
-            $query .= " '{$id_detalle_usuario}', 1, NOW()";
+            $query .= " '{$id_detalle_usuario}', '{$declaracion}', 1, NOW()";
             $query .= ")";
         }
         if ($ninguno != 'on') {
@@ -140,14 +142,15 @@ if (isset($_POST['add_conflicto_econ'])) {
             $especi_otro_particip = $_POST['especi_otro_particip'];
             $id_cat_particip_direc = $_POST['id_cat_particip_direc'];
             $observaciones = $_POST['observaciones'];
+            $declaracion = (int)$id_rel_declaracion['id_rel_declaracion'];
 
             for ($i = 0; $i < sizeof($id_cat_tipo_operacion); $i = $i + 1) {
                 $query1 = "INSERT INTO rel_detalle_conflicto_part_econom (";
-                $query1 .= "id_detalle_usuario, ninguno, id_cat_tipo_operacion, nombre_empresa, insc_reg_publ, id_cat_tipo_soc, otra_soc,
+                $query1 .= "id_detalle_usuario, id_rel_declaracion, ninguno, id_cat_tipo_operacion, nombre_empresa, insc_reg_publ, id_cat_tipo_soc, otra_soc,
                             antiguedad_part_anios, id_cat_resp_conf, fecha_const_soc, ubicacion, sector_indust, tipo_particip, especi_otro_particip,
                             id_cat_particip_direc, observaciones, fecha_creacion";
                 $query1 .= ") VALUES (";
-                $query1 .= "'{$id_detalle_usuario}', '{$nin}', '$id_cat_tipo_operacion[$i]', '$nombre_empresa[$i]', '$insc_reg_publ[$i]', 
+                $query1 .= "'{$id_detalle_usuario}', '{$declaracion}', '{$nin}', '$id_cat_tipo_operacion[$i]', '$nombre_empresa[$i]', '$insc_reg_publ[$i]', 
                             '$id_cat_tipo_soc[$i]', '$otra_soc[$i]', '$antiguedad_part_anios[$i]', '$id_cat_resp_conf[$i]', '$fecha_const_soc[$i]', 
                             '$ubicacion[$i]', '$sector_indust[$i]', '$tipo_particip[$i]', '$especi_otro_particip[$i]', '$id_cat_particip_direc[$i]',
                             '$observaciones[$i]', NOW()";
@@ -155,10 +158,13 @@ if (isset($_POST['add_conflicto_econ'])) {
                 $db->query($query1);
             }
         }
-        if ($db->query($query)) {
-            $session->msg('s', "La información del conflicto de interés por participaciones económicas ha sido agregada con éxito.");
+        $sql2 = "UPDATE bandera_continuacion SET fecha_actualizacion = NOW() WHERE id_rel_declaracion ='{$db->escape($declaracion)}'";
+        $result2 = $db->query($sql2);
+        if (($db->query($query)) && ($result2)) {
+            $session->msg('s', "La información del conflicto de interés por participaciones económicas ha sido agregada con éxito. Continúa con las observaciones y aclaraciones (si las hay).");
             insertAccion($user['id_user'], '"' . $user['username'] . '" agregó conflicto de interés econ.', 1);
-            redirect('conflicto_econ.php', false);
+            updateLastArchivo('add_obs_acla.php', $declaracion);
+            redirect('add_obs_acla.php', false);
         } else {
             $session->msg('d', ' No se pudo agregar la información.');
             redirect('conflicto_econ.php', false);

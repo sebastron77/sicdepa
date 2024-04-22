@@ -9,6 +9,7 @@ $detalles = find_by_id('rel_detalle_adeudos', (int)$_GET['id'], 'id_cat_rel_deta
 $operaciones = find_all('cat_tipo_operacion');
 $titulares = find_all('cat_titular');
 $adeudos = find_all('cat_tipo_adeudo');
+$id_rel_declaracion = find_by_id_dec((int)$id_detalle_usuario);
 page_require_level(3);
 ?>
 <style>
@@ -56,19 +57,24 @@ if (isset($_POST['update'])) {
         $tipo_moneda_ins = $_POST['tipo_moneda_ins'];
         $id_cat_plazo_adeudo = $_POST['id_cat_plazo_adeudo'];
         $id_cat_titular = $_POST['id_cat_titular'];
+        $declaracion = (int)$id_rel_declaracion['id_rel_declaracion'];
 
-        $sql = "UPDATE rel_detalle_adeudos SET id_cat_tipo_operacion='{$id_cat_tipo_operacion}', id_cat_tipo_adeudo='{$id_cat_tipo_adeudo}', 
-                num_cuenta='{$num_cuenta}', mexico='{$mexico}', inst_razon_soc='{$inst_razon_soc}', extranjero='{$extranjero}', 
-                pais_inst_razon_soc='{$pais_inst_razon_soc}', fecha_otorgamiento='{$fecha_otorgamiento}', monto_orig_adeudo='{$monto_orig_adeudo}', 
-                tipo_moneda_or='{$tipo_moneda_or}', saldo_inso='{$saldo_inso}', tipo_moneda_ins='{$tipo_moneda_ins}', 
+        $sql = "UPDATE rel_detalle_adeudos SET id_rel_declaracion='{$declaracion}', id_cat_tipo_operacion='{$id_cat_tipo_operacion}', 
+                id_cat_tipo_adeudo='{$id_cat_tipo_adeudo}', num_cuenta='{$num_cuenta}', mexico='{$mexico}', inst_razon_soc='{$inst_razon_soc}', 
+                extranjero='{$extranjero}', pais_inst_razon_soc='{$pais_inst_razon_soc}', fecha_otorgamiento='{$fecha_otorgamiento}', 
+                monto_orig_adeudo='{$monto_orig_adeudo}', tipo_moneda_or='{$tipo_moneda_or}', saldo_inso='{$saldo_inso}', tipo_moneda_ins='{$tipo_moneda_ins}', 
                 id_cat_plazo_adeudo='{$id_cat_plazo_adeudo}', id_cat_titular='{$id_cat_titular}'  
                 WHERE id_cat_rel_detalle_adeudos ='{$db->escape($id)}'";
 
+        $sql2 = "UPDATE bandera_continuacion SET fecha_actualizacion = NOW() WHERE id_rel_declaracion ='{$db->escape($declaracion)}'";
+
         $result = $db->query($sql);
-        if ($result && $db->affected_rows() === 1) {
-            $session->msg('s', "La información de la(s) cuenta(s) bancarias ha sido editada con éxito.");
+        $result2 = $db->query($sql2);
+        
+        if (($result && $db->affected_rows() === 1) && ($result2 && $db->affected_rows() === 1)) {
+            $session->msg('s', "La información de la(s) cuenta(s) bancarias ha sido editada con éxito. Continúa con los posibles conflictos de interés (si los hay).");
             insertAccion($user['id_user'], '"' . $user['username'] . '" editó inf. cuenta banc.' . $detalles['id_cat_rel_detalle_adeudos'] . '.', 1);
-            redirect('edit_adeudos.php?id=' . (int)$detalles['id_cat_rel_detalle_adeudos'], false);
+            redirect('conflicto.php', false);
         } else {
             $session->msg('d', ' No se pudo editar la información de la(s) cuenta(s).');
             redirect('edit_adeudos.php?id=' . (int)$detalles['id_cat_rel_detalle_adeudos'], false);
@@ -137,7 +143,7 @@ include_once('layouts/header.php'); ?>
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="num_cuenta">Número de cuenta o contrato</label>
-                                    <input class="form-control" type="text" name="num_cuenta" id="num_cuenta" value="<?php echo $detalles['num_cuenta']?>">
+                                    <input class="form-control" type="text" name="num_cuenta" id="num_cuenta" value="<?php echo $detalles['num_cuenta'] ?>">
                                 </div>
                             </div>
                             <div class="col-md-1">
@@ -153,7 +159,7 @@ include_once('layouts/header.php'); ?>
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="inst_razon_soc">Institución o razón social</label>
-                                    <input class="form-control" type="text" name="inst_razon_soc" id="inst_razon_soc" value="<?php echo $detalles['inst_razon_soc']?>">
+                                    <input class="form-control" type="text" name="inst_razon_soc" id="inst_razon_soc" value="<?php echo $detalles['inst_razon_soc'] ?>">
                                 </div>
                             </div>
                             <div class="col-md-1">
@@ -169,7 +175,7 @@ include_once('layouts/header.php'); ?>
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="pais_inst_razon_soc">País e institución o razón social</label>
-                                    <input class="form-control" type="text" name="pais_inst_razon_soc" id="pais_inst_razon_soc" value="<?php echo $detalles['pais_inst_razon_soc']?>">
+                                    <input class="form-control" type="text" name="pais_inst_razon_soc" id="pais_inst_razon_soc" value="<?php echo $detalles['pais_inst_razon_soc'] ?>">
                                 </div>
                             </div>
                         </div>
@@ -177,31 +183,31 @@ include_once('layouts/header.php'); ?>
                             <div class="col-md-2 d-flex flex-column justify-content-end">
                                 <div class="form-group">
                                     <label for="fecha_otorgamiento">Fecha del otorgamiento</label>
-                                    <input class="form-control" type="date" name="fecha_otorgamiento" id="fecha_otorgamiento" value="<?php echo $detalles['fecha_otorgamiento']?>">
+                                    <input class="form-control" type="date" name="fecha_otorgamiento" id="fecha_otorgamiento" value="<?php echo $detalles['fecha_otorgamiento'] ?>">
                                 </div>
                             </div>
                             <div class="col-md-2 d-flex flex-column justify-content-end">
                                 <div class="form-group">
                                     <label for="monto_orig_adeudo">Monto original del adeudo SIN CENTAVOS</label>
-                                    <input class="form-control" type="text" name="monto_orig_adeudo" id="monto_orig_adeudo" value="<?php echo $detalles['monto_orig_adeudo']?>">
+                                    <input class="form-control" type="text" name="monto_orig_adeudo" id="monto_orig_adeudo" value="<?php echo $detalles['monto_orig_adeudo'] ?>">
                                 </div>
                             </div>
                             <div class="col-md-2 d-flex flex-column justify-content-end">
                                 <div class="form-group">
                                     <label for="tipo_moneda_or">Tipo moneda (especificar)</label>
-                                    <input class="form-control" type="text" name="tipo_moneda_or" id="tipo_moneda_or" value="<?php echo $detalles['tipo_moneda_or']?>">
+                                    <input class="form-control" type="text" name="tipo_moneda_or" id="tipo_moneda_or" value="<?php echo $detalles['tipo_moneda_or'] ?>">
                                 </div>
                             </div>
                             <div class="col-md-2 d-flex flex-column justify-content-end">
                                 <div class="form-group">
                                     <label for="saldo_inso">Saldo Insoluto a la fecha del encargo que inicia SIN CENTAVOS </label>
-                                    <input class="form-control" type="text" name="saldo_inso" id="saldo_inso" value="<?php echo $detalles['saldo_inso']?>">
+                                    <input class="form-control" type="text" name="saldo_inso" id="saldo_inso" value="<?php echo $detalles['saldo_inso'] ?>">
                                 </div>
                             </div>
                             <div class="col-md-2 d-flex flex-column justify-content-end">
                                 <div class="form-group">
                                     <label for="tipo_moneda_ins">Tipo de moneda (especificar)</label>
-                                    <input class="form-control" type="text" name="tipo_moneda_ins" id="tipo_moneda_ins" value="<?php echo $detalles['tipo_moneda_ins']?>">
+                                    <input class="form-control" type="text" name="tipo_moneda_ins" id="tipo_moneda_ins" value="<?php echo $detalles['tipo_moneda_ins'] ?>">
                                 </div>
                             </div>
                             <div class="col-md-2 d-flex flex-column justify-content-end">
@@ -209,7 +215,7 @@ include_once('layouts/header.php'); ?>
                                     <label for="id_cat_plazo_adeudo">Plazo del adeudo<p style="font-size:9px">-Vehículos (meses)</p>
                                         <p style="font-size:9px; margin-top:-10px;">-Crédito Hipotecario (años)</p>
                                     </label>
-                                    <input class="form-control" type="text" name="id_cat_plazo_adeudo" id="id_cat_plazo_adeudo" value="<?php echo $detalles['id_cat_plazo_adeudo']?>">
+                                    <input class="form-control" type="text" name="id_cat_plazo_adeudo" id="id_cat_plazo_adeudo" value="<?php echo $detalles['id_cat_plazo_adeudo'] ?>">
                                 </div>
                             </div>
                         </div>

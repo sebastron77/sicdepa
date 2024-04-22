@@ -9,6 +9,7 @@ $detalles = find_by_id('rel_detalle_inv_cbanc', (int)$_GET['id'], 'id_rel_detal_
 $operaciones = find_all('cat_tipo_operacion');
 $titulares = find_all('cat_titular');
 $inversiones = find_all('cat_tipo_inversion');
+$id_rel_declaracion = find_by_id_dec((int)$id_detalle_usuario);
 page_require_level(3);
 ?>
 <style>
@@ -53,18 +54,23 @@ if (isset($_POST['update'])) {
         $saldo_fecha_toma = $_POST['saldo_fecha_toma'];
         $tipo_moneda = $_POST['tipo_moneda'];
         $id_cat_tipo_inversion = $_POST['id_cat_tipo_inversion'];
+        $declaracion = (int)$id_rel_declaracion['id_rel_declaracion'];
 
-        $sql = "UPDATE rel_detalle_inv_cbanc SET id_cat_tipo_operacion='{$id_cat_tipo_operacion}', id_cat_titular='{$id_cat_titular}', 
+        $sql = "UPDATE rel_detalle_inv_cbanc SET id_rel_declaracion='{$declaracion}', id_cat_tipo_operacion='{$id_cat_tipo_operacion}', id_cat_titular='{$id_cat_titular}', 
                 num_cuenta='{$num_cuenta}', mexico='{$mexico}', inst_razon_soc='{$inst_razon_soc}', extranjero='{$extranjero}', 
                 inst_razon_soc_ext='{$inst_razon_soc_ext}', pais_localiza='{$pais_localiza}', saldo_fecha_toma='{$saldo_fecha_toma}', 
                 tipo_moneda='{$tipo_moneda}', id_cat_tipo_inversion='{$id_cat_tipo_inversion}' 
                 WHERE id_rel_detal_inv_cbanc ='{$db->escape($id)}'";
 
+        $sql2 = "UPDATE bandera_continuacion SET fecha_actualizacion = NOW() WHERE id_rel_declaracion ='{$db->escape($declaracion)}'";
+
         $result = $db->query($sql);
-        if ($result && $db->affected_rows() === 1) {
-            $session->msg('s', "La información de la(s) cuenta(s) bancarias ha sido editada con éxito.");
+        $result2 = $db->query($sql2);
+
+        if (($result && $db->affected_rows() === 1) && ($result2 && $db->affected_rows() === 1)) {
+            $session->msg('s', "La información de la(s) cuenta(s) bancarias ha sido editada con éxito. Continúa con los adeudos del declarante");
             insertAccion($user['id_user'], '"' . $user['username'] . '" editó inf. cuenta banc.' . $detalles['id_rel_detal_inv_cbanc'] . '.', 1);
-            redirect('edit_cuentas.php?id=' . (int)$detalles['id_rel_detal_inv_cbanc'], false);
+            redirect('adeudos.php', false);
         } else {
             $session->msg('d', ' No se pudo editar la información de la(s) cuenta(s).');
             redirect('edit_cuentas.php?id=' . (int)$detalles['id_rel_detal_inv_cbanc'], false);

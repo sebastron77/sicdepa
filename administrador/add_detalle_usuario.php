@@ -8,6 +8,7 @@ $cat_est_civ = find_all('cat_estado_civil');
 $cat_regimen_matrimonial = find_all('cat_regimen_matrimonial');
 $cat_nacionalidad = find_all('cat_nacionalidades');
 $cat_entidad_fed = find_all('cat_entidad_fed');
+$id_rel_declaracion = find_all('rel_declaracion');
 page_require_level(3);
 ?>
 <?php header('Content-type: text/html; charset=utf-8');
@@ -35,14 +36,15 @@ if (isset($_POST['add_detalle_usuario'])) {
         $entidad_resid = remove_junk($db->escape($_POST['entidad_resid']));
         $cod_post = remove_junk($db->escape($_POST['cod_post']));
 
+        $declaracion = $id_rel_declaracion['id_rel_declaracion'];
+
         $query = "INSERT INTO detalles_usuario (";
-        $query .= "nombre, apellido_paterno, apellido_materno, curp, rfc, correo_laboral, correo_personal, id_cat_estado_civil, id_cat_regimen_matrimonial, 
-                    pais_nac, nacionalidad, entidad_nac, telefono, lugar_ubica_dom, calle_num, colonia, municipio, tel_part, entidad_resid, cod_post,
-                    estatus_detalle";
+        $query .= "id_rel_declaracion, nombre, apellido_paterno, apellido_materno, curp, rfc, correo_laboral, correo_personal, id_cat_estado_civil, 
+                    id_cat_regimen_matrimonial, pais_nac, nacionalidad, entidad_nac, telefono, lugar_ubica_dom, calle_num, colonia, municipio, tel_part, entidad_resid, cod_post, estatus_detalle";
         $query .= ") VALUES (";
-        $query .= " '{$nombre}', '{$apellido_paterno}', '{$apellido_materno}', '{$curp}', '{$rfc}', '{$correo_laboral}', '{$correo_personal}', 
-                    '{$id_cat_estado_civil}', '{$id_cat_regimen_matrimonial}', '{$pais_nac}', '{$nacionalidad}', '{$entidad_nac}', '{$telefono}', 
-                    '{$lugar_ubica_dom}', '{$calle_num}', '{$colonia}', '{$municipio}',  '{$tel_part}', '{$entidad_resid}', '{$cod_post}','1'";
+        $query .= " '{$declaracion}', '{$nombre}', '{$apellido_paterno}', '{$apellido_materno}', '{$curp}', '{$rfc}', '{$correo_laboral}', 
+                    '{$correo_personal}', '{$id_cat_estado_civil}', '{$id_cat_regimen_matrimonial}', '{$pais_nac}', '{$nacionalidad}', '{$entidad_nac}', 
+                    '{$telefono}', '{$lugar_ubica_dom}', '{$calle_num}', '{$colonia}', '{$municipio}',  '{$tel_part}', '{$entidad_resid}', '{$cod_post}', '1'";
         $query .= ")";
 
         if ($db->query($query)) {

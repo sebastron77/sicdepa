@@ -5,6 +5,7 @@ require_once('includes/load.php');
 
 $user = current_user();
 $id_detalle_usuario = $user['id_detalle_user'];
+$id_rel_declaracion = find_by_id_dec((int)$id_detalle_usuario);
 page_require_level(3);
 ?>
 <style>
@@ -125,6 +126,7 @@ if (isset($_POST['add_rem_anio_ant'])) {
         $cony_deduce_imp = remove_junk($db->escape($_POST['cony_deduce_imp']));
         $ingr_anual_cony = remove_junk($db->escape($_POST['ingr_anual_cony']));
         $suma_ab = remove_junk($db->escape($_POST['suma_ab']));
+        $declaracion = (int)$id_rel_declaracion['id_rel_declaracion'];
 
         $monto_solo1 = str_replace("$", "", $renum_anual_neta);
         $monto_solo2 = str_replace("$", "", $act_indus);
@@ -137,18 +139,22 @@ if (isset($_POST['add_rem_anio_ant'])) {
         $monto_solo9 = str_replace("$", "", $suma_ab);
 
         $query = "INSERT INTO rel_detalle_renum_anio_ant (";
-        $query .= "id_detalle_usuario, ing_anual_dec_cony, inicio_periodo, fin_periodo, renum_anual_neta, nombre_act_indus, act_indus, nombre_act_fin,
-                    act_finan,tipo_serv_prof, serv_prof, otros_info, otros, subtotal2, subtotal1_2, cony_deduce_imp, ingr_anual_cony, suma_ab, fecha_creacion";
+        $query .= "id_detalle_usuario, id_rel_declaracion, ing_anual_dec_cony, inicio_periodo, fin_periodo, renum_anual_neta, nombre_act_indus, act_indus, 
+                    nombre_act_fin, act_finan,tipo_serv_prof, serv_prof, otros_info, otros, subtotal2, subtotal1_2, cony_deduce_imp, ingr_anual_cony, suma_ab, fecha_creacion";
         $query .= ") VALUES (";
-        $query .= " '{$id_detalle_usuario}', '{$bool}', '{$inicio_periodo}', '{$fin_periodo}', '{$monto_solo1}', '{$nombre_act_indus}', '{$monto_solo2}', '{$nombre_act_fin}', '{$monto_solo3}', 
-                    '{$tipo_serv_prof}', '{$monto_solo4}', '{$otros_info}', '{$monto_solo5}', '{$monto_solo6}', '{$monto_solo7}', '{$cony_deduce_imp}', 
-                    '{$monto_solo8}', '{$monto_solo9}', NOW()";
+        $query .= " '{$id_detalle_usuario}','{$declaracion}', '{$bool}', '{$inicio_periodo}', '{$fin_periodo}', '{$monto_solo1}', '{$nombre_act_indus}', 
+                    '{$monto_solo2}', '{$nombre_act_fin}', '{$monto_solo3}', '{$tipo_serv_prof}', '{$monto_solo4}', '{$otros_info}', '{$monto_solo5}', 
+                    '{$monto_solo6}', '{$monto_solo7}', '{$cony_deduce_imp}', '{$monto_solo8}', '{$monto_solo9}', NOW()";
         $query .= ")";
 
-        if ($db->query($query)) {
-            $session->msg('s', "La información de la situación patrimonial del año inmediato anterior ha sido agregada con éxito.");
+        $sql2 = "UPDATE bandera_continuacion SET fecha_actualizacion = NOW() WHERE id_rel_declaracion ='{$db->escape($declaracion)}'";
+        $result2 = $db->query($sql2);
+
+        if (($db->query($query)) && ($result2)) {
+            $session->msg('s', "La información de la situación patrimonial del año inmediato anterior ha sido agregada con éxito. Continúa con los bienes inmuebles.");
             insertAccion($user['id_user'], '"' . $user['username'] . '" agregó remun. anio anterior: ' . '.', 1);
-            redirect('rem_anio_ant.php', false);
+            updateLastArchivo('bienes_inmuebles.php', $declaracion);
+            redirect('bienes_inmuebles.php', false);
         } else {
             $session->msg('d', ' No se pudo agregar la información de la situación patrimonial del año inmediato anterior.');
             redirect('rem_anio_ant.php', false);

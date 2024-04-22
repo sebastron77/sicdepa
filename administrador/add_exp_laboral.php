@@ -8,6 +8,7 @@ $id_detalle_usuario = $user['id_detalle_user'];
 $cat_sector = find_all('cat_sector');
 $cat_poder = find_all('cat_poder');
 $cat_ambito = find_all('cat_ambito');
+$id_rel_declaracion = find_by_id_dec((int)$id_detalle_usuario);
 page_require_level(3);
 ?>
 <style>
@@ -41,11 +42,12 @@ if (isset($_POST['add_exp_laboral'])) {
 
     if (empty($errors)) {
         $ninguno = remove_junk($db->escape($_POST['ninguno']));
+        $declaracion = (int)$id_rel_declaracion['id_rel_declaracion'];
         if ($ninguno == 'on') {
             $query = "INSERT INTO rel_exp_laboral (";
-            $query .= "id_detalle_usuario, ninguno, fecha_creacion, estatus_exp";
+            $query .= "id_detalle_usuario, id_rel_declaracion, ninguno, fecha_creacion, estatus_exp";
             $query .= ") VALUES (";
-            $query .= " '{$id_detalle_usuario}', 1, NOW(), '1'";
+            $query .= " '{$id_detalle_usuario}', '{$declaracion}', 1, NOW(), '1'";
             $query .= ")";
         }
         if ($ninguno != 'on') {
@@ -57,21 +59,25 @@ if (isset($_POST['add_exp_laboral'])) {
             $puesto_cargo = remove_junk($db->escape($_POST['puesto_cargo']));
             $funcion_principal = remove_junk($db->escape($_POST['funcion_principal']));
             $ingreso = remove_junk($db->escape($_POST['ingreso']));
-            $egreso = remove_junk($db->escape($_POST['egreso']));
+            $egreso = remove_junk($db->escape($_POST['egreso']));            
 
             $query = "INSERT INTO rel_exp_laboral (";
-            $query .= "id_detalle_usuario, ninguno, id_cat_sector, id_cat_poder, id_cat_ambito, nombre_inst_empresa, unidad_admin_area, puesto_cargo, 
-                    funcion_principal, ingreso, egreso, fecha_creacion, estatus_exp";
+            $query .= "id_detalle_usuario, id_rel_declaracion, ninguno, id_cat_sector, id_cat_poder, id_cat_ambito, nombre_inst_empresa, unidad_admin_area, 
+                        puesto_cargo, funcion_principal, ingreso, egreso, fecha_creacion, estatus_exp";
             $query .= ") VALUES (";
-            $query .= " '{$id_detalle_usuario}', 0, '{$id_cat_sector}', '{$id_cat_poder}', '{$id_cat_ambito}', '{$nombre_inst_empresa}', 
+            $query .= " '{$id_detalle_usuario}', '{$declaracion}', 0, '{$id_cat_sector}', '{$id_cat_poder}', '{$id_cat_ambito}', '{$nombre_inst_empresa}', 
                     '{$unidad_admin_area}', '{$puesto_cargo}', '{$funcion_principal}', '{$ingreso}', '{$egreso}', NOW(), '1'";
             $query .= ")";
         }
 
-        if ($db->query($query)) {
-            $session->msg('s', "La información de experiencia laboral ha sido agregada con éxito.");
+        $sql2 = "UPDATE bandera_continuacion SET fecha_actualizacion = NOW() WHERE id_rel_declaracion ='{$db->escape($declaracion)}'";
+        $result2 = $db->query($sql2);
+
+        if (($db->query($query)) && ($result2)) {
+            $session->msg('s', "La información de experiencia laboral ha sido agregada con éxito. Continúa con la información del cónyuge.");
             insertAccion($user['id_user'], '"' . $user['username'] . '" agregó su exp. laboral: ' . '.', 1);
-            redirect('add_exp_laboral.php', false);
+            updateLastArchivo('datos_conyuge.php', $declaracion);
+            redirect('datos_conyuge.php', false);
         } else {
             $session->msg('d', ' No se pudo agregar la experiencia laboral.');
             redirect('add_exp_laboral.php', false);

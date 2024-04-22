@@ -11,6 +11,7 @@ $bienes = find_all('cat_tipo_bien_mueble');
 $adquisiciones = find_all('cat_forma_adquisicion');
 $titulares = find_all('cat_titular');
 $cesionarios = find_all('cat_rel_cesionario');
+$id_rel_declaracion = find_by_id_dec((int)$id_detalle_usuario);
 page_require_level(3);
 ?>
 <style>
@@ -56,19 +57,22 @@ if (isset($_POST['update'])) {
         $fecha_adquisicion = $_POST['fecha_adquisicion'];
         $id_cat_titular = $_POST['id_cat_titular'];
         $venta_forma_oper = $_POST['venta_forma_oper'];
+        $declaracion = (int)$id_rel_declaracion['id_rel_declaracion'];
 
-        $sql = "UPDATE rel_detalle_bien_mueble SET id_cat_tipo_operacion='{$id_cat_tipo_operacion}', id_cat_tipo_bien='{$id_cat_tipo_bien}',  
-                descripcion_bien='{$descripcion_bien}', id_cat_forma_adquisicion='{$id_cat_forma_adquisicion}', nombre_razon_soc_ces='{$nombre_razon_soc_ces}', 
-                id_cat_rel_cesionario='{$id_cat_rel_cesionario}', otro_indica_relac ='{$otro_indica_relac}', valor_bien='{$valor_bien}', 
-                tipo_moneda='{$tipo_moneda}', fecha_adquisicion='{$fecha_adquisicion}', id_cat_titular='{$id_cat_titular}', 
+        $sql = "UPDATE rel_detalle_bien_mueble SET id_rel_declaracion='{$declaracion}', id_cat_tipo_operacion='{$id_cat_tipo_operacion}',  
+                id_cat_tipo_bien='{$id_cat_tipo_bien}', descripcion_bien='{$descripcion_bien}', id_cat_forma_adquisicion='{$id_cat_forma_adquisicion}', nombre_razon_soc_ces='{$nombre_razon_soc_ces}', id_cat_rel_cesionario='{$id_cat_rel_cesionario}', otro_indica_relac ='{$otro_indica_relac}', valor_bien='{$valor_bien}', tipo_moneda='{$tipo_moneda}', fecha_adquisicion='{$fecha_adquisicion}', id_cat_titular='{$id_cat_titular}', 
                 venta_forma_oper='{$venta_forma_oper}'
                 WHERE id_rel_detalle_bien_mueble ='{$db->escape($id)}'";
 
+        $sql2 = "UPDATE bandera_continuacion SET fecha_actualizacion = NOW() WHERE id_rel_declaracion ='{$db->escape($declaracion)}'";
+
         $result = $db->query($sql);
-        if ($result && $db->affected_rows() === 1) {
-            $session->msg('s', "La información de bienes muebles ha sido editada con éxito.");
-            insertAccion($user['id_user'], '"' . $user['username'] . '" editó bien mueble' . $detalles['id_rel_detalle_bien_mueble'] . '.', 1);
-            redirect('edit_bienes_muebles.php?id=' . (int)$detalles['id_rel_detalle_bien_mueble'], false);
+        $result2 = $db->query($sql2);
+        
+        if (($result && $db->affected_rows() === 1) && ($result2 && $db->affected_rows() === 1)) {
+            $session->msg('s', "La información de bienes muebles ha sido editada con éxito. Continúa con cuentas bancarias.");
+            insertAccion($user['id_user'], '"' . $user['username'] . '" editó bien mueble' . $detalles['id _rel_detalle_bien_mueble'] . '.', 1);
+            redirect('cuentas.php', false);
         } else {
             $session->msg('d', ' No se pudo editar la información de bienes muebles.');
             redirect('edit_bienes_muebles.php?id=' . (int)$detalles['id_rel_detalle_bien_mueble'], false);
@@ -130,7 +134,7 @@ include_once('layouts/header.php'); ?>
                                     <select class="form-control" id="id_cat_tipo_bien" name="id_cat_tipo_bien">
                                         <option value="">Escoge una opción</option>
                                         <?php foreach ($bienes as $bien) : ?>
-                                            <option <?php if ($bien['id_cat_tipo_bien_mueble'] === $detalles['id_cat_tipo_bien']) echo 'selected="selected"';?> value="<?php echo $bien['id_cat_tipo_bien_mueble']; ?>">
+                                            <option <?php if ($bien['id_cat_tipo_bien_mueble'] === $detalles['id_cat_tipo_bien']) echo 'selected="selected"'; ?> value="<?php echo $bien['id_cat_tipo_bien_mueble']; ?>">
                                                 <?php echo ucwords($bien['descripcion']) ?>
                                             </option>
                                         <?php endforeach; ?>

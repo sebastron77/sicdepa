@@ -11,6 +11,7 @@ $obras = find_all('cat_si_obra');
 $adquisiciones = find_all('cat_forma_adquisicion');
 $titulares = find_all('cat_titular');
 $cesionarios = find_all('cat_rel_cesionario');
+$id_rel_declaracion = find_by_id_dec((int)$id_detalle_usuario);
 page_require_level(3);
 ?>
 
@@ -45,11 +46,12 @@ page_require_level(3);
 if (isset($_POST['add_bienes_inmuebles'])) {
     if (empty($errors)) {
         $ninguno = remove_junk($db->escape($_POST['ninguno']));
+        $declaracion = (int)$id_rel_declaracion['id_rel_declaracion'];
         if ($ninguno == 'on') {
             $query = "INSERT INTO rel_detalle_bienes_inmuebles (";
-            $query .= "id_detalle_usuario, ninguno, fecha_creacion";
+            $query .= "id_detalle_usuario, id_rel_declaracion, ninguno, fecha_creacion";
             $query .= ") VALUES (";
-            $query .= " '{$id_detalle_usuario}', 1, NOW()";
+            $query .= " '{$id_detalle_usuario}', '{$declaracion}', 1, NOW()";
             $query .= ")";
         }
         if ($ninguno != 'on') {
@@ -69,26 +71,30 @@ if (isset($_POST['add_bienes_inmuebles'])) {
             $datos_registro = $_POST['datos_registro'];
             $ubicacion_inmueble = $_POST['ubicacion_inmueble'];
             $si_es_obra = $_POST['si_es_obra'];
-            $si_venta = $_POST['si_venta'];
+            $si_venta = $_POST['si_venta'];            
 
             for ($i = 0; $i < sizeof($id_cat_tipo_operacion); $i = $i + 1) {
                 $query1 = "INSERT INTO rel_detalle_bienes_inmuebles (";
-                $query1 .= "id_detalle_usuario, ninguno, id_cat_tipo_operacion, id_cat_tipo_bien, cat_si_obra, superficie_terreno, superficie_construccion,
-                            id_cat_forma_adquisicion, nombre_razon_soc, id_cat_titular, id_cat_relacion_ces_don_her, si_otro, valor_inmueble, tipo_moneda, 
-                            fecha_adquisicion, datos_registro, ubicacion_inmueble, si_es_obra, si_venta, fecha_creacion";
+                $query1 .= "id_detalle_usuario, id_rel_declaracion, ninguno, id_cat_tipo_operacion, id_cat_tipo_bien, cat_si_obra, superficie_terreno,
+                            superficie_construccion, id_cat_forma_adquisicion, nombre_razon_soc, id_cat_titular, id_cat_relacion_ces_don_her, si_otro, valor_inmueble, tipo_moneda, fecha_adquisicion, datos_registro, ubicacion_inmueble, si_es_obra, si_venta, fecha_creacion";
                 $query1 .= ") VALUES (";
-                $query1 .= "'{$id_detalle_usuario}', 0, '$id_cat_tipo_operacion[$i]', '$id_cat_tipo_bien[$i]', '$cat_si_obra[$i]', '$superficie_terreno[$i]', 
-                            '$superficie_construccion[$i]', '$id_cat_forma_adquisicion[$i]', '$nombre_razon_soc[$i]', '$id_cat_titular[$i]', 
-                            '$id_cat_relacion_ces_don_her[$i]', '$si_otro[$i]', '$valor_inmueble[$i]', '$tipo_moneda[$i]', '$fecha_adquisicion[$i]', 
-                            '$datos_registro[$i]', '$ubicacion_inmueble[$i]', '$si_es_obra[$i]', '$si_venta[$i]', NOW()";
+                $query1 .= "'{$id_detalle_usuario}', '{$declaracion}', 0, '$id_cat_tipo_operacion[$i]', '$id_cat_tipo_bien[$i]', '$cat_si_obra[$i]',
+                            '$superficie_terreno[$i]', '$superficie_construccion[$i]', '$id_cat_forma_adquisicion[$i]', '$nombre_razon_soc[$i]', 
+                            '$id_cat_titular[$i]', '$id_cat_relacion_ces_don_her[$i]', '$si_otro[$i]', '$valor_inmueble[$i]', '$tipo_moneda[$i]', 
+                            '$fecha_adquisicion[$i]', '$datos_registro[$i]', '$ubicacion_inmueble[$i]', '$si_es_obra[$i]', '$si_venta[$i]', NOW()";
                 $query1 .= ")";
                 $db->query($query1);
             }
         }
-        if ($db->query($query)) {
-            $session->msg('s', "La información de el/los bien(es) inmueble(s) ha sido agregada con éxito.");
+
+        $sql2 = "UPDATE bandera_continuacion SET fecha_actualizacion = NOW() WHERE id_rel_declaracion ='{$db->escape($declaracion)}'";
+        $result2 = $db->query($sql2);
+
+        if (($db->query($query)) && ($result2)) {
+            $session->msg('s', "La información de el/los bien(es) inmueble(s) ha sido agregada con éxito. Continúa con los vehículos.");
             insertAccion($user['id_user'], '"' . $user['username'] . '" agregó bien(es) inmueble(s).', 1);
-            redirect('bienes_inmuebles.php', false);
+            updateLastArchivo('vehiculos.php', $declaracion);
+            redirect('vehiculos.php', false);
         } else {
             $session->msg('d', ' No se pudo agregar la información.');
             redirect('bienes_inmuebles.php', false);

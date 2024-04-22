@@ -13,6 +13,7 @@ $resps_conf = find_all('cat_tipo_resp_conf');
 $naturs_vinc = find_all('cat_natur_vinc');
 $particips_direc = find_all('cat_particip_direc');
 $tipos_colab = find_all('cat_tipo_colab');
+$id_rel_declaracion = find_by_id_dec((int)$id_detalle_usuario);
 page_require_level(3);
 ?>
 <style>
@@ -60,17 +61,22 @@ if (isset($_POST['update'])) {
         $id_cat_tipo_colab = $_POST['id_cat_tipo_colab'];
         $ubicacion = $_POST['ubicacion'];
         $observaciones_aclaraciones = $_POST['observaciones_aclaraciones'];
+        $declaracion = (int)$id_rel_declaracion['id_rel_declaracion'];
 
-        $sql = "UPDATE rel_detalle_conflicto_declarante SET id_cat_tipo_operacion='{$id_cat_tipo_op_conf}', nombre_entidad='{$nombre_entidad}', 
-                id_cat_frec_anual='{$id_cat_frec_anual}', otra_frec_anual='{$otra_frec_anual}', id_cat_tipo_pers_jur='{$id_cat_tipo_pers_jur}', otra_pers_jurid='{$otra_pers_jurid}', id_cat_resp_conf='{$id_cat_resp_conf}', id_cat_natur_vinc='{$id_cat_natur_vinc}', 
-                otro_nat_vinc='{$otro_nat_vinc}', antiguedad_vinc_anios='{$antiguedad_vinc_anios}', id_cat_particip_direc='{$id_cat_particip_direc}', id_cat_tipo_colab='{$id_cat_tipo_colab}', ubicacion='{$ubicacion}', observaciones_aclaraciones='{$observaciones_aclaraciones}'
+        $sql = "UPDATE rel_detalle_conflicto_declarante SET id_rel_declaracion='{$declaracion}', id_cat_tipo_operacion='{$id_cat_tipo_op_conf}', 
+                nombre_entidad='{$nombre_entidad}', id_cat_frec_anual='{$id_cat_frec_anual}', otra_frec_anual='{$otra_frec_anual}', 
+                id_cat_tipo_pers_jur='{$id_cat_tipo_pers_jur}', otra_pers_jurid='{$otra_pers_jurid}', id_cat_resp_conf='{$id_cat_resp_conf}', id_cat_natur_vinc='{$id_cat_natur_vinc}', otro_nat_vinc='{$otro_nat_vinc}', antiguedad_vinc_anios='{$antiguedad_vinc_anios}', id_cat_particip_direc='{$id_cat_particip_direc}', id_cat_tipo_colab='{$id_cat_tipo_colab}', ubicacion='{$ubicacion}', observaciones_aclaraciones='{$observaciones_aclaraciones}'
                 WHERE id_rel_detalle_conflicto_declarante ='{$db->escape($id)}'";
 
+        $sql2 = "UPDATE bandera_continuacion SET fecha_actualizacion = NOW() WHERE id_rel_declaracion ='{$db->escape($declaracion)}'";
+
         $result = $db->query($sql);
-        if ($result && $db->affected_rows() === 1) {
-            $session->msg('s', "La información de la declaración de posible conflicto de interés ha sido editada con éxito.");
+        $result2 = $db->query($sql2);
+
+        if (($result && $db->affected_rows() === 1) && ($result2 && $db->affected_rows() === 1)) {
+            $session->msg('s', "La información de la declaración de posible conflicto de interés ha sido editada con éxito. Continúa con conflictos de intereses económicos (si los hay).");
             insertAccion($user['id_user'], '"' . $user['username'] . '" editó inf. cuenta banc.' . $detalles['id_rel_detalle_conflicto_declarante'] . '.', 1);
-            redirect('edit_conflicto.php?id=' . (int)$detalles['id_rel_detalle_conflicto_declarante'], false);
+            redirect('conflicto_econ.php', false);
         } else {
             $session->msg('d', ' No se pudo editar la información de la declaración de posible conflicto de interés.');
             redirect('edit_conflicto.php?id=' . (int)$detalles['id_rel_detalle_conflicto_declarante'], false);
@@ -122,7 +128,7 @@ include_once('layouts/header.php'); ?>
                             <div class="col-md-5">
                                 <div class="form-group">
                                     <label style="font-size: 12px;">Nombre de la entidad (Empresa, asociación, sindicato, etc.)</label>
-                                    <input class="form-control" type="text" name="nombre_entidad" value="<?php echo $detalles['nombre_entidad']?>">
+                                    <input class="form-control" type="text" name="nombre_entidad" value="<?php echo $detalles['nombre_entidad'] ?>">
                                 </div>
                             </div>
                             <div class="col-md-2">
@@ -142,7 +148,7 @@ include_once('layouts/header.php'); ?>
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label style="font-size: 12px;">Otra frecuencia anual</label>
-                                    <input class="form-control" type="text" name="otra_frec_anual" value="<?php echo $detalles['otra_frec_anual']?>">
+                                    <input class="form-control" type="text" name="otra_frec_anual" value="<?php echo $detalles['otra_frec_anual'] ?>">
                                 </div>
                             </div>
                         </div>
@@ -164,7 +170,7 @@ include_once('layouts/header.php'); ?>
                             <div class="col-md-3  d-flex flex-column justify-content-end">
                                 <div class="form-group">
                                     <label style="font-size: 12px;">Otro tipo de persona jurídica</label>
-                                    <input class="form-control" type="text" name="otra_pers_jurid" value="<?php echo $detalles['otra_pers_jurid']?>">
+                                    <input class="form-control" type="text" name="otra_pers_jurid" value="<?php echo $detalles['otra_pers_jurid'] ?>">
                                 </div>
                             </div>
                             <div class="col-md-2  d-flex flex-column justify-content-end">
@@ -198,7 +204,7 @@ include_once('layouts/header.php'); ?>
                             <div class="col-md-2  d-flex flex-column justify-content-end">
                                 <div class="form-group">
                                     <label style="font-size: 12px;">Otro tipo de vínculo</label>
-                                    <input class="form-control" type="text" name="otro_nat_vinc" value="<?php echo $detalles['otro_nat_vinc']?>">
+                                    <input class="form-control" type="text" name="otro_nat_vinc" value="<?php echo $detalles['otro_nat_vinc'] ?>">
                                 </div>
                             </div>
                         </div>
@@ -206,7 +212,7 @@ include_once('layouts/header.php'); ?>
                             <div class="col-md-2 d-flex flex-column justify-content-end">
                                 <div class="form-group">
                                     <label style="font-size: 12px;">Antigüedad del vínculo (Años)</label>
-                                    <input class="form-control" type="text" name="antiguedad_vinc_anios" value="<?php echo $detalles['antiguedad_vinc_anios']?>">
+                                    <input class="form-control" type="text" name="antiguedad_vinc_anios" value="<?php echo $detalles['antiguedad_vinc_anios'] ?>">
                                 </div>
                             </div>
                             <div class="col-md-2 d-flex flex-column justify-content-end">
@@ -240,13 +246,13 @@ include_once('layouts/header.php'); ?>
                             <div class="col-md-3 d-flex flex-column justify-content-end">
                                 <div class="form-group">
                                     <label style="font-size: 12px;">Ubicación (Ciudad o Población, Entidad Federativa y País)</label>
-                                    <input class="form-control" type="text" name="ubicacion" value="<?php echo $detalles['ubicacion']?>">
+                                    <input class="form-control" type="text" name="ubicacion" value="<?php echo $detalles['ubicacion'] ?>">
                                 </div>
                             </div>
                             <div class="col-md-3 d-flex flex-column justify-content-end">
                                 <div class="form-group">
                                     <label style="font-size: 12px;">Observaciones o aclaraciones</label>
-                                    <textarea class="form-control" name="observaciones_aclaraciones" cols="10" rows="3"><?php echo $detalles['observaciones_aclaraciones']?></textarea>
+                                    <textarea class="form-control" name="observaciones_aclaraciones" cols="10" rows="3"><?php echo $detalles['observaciones_aclaraciones'] ?></textarea>
                                 </div>
                             </div>
                         </div>

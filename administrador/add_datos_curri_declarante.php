@@ -12,6 +12,7 @@ $cat_escolaridad = find_all('cat_escolaridad');
 $cat_periodos = find_all('cat_periodos_cursados');
 $cat_estatus = find_all('cat_estatus_estudios');
 $cat_documentos = find_all('cat_documento_obtenido');
+$id_rel_declaracion = find_by_id_dec((int)$id_detalle_usuario);
 page_require_level(3);
 ?>
 <style>
@@ -71,6 +72,8 @@ if (isset($_POST['add_datos_curri_declarante'])) {
 
     if (empty($errors)) {
         $id_cat_esc = remove_junk($db->escape($_POST['id_cat_escolaridad']));
+        $declaracion = (int)$id_rel_declaracion['id_rel_declaracion'];
+
         if ($id_cat_esc <= 3) {
             $inst_educativa1 = remove_junk($db->escape($_POST['inst_educativa1']));
             $id_cat_periodo_cursado1 = remove_junk($db->escape($_POST['id_cat_periodo_cursado1']));
@@ -78,11 +81,11 @@ if (isset($_POST['add_datos_curri_declarante'])) {
             $id_cat_estatus_estudios1 = remove_junk($db->escape($_POST['id_cat_estatus_estudios1']));
 
             $query = "INSERT INTO rel_detalle_estudios (";
-            $query .= "id_detalle_usuario, id_cat_escolaridad, inst_educativa, id_cat_periodo_cursado, id_cat_documento_obtenido, id_cat_estatus_estudios,
-                        fecha_creacion, estatus_detalle";
+            $query .= "id_detalle_usuario, id_rel_declaracion, id_cat_escolaridad, inst_educativa, id_cat_periodo_cursado, id_cat_documento_obtenido, 
+                        id_cat_estatus_estudios, fecha_creacion, estatus_detalle";
             $query .= ") VALUES (";
-            $query .= " '{$id_detalle_usuario}', '{$id_cat_esc}', '{$inst_educativa1}', '{$id_cat_periodo_cursado1}', '{$id_cat_documento_obtenido1}', 
-                        '{$id_cat_estatus_estudios1}', NOW(), '1'";
+            $query .= " '{$id_detalle_usuario}', '{$declaracion}', '{$id_cat_esc}', '{$inst_educativa1}', '{$id_cat_periodo_cursado1}', 
+                        '{$id_cat_documento_obtenido1}', '{$id_cat_estatus_estudios1}', NOW(), '1'";
             $query .= ")";
         }
         if ($id_cat_esc >= 4) {
@@ -97,19 +100,22 @@ if (isset($_POST['add_datos_curri_declarante'])) {
             $num_ced_prof = remove_junk($db->escape($_POST['num_ced_prof']));
 
             $query = "INSERT INTO rel_detalle_estudios (";
-            $query .= "id_detalle_usuario, id_cat_escolaridad, inst_educativa, id_cat_periodo_cursado, id_cat_documento_obtenido, ubic_inst, id_cat_ent_fed,
-                        id_cat_mun, carrera_area_con, id_cat_estatus_estudios, num_ced_prof, fecha_creacion, estatus_detalle";
+            $query .= "id_detalle_usuario, id_rel_declaracion, id_cat_escolaridad, inst_educativa, id_cat_periodo_cursado, id_cat_documento_obtenido, 
+                        ubic_inst, id_cat_ent_fed, id_cat_mun, carrera_area_con, id_cat_estatus_estudios, num_ced_prof, fecha_creacion, estatus_detalle";
             $query .= ") VALUES (";
-            $query .= " '{$id_detalle_usuario}', '{$id_cat_esc}', '{$inst_educativa}', '{$id_cat_periodo_cursado}', '{$id_cat_documento_obtenido}', 
-                        '{$ubic_inst}', '{$id_cat_ent_fed}', '{$id_cat_mun}', '{$carrera_area_con}', '{$id_cat_estatus_estudios}', '{$num_ced_prof}', NOW(), '1'";
+            $query .= " '{$id_detalle_usuario}', '{$declaracion}', '{$id_cat_esc}', '{$inst_educativa}', '{$id_cat_periodo_cursado}', 
+                        '{$id_cat_documento_obtenido}', '{$ubic_inst}', '{$id_cat_ent_fed}', '{$id_cat_mun}', '{$carrera_area_con}', 
+                        '{$id_cat_estatus_estudios}', '{$num_ced_prof}', NOW(), '1'";
             $query .= ")";
         }
-
-        if ($db->query($query)) {
+        $sql2 = "UPDATE bandera_continuacion SET fecha_actualizacion = NOW() WHERE id_rel_declaracion ='{$db->escape($declaracion)}'";
+        $result2 = $db->query($sql2);
+        if (($db->query($query)) && ($result2)) {
             //sucess
-            $session->msg('s', "La información curricular ha sido agregada con éxito.");
+            $session->msg('s', "Los datos curriculares han sido agregados con éxito. Continúa con la información de tu experiencia laboral.");
             insertAccion($user['id_user'], '"' . $user['username'] . '" agregó su escolaridad: ' . $id_cat_esc . '.', 1);
-            redirect('datos_curri_declarante.php', false);
+            updateLastArchivo('exp_laboral.php', $declaracion);
+            redirect('exp_laboral.php', false);
         } else {
             //failed
             $session->msg('d', ' No se pudo agregar el trabajador.');
@@ -125,11 +131,11 @@ if (isset($_POST['add_datos_curri_declarante'])) {
 include_once('layouts/header.php'); ?>
 <?php echo display_msg($msg); ?>
 <!-- <div class="row"> -->
-    <div class="form-group clearfix">
-        <a href="datos_curri_declarante.php" class="btn btn-md btn-success" data-toggle="tooltip" title="Regresar">
-            Regresar
-        </a>
-    </div>
+<div class="form-group clearfix">
+    <a href="datos_curri_declarante.php" class="btn btn-md btn-success" data-toggle="tooltip" title="Regresar">
+        Regresar
+    </a>
+</div>
 <div class="panel panel-default">
     <div class="panel-heading">
         <strong>

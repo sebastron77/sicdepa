@@ -8,6 +8,7 @@ $id_detalle_usuario = $user['id_detalle_user'];
 $operaciones = find_all('cat_tipo_operacion');
 $titulares = find_all('cat_titular');
 $inversiones = find_all('cat_tipo_inversion');
+$id_rel_declaracion = find_by_id_dec((int)$id_detalle_usuario);
 page_require_level(3);
 ?>
 
@@ -42,11 +43,13 @@ page_require_level(3);
 if (isset($_POST['add_cuentas'])) {
     if (empty($errors)) {
         $ninguno = remove_junk($db->escape($_POST['ninguno']));
+        $declaracion = (int)$id_rel_declaracion['id_rel_declaracion'];
+
         if ($ninguno == 'on') {
             $query = "INSERT INTO rel_detalle_inv_cbanc (";
-            $query .= "id_detalle_usuario, ninguno, fecha_creacion";
+            $query .= "id_detalle_usuario, id_rel_declaracion, ninguno, fecha_creacion";
             $query .= ") VALUES (";
-            $query .= " '{$id_detalle_usuario}', 1, NOW()";
+            $query .= " '{$id_detalle_usuario}', '{$declaracion}', 1, NOW()";
             $query .= ")";
         }
         if ($ninguno != 'on') {
@@ -64,20 +67,24 @@ if (isset($_POST['add_cuentas'])) {
 
             for ($i = 0; $i < sizeof($id_cat_tipo_operacion); $i = $i + 1) {
                 $query1 = "INSERT INTO rel_detalle_inv_cbanc (";
-                $query1 .= "id_detalle_usuario, ninguno, id_cat_tipo_operacion, id_cat_titular, num_cuenta, mexico, inst_razon_soc, extranjero, 
-                            inst_razon_soc_ext, pais_localiza, saldo_fecha_toma, tipo_moneda, id_cat_tipo_inversion, fecha_creacion";
+                $query1 .= "id_detalle_usuario, id_rel_declaracion, ninguno, id_cat_tipo_operacion, id_cat_titular, num_cuenta, mexico, inst_razon_soc, 
+                            extranjero, inst_razon_soc_ext, pais_localiza, saldo_fecha_toma, tipo_moneda, id_cat_tipo_inversion, fecha_creacion";
                 $query1 .= ") VALUES (";
-                $query1 .= "'{$id_detalle_usuario}', 0, '$id_cat_tipo_operacion[$i]', '$id_cat_titular[$i]', '$num_cuenta[$i]', '$mexico[$i]', 
-                            '$inst_razon_soc[$i]', '$extranjero[$i]', '$inst_razon_soc_ext[$i]', '$pais_localiza[$i]', '$saldo_fecha_toma[$i]', 
+                $query1 .= "'{$id_detalle_usuario}', '{$declaracion}', 0, '$id_cat_tipo_operacion[$i]', '$id_cat_titular[$i]', '$num_cuenta[$i]', 
+                            '$mexico[$i]', '$inst_razon_soc[$i]', '$extranjero[$i]', '$inst_razon_soc_ext[$i]', '$pais_localiza[$i]', '$saldo_fecha_toma[$i]', 
                             '$tipo_moneda[$i]', '$id_cat_tipo_inversion[$i]', NOW()";
                 $query1 .= ")";
                 $db->query($query1);
             }
         }
-        if ($db->query($query)) {
-            $session->msg('s', "La información de la/las cuenta(s) bancaria(s) e inversiones ha sido agregada con éxito.");
-            insertAccion($user['id_user'], '"' . $user['username'] . '" agregó cuenta(s).', 1);
-            redirect('cuentas.php', false);
+        $sql2 = "UPDATE bandera_continuacion SET fecha_actualizacion = NOW() WHERE id_rel_declaracion ='{$db->escape($declaracion)}'";
+        $result2 = $db->query($sql2);
+
+        if (($db->query($query)) && ($result2)) {
+            $session->msg('s', "La información de la/las cuenta(s) bancaria(s) e inversiones ha sido agregada con éxito. Continúa con los adeudos del declarante.");
+            insertAccion($user['id_user'], '"' . $user['username'] . '" agregó cuenta(s) banc.', 1);
+            updateLastArchivo('adeudos.php', $declaracion);
+            redirect('adeudos.php', false);
         } else {
             $session->msg('d', ' No se pudo agregar la información.');
             redirect('cuentas.php', false);

@@ -9,6 +9,7 @@ $detalle_encargo = find_by_id('encargo_ini_mod_conc', $_GET['id'], 'id_encargo_i
 $areas = find_all('area');
 $ent_feds = find_all('cat_entidad_fed');
 $municipios = find_all('cat_municipios');
+$id_rel_declaracion = find_by_id_dec((int)$id_detalle_usuario);
 page_require_level(3);
 ?>
 
@@ -33,23 +34,29 @@ if (isset($_POST['update'])) {
         $extension = $_POST['extension'];
         // $id_cat_func_realiza = $_POST['id_cat_func_realiza'];
         $otro = $_POST['otro'];
+        $declaracion = (int)$id_rel_declaracion['id_rel_declaracion'];
 
         $opciones_seleccionadas = explode(",", $detalle_encargo['id_cat_func_realiza']);
         $id_cat_func_realiza = implode(",", $_POST['id_cat_func_realiza']);
 
-        $sql = "UPDATE encargo_ini_mod_conc SET dependencia_entidad='{$dependencia_entidad}', nombre_emp_car_com='{$nombre_emp_car_com}', honorarios='{$honorarios}', 
-                no_hono_niv_encargo='{$no_hono_niv_encargo}', id_area_adscripcion='{$id_area_adscripcion}', fecha_toma_pos_enc='{$fecha_toma_pos_enc}',
-                lugar_ubica='{$lugar_ubica}', si_extranjero_pais='{$si_extranjero_pais}', localidad_colonia='{$localidad_colonia}', 
-                id_cat_ent_fed='{$id_cat_ent_fed}', id_cat_mun='{$id_cat_mun}', cod_post='{$cod_post}', tel_oficina='{$tel_oficina}', extension='{$extension}',
+        $sql = "UPDATE encargo_ini_mod_conc SET id_rel_declaracion='{$declaracion}', dependencia_entidad='{$dependencia_entidad}', 
+                nombre_emp_car_com='{$nombre_emp_car_com}', honorarios='{$honorarios}', no_hono_niv_encargo='{$no_hono_niv_encargo}', 
+                id_area_adscripcion='{$id_area_adscripcion}', fecha_toma_pos_enc='{$fecha_toma_pos_enc}', lugar_ubica='{$lugar_ubica}', 
+                si_extranjero_pais='{$si_extranjero_pais}', localidad_colonia='{$localidad_colonia}', id_cat_ent_fed='{$id_cat_ent_fed}', 
+                id_cat_mun='{$id_cat_mun}', cod_post='{$cod_post}', tel_oficina='{$tel_oficina}', extension='{$extension}',
                 id_cat_func_realiza='{$id_cat_func_realiza}', otro='{$otro}'
                 WHERE id_encargo_inicia ='{$db->escape($id)}'";
-        $result = $db->query($sql);
 
-        if ($db->query($query)) {
+        $sql2 = "UPDATE bandera_continuacion SET fecha_actualizacion = NOW() WHERE id_rel_declaracion ='{$db->escape($declaracion)}'";
+        
+        $result = $db->query($sql);
+        $result2 = $db->query($sql2);
+
+        if (($db->query($query)) && ($result2 && $db->affected_rows() === 1)) {
             //sucess
-            $session->msg('s', "La información del Encargo que Inicia ha sido editada con éxito.");
+            $session->msg('s', "La información del Encargo que Inicia ha sido editada con éxito. Continúa con la remuneración mensual.");
             insertAccion($user['id_user'], '"' . $user['username'] . '" editó encargo: ' . $id . '.', 2);
-            redirect('edit_encargo_inicia.php?id=' . (int)$detalle_encargo['id_encargo_inicia'], false);
+            redirect('rem_mens.php?id=' . (int)$detalle_encargo['id_encargo_inicia'], false);
         } else {
             //failed
             $session->msg('d', ' No se pudo editar la información.');
@@ -213,7 +220,7 @@ include_once('layouts/header.php'); ?>
             <div class="row">
                 <label for="id_cat_func_realiza">Marca la(s) función(es) principal(es) que realiza según el siguiente catálogo</label>
                 <div class="col-md-5">
-                    <?php $opciones_seleccionadas = explode(",", $detalle_encargo['id_cat_func_realiza']);?>
+                    <?php $opciones_seleccionadas = explode(",", $detalle_encargo['id_cat_func_realiza']); ?>
                     <input type="checkbox" name="id_cat_func_realiza[]" value="1" <?php if (in_array("1", $opciones_seleccionadas)) echo "checked"; ?>> Administración de Bienes Materiales<br>
                     <input type="checkbox" name="id_cat_func_realiza[]" value="2" <?php if (in_array("2", $opciones_seleccionadas)) echo "checked"; ?>> Áreas Técnicas<br>
                     <input type="checkbox" name="id_cat_func_realiza[]" value="3" <?php if (in_array("3", $opciones_seleccionadas)) echo "checked"; ?>> Atención Directa al Público<br>

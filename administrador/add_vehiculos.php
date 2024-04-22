@@ -9,6 +9,7 @@ $operaciones = find_all('cat_tipo_operacion');
 $adquisiciones = find_all('cat_forma_adquisicion');
 $titulares = find_all('cat_titular');
 $cesionarios = find_all('cat_rel_cesionario');
+$id_rel_declaracion = find_by_id_dec((int)$id_detalle_usuario);
 page_require_level(3);
 ?>
 
@@ -43,11 +44,12 @@ page_require_level(3);
 if (isset($_POST['add_vehiculos'])) {
     if (empty($errors)) {
         $ninguno = remove_junk($db->escape($_POST['ninguno']));
+        $declaracion = (int)$id_rel_declaracion['id_rel_declaracion'];
         if ($ninguno == 'on') {
             $query = "INSERT INTO rel_detalle_automotores (";
-            $query .= "id_detalle_usuario, ninguno, fecha_creacion";
+            $query .= "id_detalle_usuario, id_rel_declaracion, ninguno, fecha_creacion";
             $query .= ") VALUES (";
-            $query .= " '{$id_detalle_usuario}', 1, NOW()";
+            $query .= " '{$id_detalle_usuario}', '{$declaracion}', 1, NOW()";
             $query .= ")";
         }
         if ($ninguno != 'on') {
@@ -67,26 +69,29 @@ if (isset($_POST['add_vehiculos'])) {
             $fecha_adquisicion = $_POST['fecha_adquisicion'];
             $id_cat_titular = $_POST['id_cat_titular'];
             $si_vent_forma_oper = $_POST['si_vent_forma_oper'];
-            $si_sinies_tipo = $_POST['si_sinies_tipo'];
+            $si_sinies_tipo = $_POST['si_sinies_tipo'];            
 
             for ($i = 0; $i < sizeof($id_cat_tipo_operacion); $i = $i + 1) {
                 $query1 = "INSERT INTO rel_detalle_automotores (";
-                $query1 .= "id_detalle_usuario, ninguno, id_cat_tipo_operacion, marca, tipo, modelo, num_serie, donde_registrado, ent_fed_pais, 
-                            id_cat_forma_adquis, nombre_cesionario, id_cat_rel_cesionario, otro_especifica, valor_momento_compra, tipo_moneda, 
+                $query1 .= "id_detalle_usuario, id_rel_declaracion, ninguno, id_cat_tipo_operacion, marca, tipo, modelo, num_serie, donde_registrado, 
+                            ent_fed_pais, id_cat_forma_adquis, nombre_cesionario, id_cat_rel_cesionario, otro_especifica, valor_momento_compra, tipo_moneda, 
                             fecha_adquisicion, id_cat_titular, si_vent_forma_oper, si_sinies_tipo, fecha_creacion";
                 $query1 .= ") VALUES (";
-                $query1 .= "'{$id_detalle_usuario}', 0, '$id_cat_tipo_operacion[$i]', '$marca[$i]', '$tipo[$i]', '$modelo[$i]', '$num_serie[$i]', 
-                            '$donde_registrado[$i]', '$ent_fed_pais[$i]', '$id_cat_forma_adquis[$i]', '$nombre_cesionario[$i]', '$id_cat_rel_cesionario[$i]', 
-                            '$otro_especifica[$i]', '$valor_momento_compra[$i]', '$tipo_moneda[$i]', '$fecha_adquisicion[$i]', '$id_cat_titular[$i]', 
-                            '$si_vent_forma_oper[$i]', '$si_sinies_tipo[$i]', NOW()";
+                $query1 .= "'{$id_detalle_usuario}', '{$declaracion}', 0, '$id_cat_tipo_operacion[$i]', '$marca[$i]', '$tipo[$i]', '$modelo[$i]', 
+                            '$num_serie[$i]', '$donde_registrado[$i]', '$ent_fed_pais[$i]', '$id_cat_forma_adquis[$i]', '$nombre_cesionario[$i]', '$id_cat_rel_cesionario[$i]', '$otro_especifica[$i]', '$valor_momento_compra[$i]', '$tipo_moneda[$i]', '$fecha_adquisicion[$i]', '$id_cat_titular[$i]', '$si_vent_forma_oper[$i]', '$si_sinies_tipo[$i]', NOW()";
                 $query1 .= ")";
                 $db->query($query1);
             }
         }
-        if ($db->query($query)) {
-            $session->msg('s', "La información de el/los vehículo(s) ha sido agregada con éxito.");
+
+        $sql2 = "UPDATE bandera_continuacion SET fecha_actualizacion = NOW() WHERE id_rel_declaracion ='{$db->escape($declaracion)}'";
+        $result2 = $db->query($sql2);
+
+        if (($db->query($query)) && ($result2)) {
+            $session->msg('s', "La información de el/los vehículo(s) ha sido agregada con éxito. Continúa con bienes muebles.");
             insertAccion($user['id_user'], '"' . $user['username'] . '" agregó vehículo(s).', 1);
-            redirect('vehiculos.php', false);
+            updateLastArchivo('bienes_muebles.php', $declaracion);
+            redirect('bienes_muebles.php', false);
         } else {
             $session->msg('d', ' No se pudo agregar la información.');
             redirect('vehiculos.php', false);

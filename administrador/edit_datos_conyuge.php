@@ -6,6 +6,7 @@ require_once('includes/load.php');
 $user = current_user();
 $id_detalle_usuario = $user['id_detalle_user'];
 $detalle_cony = find_by_id('rel_detalle_cony_dependientes', $_GET['id'], 'id_rel_detalle_cony_dependientes');
+$id_rel_declaracion = find_by_id_dec((int)$id_detalle_usuario);
 page_require_level(3);
 ?>
 
@@ -24,17 +25,22 @@ if (isset($_POST['update'])) {
         $habita_domicilio = $_POST['habita_domicilio'];
         $dom_si_no_habita = $_POST['dom_si_no_habita'];
 
-        $sql = "UPDATE rel_detalle_cony_dependientes SET nombre_completo='{$nombre_completo}', parentesco='{$parentesco}', extranjero='{$extranjero}', 
-                curp='{$curp}', dependiente_econ='{$dependiente_econ}', desemp_admin_pub='{$desemp_admin_pub}', depen_ent_desemp_ap='{$depen_ent_desemp_ap}', 
-                habita_domicilio='{$habita_domicilio}', dom_si_no_habita='{$dom_si_no_habita}'
+        $declaracion = (int)$id_rel_declaracion['id_rel_declaracion'];
+
+        $sql = "UPDATE rel_detalle_cony_dependientes SET id_rel_declaracion='{$declaracion}', nombre_completo='{$nombre_completo}', 
+                parentesco='{$parentesco}', extranjero='{$extranjero}', curp='{$curp}', dependiente_econ='{$dependiente_econ}', 
+                desemp_admin_pub='{$desemp_admin_pub}', depen_ent_desemp_ap='{$depen_ent_desemp_ap}', habita_domicilio='{$habita_domicilio}', 
+                dom_si_no_habita='{$dom_si_no_habita}'
                 WHERE id_rel_detalle_cony_dependientes ='{$db->escape($id)}'";
         $result = $db->query($sql);
+        $sql2 = "UPDATE bandera_continuacion SET fecha_actualizacion = NOW() WHERE id_rel_declaracion ='{$db->escape($declaracion)}'";
+        $result2 = $db->query($sql2);
 
-        if ($db->query($query)) {
+        if (($db->query($query)) && ($result2 && $db->affected_rows() === 1)) {
             //sucess
-            $session->msg('s', "La información del Cónyuge, Concubina o Concubinario y/o Dependientes Económicos ha sido editada con éxito.");
+            $session->msg('s', "La información del Cónyuge, Concubina o Concubinario y/o Dependientes Económicos ha sido editada con éxito. Continúa con la información del encargo que inicias.");
             insertAccion($user['id_user'], '"' . $user['username'] . '" editó info. cony.: ' . $id . '.', 2);
-            redirect('edit_datos_conyuge.php?id=' . (int)$detalle_cony['id_rel_detalle_cony_dependientes'], false);
+            redirect('encargo_inicia.php', false);
         } else {
             //failed
             $session->msg('d', ' No se pudo editar la información.');

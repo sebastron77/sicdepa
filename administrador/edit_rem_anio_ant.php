@@ -6,6 +6,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 $user = current_user();
 $id_detalle_usuario = $user['id_detalle_user'];
 $detalles = find_by_id('rel_detalle_renum_anio_ant', (int)$_GET['id'], 'id_rel_detalle_renum_anio_ant');
+$id_rel_declaracion = find_by_id_dec((int)$id_detalle_usuario);
 page_require_level(3);
 ?>
 <style>
@@ -113,6 +114,7 @@ if (isset($_POST['update'])) {
         $cony_deduce_imp = remove_junk($db->escape($_POST['cony_deduce_imp']));
         $ingr_anual_cony = remove_junk($db->escape($_POST['ingr_anual_cony']));
         $suma_ab = remove_junk($db->escape($_POST['suma_ab']));
+        $declaracion = (int)$id_rel_declaracion['id_rel_declaracion'];
 
         $monto_solo1 = str_replace("$", "", $renum_anual_neta);
         $monto_solo2 = str_replace("$", "", $act_indus);
@@ -124,17 +126,19 @@ if (isset($_POST['update'])) {
         $monto_solo8 = str_replace("$", "", $ingr_anual_cony);
         $monto_solo9 = str_replace("$", "", $suma_ab);
 
-        $sql = "UPDATE rel_detalle_renum_anio_ant SET ing_anual_dec_cony='{$bool}', inicio_periodo='{$inicio_periodo}',
+        $sql = "UPDATE rel_detalle_renum_anio_ant SET id_rel_declaracion='{$declaracion}', ing_anual_dec_cony='{$bool}', inicio_periodo='{$inicio_periodo}',
                 fin_periodo='{$fin_periodo}', renum_anual_neta='{$monto_solo1}', nombre_act_indus='{$nombre_act_indus}', act_indus='{$monto_solo2}', 
                 nombre_act_fin='{$nombre_act_fin}', act_finan='{$monto_solo3}', tipo_serv_prof='{$tipo_serv_prof}', serv_prof='{$monto_solo4}', 
                 otros_info='{$otros_info}', otros='{$monto_solo5}', subtotal2='{$monto_solo6}', subtotal1_2='{$monto_solo7}', cony_deduce_imp='{$cony_deduce_imp}', ingr_anual_cony='{$monto_solo8}', suma_ab='{$monto_solo9}'
                 WHERE id_rel_detalle_renum_anio_ant ='{$db->escape($id)}'";
+                $sql2 = "UPDATE bandera_continuacion SET fecha_actualizacion = NOW() WHERE id_rel_declaracion ='{$db->escape($declaracion)}'";
 
         $result = $db->query($sql);
-        if ($result && $db->affected_rows() === 1) {
-            $session->msg('s', "La información de la situación patrimonial del año inmediato anterior ha sido editada con éxito.");
+        $result2 = $db->query($sql2);
+        if (($result && $db->affected_rows() === 1) && ($result2 && $db->affected_rows() === 1)) {
+            $session->msg('s', "La información de la situación patrimonial del año inmediato anterior ha sido editada con éxito. Continúa con los bienes inmuebles.");
             insertAccion($user['id_user'], '"' . $user['username'] . '" editó remun. anio anterior' . $detalles['id_rel_detalle_renum_anio_ant'] . '.', 1);
-            redirect('edit_rem_anio_ant.php?id=' . (int)$detalles['id_rel_detalle_renum_anio_ant'], false);
+            redirect('bienes_inmuebles.php?id=' . (int)$detalles['id_rel_detalle_renum_anio_ant'], false);
         } else {
             $session->msg('d', ' No se pudo agregar la información de la situación patrimonial del año inmediato anterior.');
             redirect('edit_rem_anio_ant.php?id=' . (int)$detalles['id_rel_detalle_renum_anio_ant'], false);

@@ -12,6 +12,7 @@ $resps_conf = find_all('cat_tipo_resp_conf');
 $naturs_vinc = find_all('cat_natur_vinc');
 $particips_direc = find_all('cat_particip_direc');
 $tipos_colab = find_all('cat_tipo_colab');
+$id_rel_declaracion = find_by_id_dec((int)$id_detalle_usuario);
 page_require_level(3);
 ?>
 
@@ -112,11 +113,12 @@ page_require_level(3);
 if (isset($_POST['add_conflicto'])) {
     if (empty($errors)) {
         $ninguno = remove_junk($db->escape($_POST['ninguno']));
+        $declaracion = (int)$id_rel_declaracion['id_rel_declaracion'];
         if ($ninguno == 'on') {
             $query = "INSERT INTO rel_detalle_conflicto_declarante (";
-            $query .= "id_detalle_usuario, ninguno, fecha_creacion";
+            $query .= "id_detalle_usuario, id_rel_declaracion, ninguno, fecha_creacion";
             $query .= ") VALUES (";
-            $query .= " '{$id_detalle_usuario}', 1, NOW()";
+            $query .= " '{$id_detalle_usuario}', '{$declaracion}', 1, NOW()";
             $query .= ")";
         }
         if ($ninguno != 'on') {
@@ -149,21 +151,24 @@ if (isset($_POST['add_conflicto'])) {
 
             for ($i = 0; $i < sizeof($id_cat_tipo_op_conf); $i = $i + 1) {
                 $query1 = "INSERT INTO rel_detalle_conflicto_declarante (";
-                $query1 .= "id_detalle_usuario, ninguno, de_acuerdo_publica, id_cat_tipo_operacion, nombre_entidad, id_cat_frec_anual, otra_frec_anual, 
-                            id_cat_tipo_pers_jur, otra_pers_jurid, id_cat_resp_conf, id_cat_natur_vinc, otro_nat_vinc, antiguedad_vinc_anios, id_cat_particip_direc, id_cat_tipo_colab, ubicacion, observaciones_aclaraciones, fecha_creacion";
+                $query1 .= "id_detalle_usuario, id_rel_declaracion, ninguno, de_acuerdo_publica, id_cat_tipo_operacion, nombre_entidad, id_cat_frec_anual,
+                            otra_frec_anual, id_cat_tipo_pers_jur, otra_pers_jurid, id_cat_resp_conf, id_cat_natur_vinc, otro_nat_vinc, antiguedad_vinc_anios, id_cat_particip_direc, id_cat_tipo_colab, ubicacion, observaciones_aclaraciones, fecha_creacion";
                 $query1 .= ") VALUES (";
-                $query1 .= "'{$id_detalle_usuario}', '{$nin}', '{$bool}', '$id_cat_tipo_op_conf[$i]', '$nombre_entidad[$i]', '$id_cat_frec_anual[$i]', 
-                            '$otra_frec_anual[$i]', '$id_cat_tipo_pers_jur[$i]', '$otra_pers_jurid[$i]', '$id_cat_resp_conf[$i]', '$id_cat_natur_vinc[$i]',
-                            '$otro_nat_vinc[$i]', '$antiguedad_vinc_anios[$i]', '$id_cat_particip_direc[$i]', '$id_cat_tipo_colab[$i]', '$ubicacion[$i]', 
-                            '$observaciones_aclaraciones[$i]', NOW()";
+                $query1 .= "'{$id_detalle_usuario}', '{$declaracion}', '{$nin}', '{$bool}', '$id_cat_tipo_op_conf[$i]', '$nombre_entidad[$i]', 
+                            '$id_cat_frec_anual[$i]', '$otra_frec_anual[$i]', '$id_cat_tipo_pers_jur[$i]', '$otra_pers_jurid[$i]', '$id_cat_resp_conf[$i]',
+                            '$id_cat_natur_vinc[$i]', '$otro_nat_vinc[$i]', '$antiguedad_vinc_anios[$i]', '$id_cat_particip_direc[$i]', 
+                            '$id_cat_tipo_colab[$i]', '$ubicacion[$i]', '$observaciones_aclaraciones[$i]', NOW()";
                 $query1 .= ")";
                 $db->query($query1);
             }
         }
-        if ($db->query($query)) {
-            $session->msg('s', "La información del conflicto de interés ha sido agregada con éxito.");
+        $sql2 = "UPDATE bandera_continuacion SET fecha_actualizacion = NOW() WHERE id_rel_declaracion ='{$db->escape($declaracion)}'";
+        $result2 = $db->query($sql2);
+        
+        if (($db->query($query)) && ($result2)) {
+            $session->msg('s', "La información del conflicto de interés ha sido agregada con éxito. Continúa con conflictos de intereses económicos (si los hay).");
             insertAccion($user['id_user'], '"' . $user['username'] . '" agregó conflicto de interés.', 1);
-            redirect('conflicto.php', false);
+            redirect('conflicto_econ.php', false);
         } else {
             $session->msg('d', ' No se pudo agregar la información.');
             redirect('conflicto.php', false);

@@ -10,6 +10,7 @@ $bienes = find_all('cat_tipo_bien_mueble');
 $adquisiciones = find_all('cat_forma_adquisicion');
 $titulares = find_all('cat_titular');
 $cesionarios = find_all('cat_rel_cesionario');
+$id_rel_declaracion = find_by_id_dec((int)$id_detalle_usuario);
 page_require_level(3);
 ?>
 
@@ -44,11 +45,12 @@ page_require_level(3);
 if (isset($_POST['add_bienes_muebles'])) {
     if (empty($errors)) {
         $ninguno = remove_junk($db->escape($_POST['ninguno']));
+        $declaracion = (int)$id_rel_declaracion['id_rel_declaracion'];
         if ($ninguno == 'on') {
             $query = "INSERT INTO rel_detalle_bien_mueble (";
-            $query .= "id_detalle_usuario, ninguno, fecha_creacion";
+            $query .= "id_detalle_usuario, id_rel_declaracion, ninguno, fecha_creacion";
             $query .= ") VALUES (";
-            $query .= " '{$id_detalle_usuario}', 1, NOW()";
+            $query .= " '{$id_detalle_usuario}', '{$declaracion}', 1, NOW()";
             $query .= ")";
         }
         if ($ninguno != 'on') {
@@ -64,24 +66,27 @@ if (isset($_POST['add_bienes_muebles'])) {
             $fecha_adquisicion = $_POST['fecha_adquisicion'];
             $id_cat_titular = $_POST['id_cat_titular'];
             $venta_forma_oper = $_POST['venta_forma_oper'];
-
+            
             for ($i = 0; $i < sizeof($id_cat_tipo_operacion); $i = $i + 1) {
                 $query1 = "INSERT INTO rel_detalle_bien_mueble (";
-                $query1 .= "id_detalle_usuario, ninguno, id_cat_tipo_operacion, id_cat_tipo_bien, descripcion_bien, id_cat_forma_adquisicion, 
-                            nombre_razon_soc_ces, id_cat_rel_cesionario, otro_indica_relac, valor_bien, tipo_moneda, fecha_adquisicion, id_cat_titular, 
-                            venta_forma_oper, fecha_creacion";
+                $query1 .= "id_detalle_usuario, id_rel_declaracion, ninguno, id_cat_tipo_operacion, id_cat_tipo_bien, descripcion_bien, 
+                            id_cat_forma_adquisicion, nombre_razon_soc_ces, id_cat_rel_cesionario, otro_indica_relac, valor_bien, tipo_moneda, fecha_adquisicion, id_cat_titular, venta_forma_oper, fecha_creacion";
                 $query1 .= ") VALUES (";
-                $query1 .= "'{$id_detalle_usuario}', 0, '$id_cat_tipo_operacion[$i]', '$id_cat_tipo_bien[$i]', '$descripcion_bien[$i]',
+                $query1 .= "'{$id_detalle_usuario}', '{$declaracion}', 0, '$id_cat_tipo_operacion[$i]', '$id_cat_tipo_bien[$i]', '$descripcion_bien[$i]',
                             '$id_cat_forma_adquisicion[$i]', '$nombre_razon_soc_ces[$i]', '$id_cat_rel_cesionario[$i]', '$otro_indica_relac[$i]', 
                             '$valor_bien[$i]', '$tipo_moneda[$i]', '$fecha_adquisicion[$i]', '$id_cat_titular[$i]', '$venta_forma_oper[$i]', NOW()";
                 $query1 .= ")";
                 $db->query($query1);
             }
         }
-        if ($db->query($query)) {
-            $session->msg('s', "La información de el/los bien(es) mueble(s) ha sido agregada con éxito.");
+        $sql2 = "UPDATE bandera_continuacion SET fecha_actualizacion = NOW() WHERE id_rel_declaracion ='{$db->escape($declaracion)}'";
+        $result2 = $db->query($sql2);
+
+        if (($db->query($query)) && ($result2)) {
+            $session->msg('s', "La información de el/los bien(es) mueble(s) ha sido agregada con éxito. Continúa con cuentas bancarias.");
             insertAccion($user['id_user'], '"' . $user['username'] . '" agregó bien(es) mueble(s).', 1);
-            redirect('bienes_muebles.php', false);
+            updateLastArchivo('cuentas.php', $declaracion);
+            redirect('cuentas.php', false);
         } else {
             $session->msg('d', ' No se pudo agregar la información.');
             redirect('bienes_muebles.php', false);
