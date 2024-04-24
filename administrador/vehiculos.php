@@ -59,9 +59,11 @@ page_require_level(3);
                                     <td><?php echo remove_junk(ucwords($a_detalle2['fecha_adquisicion'])) ?></td>
                                     <td class="text-center">
                                         <div class="btn-group">
-                                            <a href="edit_vehiculos.php?id=<?php echo (int)$a_detalle2['id_rel_detalle_automotores']; ?>" class="btn btn-warning btn-md" title="Editar" data-toggle="tooltip" style="height: 32px; width: 32px;">
-                                                <span class="material-symbols-rounded" style="font-size: 20px; color: black; margin-top: 2px; margin-left: -3px;">edit</span>
-                                            </a>
+                                            <?php if ($a_detalle2['ninguno'] == 0) : ?>
+                                                <a href="edit_vehiculos.php?id=<?php echo (int)$a_detalle2['id_rel_detalle_automotores']; ?>" class="btn btn-warning btn-md" title="Editar" data-toggle="tooltip" style="height: 32px; width: 32px;">
+                                                    <span class="material-symbols-rounded" style="font-size: 20px; color: black; margin-top: 2px; margin-left: -3px;">edit</span>
+                                                </a>
+                                            <?php endif; ?>
                                         </div>
                                     </td>
                                 </tr>
@@ -79,9 +81,11 @@ page_require_level(3);
                                     <td><?php echo remove_junk(ucwords($a_detalle['fecha_adquisicion'])) ?></td>
                                     <td class="text-center">
                                         <div class="btn-group">
-                                            <a href="edit_vehiculos.php?id=<?php echo (int)$a_detalle['id_rel_detalle_automotores']; ?>" class="btn btn-warning btn-md" title="Editar" data-toggle="tooltip" style="height: 32px; width: 32px;">
-                                                <span class="material-symbols-rounded" style="font-size: 20px; color: black; margin-top: 2px; margin-left: -3px;">edit</span>
-                                            </a>
+                                            <?php if ($a_detalle['ninguno'] == 0) : ?>
+                                                <a href="edit_vehiculos.php?id=<?php echo (int)$a_detalle['id_rel_detalle_automotores']; ?>" class="btn btn-warning btn-md" title="Editar" data-toggle="tooltip" style="height: 32px; width: 32px;">
+                                                    <span class="material-symbols-rounded" style="font-size: 20px; color: black; margin-top: 2px; margin-left: -3px;">edit</span>
+                                                </a>
+                                            <?php endif; ?>
                                         </div>
                                     </td>
                                 </tr>

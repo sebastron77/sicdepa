@@ -74,10 +74,10 @@ if (isset($_POST['add_exp_laboral'])) {
         $result2 = $db->query($sql2);
 
         if (($db->query($query)) && ($result2)) {
-            $session->msg('s', "La información de experiencia laboral ha sido agregada con éxito. Continúa con la información del cónyuge.");
+            $session->msg('s', "La información de experiencia laboral ha sido agregada con éxito. Continúa con si quieres hacer datos patrimoniales públicos.");
             insertAccion($user['id_user'], '"' . $user['username'] . '" agregó su exp. laboral: ' . '.', 1);
-            updateLastArchivo('datos_conyuge.php', $declaracion);
-            redirect('datos_conyuge.php', false);
+            updateLastArchivo('rel_datos_pub_dec.php.php', $declaracion);
+            redirect('rel_datos_pub_dec.php.php', false);
         } else {
             $session->msg('d', ' No se pudo agregar la experiencia laboral.');
             redirect('add_exp_laboral.php', false);

@@ -5,8 +5,10 @@ require_once('includes/load.php');
 
 $user = current_user();
 $nivel_user = $user['user_level'];
+$id_detalle_usuario = $user['id_detalle_user'];
+$declaracion = find_by_id_dec((int)$id_detalle_usuario);
+$bandera = find_by_id_bandera((int)$declaracion['id_rel_declaracion']);
 page_require_level(3);
-
 ?>
 <?php include_once('layouts/header.php'); ?>
 <style>
@@ -16,6 +18,7 @@ page_require_level(3);
 		display: flex;
 		cursor: pointer;
 	}
+
 	/* Pestañas */
 	.tab {
 		flex: 1;
@@ -25,16 +28,19 @@ page_require_level(3);
 		background-color: #f4f4f4;
 		transition: background-color 0.3s;
 	}
+
 	/* Pestaña activa */
 	.tab.active {
 		background-color: #ddd;
 	}
+
 	/* Contenedor de contenido */
 	.content {
 		border: 1px solid #ccc;
 		padding: 20px;
 		display: none;
 	}
+
 	/* Contenido activo */
 	.content.active {
 		display: block;
@@ -67,9 +73,12 @@ page_require_level(3);
 					<td class="text-center">Nueva Declaración</td>
 					<td class="text-center"></td>
 					<td class="text-center">
-						<a href="add_rel_declaracion.php" class="btn btn-success btn-md" title="Presentar" data-toggle="tooltip">
-							Presentar
-						</a>
+						<?php if ($declaracion['concluida'] == 1) : ?>
+							<a href="add_rel_declaracion.php" class="btn btn-success btn-md" title="Presentar" data-toggle="tooltip">Presentar</a>
+						<?php endif; ?>
+						<?php if ($declaracion['concluida'] == 0) : ?>
+							<a href="<?php echo $bandera['ultimo_archivo'];?>" class="btn btn-success btn-md" title="Continuar" data-toggle="tooltip">Continuar</a>
+						<?php endif; ?>
 					</td>
 				</tbody>
 			</table>

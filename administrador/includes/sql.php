@@ -79,6 +79,16 @@ function find_by_id_dec($id)
     return null;
 }
 
+function find_by_id_bandera($id)
+{
+  global $db;
+  $id = (int)$id;
+  $sql = $db->query("SELECT * FROM bandera_continuacion WHERE id_rel_declaracion='{$db->escape($id)}' ORDER BY fecha_creacion DESC LIMIT 1");
+  if ($result = $db->fetch_assoc($sql))
+    return $result;
+  else
+    return null;
+}
 /*--------------------------------------------------------------*/
 /*  Funcion para encontrar datos por su id en una tabla
 /*--------------------------------------------------------------*/
@@ -1063,7 +1073,7 @@ function find_by_id_all_remun_anio_ant($id)
 }
 function find_all_bienes()
 {
-  $sql = "SELECT rr.id_rel_detalle_bienes, rr.id_detalle_usuario, rr.id_cat_tipo_operacion, rr.id_cat_tipo_bien, rr.id_cat_titular, rr.fecha_adquisicion,
+  $sql = "SELECT rr.id_rel_detalle_bienes, rr.id_detalle_usuario, rr.ninguno, rr.id_cat_tipo_operacion, rr.id_cat_tipo_bien, rr.id_cat_titular, rr.fecha_adquisicion,
           cto.descripcion as tipo_operacion, tb.descripcion as bien_inmueble, ct.descripcion as titular, du.nombre, du.apellido_paterno, du.apellido_materno
           FROM rel_detalle_bienes_inmuebles rr
           LEFT JOIN detalles_usuario du
@@ -1080,7 +1090,7 @@ function find_all_bienes()
 }
 function find_by_id_bienes($id)
 {
-  $sql = "SELECT rr.id_rel_detalle_bienes, rr.id_detalle_usuario, rr.id_cat_tipo_operacion, rr.id_cat_tipo_bien, rr.id_cat_titular, rr.fecha_adquisicion,
+  $sql = "SELECT rr.id_rel_detalle_bienes, rr.ninguno, rr.id_detalle_usuario, rr.id_cat_tipo_operacion, rr.id_cat_tipo_bien, rr.id_cat_titular, rr.fecha_adquisicion,
           cto.descripcion as tipo_operacion, tb.descripcion as bien_inmueble, ct.descripcion as titular, du.nombre, du.apellido_paterno, du.apellido_materno
   FROM rel_detalle_bienes_inmuebles rr
   LEFT JOIN detalles_usuario du
@@ -1098,7 +1108,7 @@ function find_by_id_bienes($id)
 }
 function find_all_vehiculos()
 {
-  $sql = "SELECT rr.id_rel_detalle_automotores, rr.id_detalle_usuario, rr.id_cat_tipo_operacion, rr.id_cat_titular, rr.fecha_adquisicion,
+  $sql = "SELECT rr.id_rel_detalle_automotores, rr.id_detalle_usuario, rr.ninguno, rr.id_cat_tipo_operacion, rr.id_cat_titular, rr.fecha_adquisicion,
           cto.descripcion as tipo_operacion, ct.descripcion as titular, du.nombre, du.apellido_paterno, du.apellido_materno, rr.tipo, rr.marca
           FROM rel_detalle_automotores rr
           LEFT JOIN detalles_usuario du
@@ -1113,7 +1123,7 @@ function find_all_vehiculos()
 }
 function find_by_id_vehiculos($id)
 {
-  $sql = "SELECT rr.id_rel_detalle_automotores, rr.id_detalle_usuario, rr.id_cat_tipo_operacion, rr.id_cat_titular, rr.fecha_adquisicion,
+  $sql = "SELECT rr.id_rel_detalle_automotores, rr.id_detalle_usuario, rr.ninguno, rr.id_cat_tipo_operacion, rr.id_cat_titular, rr.fecha_adquisicion,
           cto.descripcion as tipo_operacion, ct.descripcion as titular, du.nombre, du.apellido_paterno, du.apellido_materno, rr.tipo, rr.marca
   FROM rel_detalle_automotores rr
   LEFT JOIN detalles_usuario du
@@ -1130,7 +1140,7 @@ function find_by_id_vehiculos($id)
 
 function find_all_bienes_muebles()
 {
-  $sql = "SELECT rr.id_rel_detalle_bien_mueble, rr.id_detalle_usuario, rr.id_cat_tipo_operacion, rr.id_cat_tipo_bien, rr.id_cat_titular, rr.fecha_adquisicion,
+  $sql = "SELECT rr.id_rel_detalle_bien_mueble, rr.id_detalle_usuario, rr.ninguno, rr.id_cat_tipo_operacion, rr.id_cat_tipo_bien, rr.id_cat_titular, rr.fecha_adquisicion,
           cto.descripcion as tipo_operacion, tb.descripcion as bien_mueble, ct.descripcion as titular, du.nombre, du.apellido_paterno, du.apellido_materno
           FROM rel_detalle_bien_mueble rr
           LEFT JOIN detalles_usuario du
@@ -1147,7 +1157,7 @@ function find_all_bienes_muebles()
 }
 function find_by_id_bienes_muebles($id)
 {
-  $sql = "SELECT rr.id_rel_detalle_bien_mueble, rr.id_detalle_usuario, rr.id_cat_tipo_operacion, rr.id_cat_tipo_bien, rr.id_cat_titular, rr.fecha_adquisicion,
+  $sql = "SELECT rr.id_rel_detalle_bien_mueble, rr.id_detalle_usuario, rr.ninguno, rr.id_cat_tipo_operacion, rr.id_cat_tipo_bien, rr.id_cat_titular, rr.fecha_adquisicion,
           cto.descripcion as tipo_operacion, tb.descripcion as bien_mueble, ct.descripcion as titular, du.nombre, du.apellido_paterno, du.apellido_materno
   FROM rel_detalle_bien_mueble rr
   LEFT JOIN detalles_usuario du
@@ -1323,6 +1333,52 @@ function find_by_id_conflicto_econ($id)
           ON rr.id_cat_particip_direc = pd.id_cat_particip_direc
           WHERE rr.id_detalle_usuario = '$id'
           ORDER BY rr.id_detalle_usuario ASC";
+  $result = find_by_sql($sql);
+  return $result;
+}
+
+function find_all_obs_acla()
+{
+  $sql = "SELECT rd.id_rel_declaracion, rd.id_detalle_usuario, du.nombre, du.apellido_paterno, du.apellido_materno, rd.observaciones, rd.fecha_creacion
+          FROM rel_declaracion rd
+          LEFT JOIN detalles_usuario du
+          ON rd.id_detalle_usuario = du.id_det_usuario
+          ORDER BY rd.id_detalle_usuario ASC";
+  $result = find_by_sql($sql);
+  return $result;
+}
+function find_by_id_obs_acla($id)
+{
+  $sql = "SELECT rd.id_rel_declaracion, rd.id_detalle_usuario, du.nombre, du.apellido_paterno, du.apellido_materno, rd.observaciones, rd.fecha_creacion
+          FROM rel_declaracion rd
+          LEFT JOIN detalles_usuario du
+          ON rd.id_detalle_usuario = du.id_det_usuario
+          WHERE rd.id_detalle_usuario = '$id'
+          ORDER BY rd.id_detalle_usuario ASC";
+  $result = find_by_sql($sql);
+  return $result;
+}
+
+function find_all_pub_dec()
+{
+  $sql = "SELECT rd.id_rel_datos_dec_pub, rd.id_detalle_usuario, du.nombre, du.apellido_paterno, du.apellido_materno, rd.de_acuerdo, rd.ingresos_netos, 
+          rd.bienes_inmuebles, rd.bienes_muebles, rd.vehiculos, rd.inversiones, rd.adeudos, rd.fecha_creacion
+          FROM rel_datos_pub_dec rd
+          LEFT JOIN detalles_usuario du
+          ON rd.id_detalle_usuario = du.id_det_usuario
+          ORDER BY rd.id_detalle_usuario ASC";
+  $result = find_by_sql($sql);
+  return $result;
+}
+function find_by_id_pub_dec($id)
+{
+  $sql = "SELECT rd.id_rel_datos_dec_pub, rd.id_detalle_usuario, du.nombre, du.apellido_paterno, du.apellido_materno, rd.de_acuerdo, rd.ingresos_netos, 
+          rd.bienes_inmuebles, rd.bienes_muebles, rd.vehiculos, rd.inversiones, rd.adeudos, rd.fecha_creacion
+          FROM rel_datos_pub_dec rd
+          LEFT JOIN detalles_usuario du
+          ON rd.id_detalle_usuario = du.id_det_usuario
+          WHERE rd.id_detalle_usuario = '$id'
+          ORDER BY rd.id_detalle_usuario ASC";
   $result = find_by_sql($sql);
   return $result;
 }

@@ -22,6 +22,7 @@
       <li><a href="detalles_usuario.php" style="color:#3a3d44">Datos Generales</a></li>
       <li><a href="datos_curri_declarante.php" style="color:#3a3d44">Datos Curriculares</a></li>
       <li><a href="exp_laboral.php" style="color:#3a3d44">Experiencia Laboral</a></li>
+      <li><a href="rel_datos_pub_dec.php" style="color:#3a3d44">Datos patrimoniales públicos</a></li>
       <li><a href="datos_conyuge.php">Datos Cónyuge/Dependiente</a></li>
       <li><a href="encargo_inicia.php">Encargo Inicia</a></li>
       <li><a href="rem_mens.php">Remuneración Mensual Declarante</a></li>
@@ -31,8 +32,9 @@
       <li><a href="bienes_muebles.php">Bienes muebles</a></li>
       <li><a href="cuentas.php">Cuentas bancarias e inversiones</a></li>
       <li><a href="adeudos.php">Adeudos del Declarante</a></li>
-      <li><a href="conflicto.php">Conflictos de intereses</a></li>
-      <li><a href="conflicto_econ.php">Conflictos de interes económicos</a></li>
+      <li><a href="conflicto.php">Posible conflictos de intereses</a></li>
+      <li><a href="conflicto_econ.php">Posible conflictos de intereses económicos</a></li>
+      <li><a href="obs_acla.php">Observaciones y aclaraciones</a></li>
     </ul>
   </li>
   <li style="margin-top:13px;">
