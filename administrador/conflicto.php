@@ -41,6 +41,7 @@ page_require_level(3);
                             <th style="width: 5%;" class="text-center">Tipo Operación</th>
                             <th style="width: 5%;" class="text-center">De acuerdo declaración sea publica</th>
                             <th style="width: 5%;" class="text-center">Responsable del posible conflicto de interés</th>
+                            <th style="width: 1%;" class="text-center">Fecha Creación</th>
                             <th style="width: 1%;" class="text-center">Acciones</th>
                         </tr>
                     </thead>
@@ -58,6 +59,7 @@ page_require_level(3);
                                     <td>Sí</td>
                                     <?php endif;?>
                                     <td><?php echo remove_junk(ucwords($a_detalle2['resp_conf'])) ?></td>
+                                    <td><?php echo remove_junk(ucwords($a_detalle2['fecha_creacion'])) ?></td>
                                     <td class="text-center">
                                         <?php if ($a_detalle2['ninguno'] == 0) : ?>
                                             <div class="btn-group">
@@ -83,6 +85,7 @@ page_require_level(3);
                                     <td>Sí</td>
                                     <?php endif;?>
                                     <td><?php echo remove_junk(ucwords($a_detalle['resp_conf'])) ?></td>
+                                    <td><?php echo remove_junk(ucwords($a_detalle['fecha_creacion'])) ?></td>
                                     <td class="text-center">
                                         <?php if ($a_detalle['ninguno'] == 0) : ?>
                                         <div class="btn-group">

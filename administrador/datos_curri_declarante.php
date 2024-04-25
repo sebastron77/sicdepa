@@ -36,22 +36,24 @@ if ($user['user_level'] >= 3) {
                 <table class="datatable table table-bordered table-striped">
                     <thead class="thead-purple">
                         <tr style="height: 10px;"">
-                            <th style=" width: 1%;">#</th>
+                            <th style=" width: 1%;" class="text-center">#</th>
                             <th style="width: 10%;" class="text-center">Nombre Completo</th>
                             <th style="width: 5%;" class="text-center">Escolaridad</th>
                             <th style="width: 5%;" class="text-center">Estatus</th>
                             <th style="width: 5%;" class="text-center">Documento Obtenido</th>
+                            <th style="width: 1%;" class="text-center">Fecha Creacion</th>
                             <th style="width: 1%;" class="text-center">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($all_detalles as $a_detalle) : ?>
                             <tr>
-                                <td><?php echo remove_junk(ucwords($a_detalle['id_rel_detalle_estudios'])) ?></td>
+                                <td class="text-center"><?php echo remove_junk(ucwords($a_detalle['id_rel_detalle_estudios'])) ?></td>
                                 <td><?php echo remove_junk(ucwords($a_detalle['nombre'] . ' ' . $a_detalle['apellido_paterno'] . ' ' . $a_detalle['apellido_materno'])) ?></td>
                                 <td><?php echo remove_junk($a_detalle['escolaridad']) ?></td>
                                 <td><?php echo remove_junk($a_detalle['estatus_est']) ?></td>
                                 <td><?php echo remove_junk($a_detalle['doc_obt']) ?></td>
+                                <td class="text-center"><?php echo remove_junk($a_detalle['fecha_creacion']) ?></td>
                                 <!-- <td class="text-center">
                                     <?php if ($a_detalle['estatus_detalle'] == '1') : ?>
                                         <span class="label label-success"><?php echo "Activo"; ?></span>

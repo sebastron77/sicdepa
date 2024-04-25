@@ -42,7 +42,8 @@ page_require_level(3);
                             <th style="width: 5%;" class="text-center">Actividad Industrial</th>
                             <th style="width: 5%;" class="text-center">Actividad Financiera</th>
                             <th style="width: 5%;" class="text-center">Servicios Profesionales</th>
-                            <th style="width: 5%;" class="text-center">Otros</th>
+                            <th style="width: 1%;" class="text-center">Otros</th>
+                            <th style="width: 1%;" class="text-center">Fecha Creación</th>
                             <th style="width: 1%;" class="text-center">Acciones</th>
                         </tr>
                     </thead>
@@ -57,6 +58,7 @@ page_require_level(3);
                                     <td class="text-center">$<?php echo remove_junk(ucwords($a_detalle2['act_finan'])) ?></td>
                                     <td class="text-center">$<?php echo remove_junk(ucwords($a_detalle2['serv_prof'])) ?></td>
                                     <td class="text-center">$<?php echo remove_junk(ucwords($a_detalle2['otros'])) ?></td>
+                                    <td class="text-center"><?php echo remove_junk($a_detalle2['fecha_creacion']) ?></td>
                                     <td class="text-center">
                                         <div class="btn-group">
                                             <a href="edit_rem_mens.php?id=<?php echo (int)$a_detalle2['id_rel_detalle_renum']; ?>" class="btn btn-warning btn-md" title="Editar" data-toggle="tooltip" style="height: 32px; width: 32px;">
@@ -77,6 +79,7 @@ page_require_level(3);
                                     <td class="text-center">$<?php echo remove_junk(ucwords($a_detalle['act_finan'])) ?></td>
                                     <td class="text-center">$<?php echo remove_junk(ucwords($a_detalle['serv_prof'])) ?></td>
                                     <td class="text-center">$<?php echo remove_junk(ucwords($a_detalle['otros'])) ?></td>
+                                    <td class="text-center"><?php echo remove_junk($a_detalle['fecha_creacion']) ?></td>
                                     <td class="text-center">
                                         <div class="btn-group">
                                             <a href="edit_rem_mens.php?id=<?php echo (int)$a_detalle['id_rel_detalle_renum']; ?>" class="btn btn-warning btn-md" title="Editar" data-toggle="tooltip" style="height: 32px; width: 32px;">

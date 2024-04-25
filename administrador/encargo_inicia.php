@@ -42,6 +42,7 @@ page_require_level(3);
                             <th style="width: 10%;" class="text-center">Dependencia/Entidad</th>
                             <th style="width: 10%;" class="text-center">Nivel de Encargo</th>
                             <th style="width: 10%;" class="text-center">Área de Adscripción</th>
+                            <th style="width: 1%;" class="text-center">Fecha Creación</th>
                             <th style="width: 1%;" class="text-center">Acciones</th>
                         </tr>
                     </thead>
@@ -54,6 +55,7 @@ page_require_level(3);
                                     <td class="text-center"><?php echo remove_junk($a_detalle2['dependencia_entidad']) ?></td>
                                     <td class="text-center"><?php echo remove_junk($a_detalle2['no_hono_niv_encargo']) ?></td>
                                     <td class="text-center"><?php echo remove_junk($a_detalle2['area']) ?></td>
+                                    <td class="text-center"><?php echo remove_junk($a_detalle2['fecha_creacion']) ?></td>
                                     <td class="text-center">
                                         <div class="btn-group">
                                             <a href="edit_exp_laboral.php?id=<?php echo (int)$a_detalle2['id_encargo_inicia']; ?>" class="btn btn-warning btn-md" title="Editar" data-toggle="tooltip" style="height: 32px; width: 32px;">
@@ -72,6 +74,7 @@ page_require_level(3);
                                     <td class="text-center"><?php echo remove_junk($a_detalle['dependencia_entidad']) ?></td>
                                     <td class="text-center"><?php echo remove_junk($a_detalle['no_hono_niv_encargo']) ?></td>
                                     <td class="text-center"><?php echo remove_junk($a_detalle['area']) ?></td>
+                                    <td class="text-center"><?php echo remove_junk($a_detalle['fecha_creacion']) ?></td>
                                     <td class="text-center">
                                         <div class="btn-group">
                                             <a href="edit_encargo_inicia.php?id=<?php echo (int)$a_detalle['id_encargo_inicia']; ?>" class="btn btn-warning btn-md" title="Editar" data-toggle="tooltip" style="height: 32px; width: 32px;">

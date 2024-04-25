@@ -42,6 +42,7 @@ page_require_level(3);
                             <th style="width: 8%;" class="text-center">Bien Mueble</th>
                             <th style="width: 10%;" class="text-center">Titular</th>
                             <th style="width: 5%;" class="text-center">Fecha Adquisición</th>
+                            <th style="width: 1%;" class="text-center">Fecha Creación</th>
                             <th style="width: 1%;" class="text-center">Acciones</th>
                         </tr>
                     </thead>
@@ -55,6 +56,7 @@ page_require_level(3);
                                     <td><?php echo remove_junk(ucwords($a_detalle2['bien_mueble'])) ?></td>
                                     <td><?php echo remove_junk(ucwords($a_detalle2['titular'])) ?></td>
                                     <td><?php echo remove_junk(ucwords($a_detalle2['fecha_adquisicion'])) ?></td>
+                                    <td class="text-center"><?php echo remove_junk(ucwords($a_detalle2['fecha_creacion'])) ?></td>
                                     <td class="text-center">
                                         <div class="btn-group">
                                             <?php if($a_detalle2['ninguno'] == 0):?>
@@ -76,6 +78,7 @@ page_require_level(3);
                                     <td><?php echo remove_junk(ucwords($a_detalle['bien_mueble'])) ?></td>
                                     <td><?php echo remove_junk(ucwords($a_detalle['titular'])) ?></td>
                                     <td><?php echo remove_junk(ucwords($a_detalle['fecha_adquisicion'])) ?></td>
+                                    <td class="text-center"><?php echo remove_junk(ucwords($a_detalle['fecha_creacion'])) ?></td>
                                     <td class="text-center">
                                         <div class="btn-group">
                                             <?php if($a_detalle['ninguno'] == 0):?>

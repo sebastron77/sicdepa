@@ -6,6 +6,21 @@ require_once('includes/load.php');
 $user = current_user();
 $id_detalle_usuario = $user['id_detalle_user'];
 $id_rel_declaracion = find_by_id_dec((int)$id_detalle_usuario);
+$id_dec = (int)$id_rel_declaracion['id_rel_declaracion'];
+$tot_estudios = count_by_id_tablas('rel_detalle_estudios', 'id_rel_declaracion', $id_dec);
+$tot_exp_laboral = count_by_id_tablas('rel_exp_laboral', 'id_rel_declaracion', $id_dec);
+$tot_datos_pat_pub = count_by_id_tablas('rel_datos_pub_dec', 'id_rel_declaracion', $id_dec);
+$tot_datos_cony = count_by_id_tablas('rel_detalle_cony_dependientes', 'id_rel_declaracion', $id_dec);
+$tot_encargo_ini = count_by_id_tablas('encargo_ini_mod_conc', 'id_rel_declaracion', $id_dec);
+$tot_rem_mens = count_by_id_tablas('rel_detalle_renum', 'id_rel_declaracion', $id_dec);
+$tot_rem_anio = count_by_id_tablas('rel_detalle_renum_anio_ant', 'id_rel_declaracion', $id_dec);
+$tot_bienes_in = count_by_id_tablas('rel_detalle_bienes_inmuebles', 'id_rel_declaracion', $id_dec);
+$tot_vehi = count_by_id_tablas('rel_detalle_automotores', 'id_rel_declaracion', $id_dec);
+$tot_biene_mue = count_by_id_tablas('rel_detalle_bien_mueble', 'id_rel_declaracion', $id_dec);
+$tot_cuentas = count_by_id_tablas('rel_detalle_inv_cbanc', 'id_rel_declaracion', $id_dec);
+$tot_adeudos = count_by_id_tablas('rel_detalle_adeudos', 'id_rel_declaracion', $id_dec);
+$tot_conf = count_by_id_tablas('rel_detalle_conflicto_declarante', 'id_rel_declaracion', $id_dec);
+$tot_conf_ec = count_by_id_tablas('rel_detalle_conflicto_part_econom', 'id_rel_declaracion', $id_dec);
 page_require_level(3);
 ?>
 
@@ -117,7 +132,8 @@ if (isset($_POST['add_obs_acla'])) {
         if (($result && $db->affected_rows() === 1) && ($result2 && $db->affected_rows() === 1)) {
             $session->msg('s', "La información de las observaciones y aclaraciones ha sido agregada con éxito.");
             insertAccion($user['id_user'], '"' . $user['username'] . '" agregó obs. acla.', 1);
-            redirect('obs_acla.php', false);
+            concluirDeclaracion($declaracion);
+            redirect('admin.php', false);
         } else {
             $session->msg('d', ' No se pudo guardar la información de las observaciones y aclaraciones.');
             redirect('obs_acla.php', false);
@@ -143,7 +159,7 @@ include_once('layouts/header.php'); ?>
                     <span class="material-symbols-outlined" style="margin-top: -40px; color: #3a3d44; font-size: 35px;">
                         person_alert
                     </span>
-                    <p style="margin-top: -37px; margin-left: 40px; font-size: 20px;">Observaciones y Aclaraciones</p>
+                    <p style="margin-top: -37px; margin-left: 40px; font-size: 20px;">Observaciones y Aclaraciones <?php echo $tot_conf_ec['total']; ?></p>
                 </strong>
                 <form method="post" action="add_obs_acla.php">
                     <div id="inputsContainer" style="display:block; margin-bottom: 15px;">
@@ -162,7 +178,18 @@ include_once('layouts/header.php'); ?>
                     <a href="obs_acla.php" class="btn btn-md btn-success" title="Cerrar">
                         Cerrar
                     </a>
-                    <button type="submit" name="add_obs_acla" class="btn btn-primary btn-md" onclick="return confirmarEnvio()">Terminar Declaración</button>
+
+                    <?php if (
+                        ($tot_estudios['total'] > 0) && ($tot_exp_laboral['total'] > 0) && ($tot_datos_pat_pub['total'] > 0) && 
+                        ($tot_datos_cony['total'] > 0) && ($tot_encargo_ini['total'] > 0) && ($tot_rem_mens['total'] > 0) && ($tot_rem_anio['total'] > 0) && 
+                        ($tot_bienes_in['total'] > 0) && ($tot_vehi['total'] > 0) && ($tot_biene_mue['total'] > 0) && ($tot_cuentas['total'] > 0) &&
+                        ($tot_adeudos['total'] > 0) && ($tot_conf['total'] > 0) && ($tot_conf_ec['total'] > 0)
+                    ) : ?>
+                        <button type="submit" name="add_obs_acla" class="btn btn-primary btn-md" onclick="return confirmarEnvio()">Terminar Declaración</button>
+                    <?php else : ?>
+                        <p style="font-weight: bold; font-size: 15px; color:darkblue; text-align: center; margin-top: 2%;">El botón para concluir la declaración se mostrará una vez que hayas llenado todos los módulos de tu declaración patrimonial.</p>
+                    <?php endif; ?>
+
                 </form>
             </div>
         </div>

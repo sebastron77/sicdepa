@@ -44,7 +44,7 @@ page_require_level(3);
                             <th style="width: 1%;" class="text-center">Poder</th>
                             <th style="width: 1%;" class="text-center">Ámbito</th>
                             <th style="width: 10%;" class="text-center">Inst./Empresa</th>
-                            <th style="width: 3%;" class="text-center">Fecha Registro</th>
+                            <th style="width: 1%;" class="text-center">Fecha Creación</th>
                             <th style="width: 1%;" class="text-center">Acciones</th>
                         </tr>
                     </thead>

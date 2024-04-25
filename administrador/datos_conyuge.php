@@ -38,10 +38,11 @@ page_require_level(3);
                     <thead class="thead-purple">
                         <tr style="height: 10px;"">
                             <th style=" width: 1%;" class="text-center">#</th>
-                            <th style="width: 1%;" class="text-center">Declarante</th>
+                            <th style="width: 10%;" class="text-center">Declarante</th>
                             <th style="width: 10%;" class="text-center">Nombre dependiente económico</th>
                             <th style="width: 1%;" class="text-center">Parentesco</th>
-                            <th style="width: 1%;" class="text-center">Dependiente Económico</th>
+                            <th style="width: 1%;" class="text-center">Depen. Económico</th>
+                            <th style="width: 1%;" class="text-center">Fecha Creación</th>
                             <th style="width: 1%;" class="text-center">Acciones</th>
                         </tr>
                     </thead>
@@ -60,6 +61,7 @@ page_require_level(3);
                                         <?php if ($a_detalle2['dependiente_econ'] == 1) : ?>
                                             <td class="text-center">Sí</td>
                                         <?php endif; ?>
+                                        <td class="text-center"><?php echo remove_junk($a_detalle2['fecha_creacion']) ?></td>
                                         <td class="text-center">
                                             <div class="btn-group">
                                                 <a href="edit_exp_laboral.php?id=<?php echo (int)$a_detalle2['id_rel_detalle_cony_dependientes']; ?>" class="btn btn-warning btn-md" title="Editar" data-toggle="tooltip" style="height: 32px; width: 32px;">
@@ -77,7 +79,7 @@ page_require_level(3);
                                         <td class="text-center"><?php echo '-' ?></td>
                                         <td class="text-center"><?php echo '-' ?></td>
                                         <!-- <td class="text-center"><?php echo '-' ?></td> -->
-                                        <!-- <td class="text-center"><?php echo remove_junk($a_detalle2['fecha_creacion']) ?></td> -->
+                                        <td class="text-center"><?php echo remove_junk($a_detalle2['fecha_creacion']) ?></td>
                                         <td class="text-center">
                                             <!-- <div class="btn-group">
                                                 <a href="edit_exp_laboral.php?id=<?php echo (int)$a_detalle2['id_rel_exp_lab']; ?>" class="btn btn-warning btn-md" title="Editar" data-toggle="tooltip" style="height: 32px; width: 32px;">
@@ -102,6 +104,7 @@ page_require_level(3);
                                     <?php if ($a_detalle['dependiente_econ'] == 1) : ?>
                                         <td class="text-center">Sí</td>
                                     <?php endif; ?>
+                                    <td class="text-center"><?php echo remove_junk($a_detalle['fecha_creacion']) ?></td>
                                     <td class="text-center">
                                         <?php if ($a_detalle['ninguno'] == 0) : ?>
                                             <div class="btn-group">
