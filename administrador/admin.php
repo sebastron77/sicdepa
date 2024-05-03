@@ -99,7 +99,7 @@ page_require_level(3);
 				<tbody style="background-color: #EDF8FE;">
 					<td class="text-center">Inicial</td>
 					<td class="text-center">2024</td>
-					<td class="text-center">2024-05-15</td>
+					<td class="text-center">2024-05-15</td> <!-- Sería la fecha de la última actualización de la declaración-->
 					<td class="text-center"><span class="material-symbols-outlined" style="color:#349491">description</span></td>
 					<td class="text-center"><span class="material-symbols-outlined" style="color:#CD282E">description</span></td>
 					<td class="text-center"><span class="material-symbols-outlined">description</span></td>

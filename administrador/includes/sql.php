@@ -1411,3 +1411,15 @@ function find_by_id_pub_dec($id)
   $result = find_by_sql($sql);
   return $result;
 }
+
+function find_all_dec_conc($id)
+{
+  global $db;
+  // $id = (int)$id;
+  $sql = $db->query("SELECT * FROM rel_declaracion WHERE id_detalle_usuario = '{$db->escape($id)}' AND concluida = 1 ORDER BY fecha_creacion DESC LIMIT 1");
+          
+  if ($result = $db->fetch_assoc($sql))
+    return $result;
+  else
+    return null;
+}
