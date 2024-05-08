@@ -909,6 +909,13 @@ function find_by_id_all_exp($id)
   $result = find_by_sql($sql);
   return $result;
 }
+function find_by_id_all_dec($id)
+{
+  $id = (int)$id;
+  $sql = "SELECT * FROM rel_declaracion WHERE id_detalle_usuario = $id AND concluida = 1";
+  $result = find_by_sql($sql);
+  return $result;
+}
 function find_all_exp_laboral()
 {
   $sql = "SELECT el.id_rel_exp_lab, el.id_detalle_usuario, el.ninguno, el.id_cat_sector, cs.descripcion as sector, el.id_cat_poder, cp.descripcion as poder, 

@@ -77,12 +77,12 @@ if (isset($_POST['boton'])) {
                                         nombre_inst_empresa, unidad_admin_area, puesto_cargo, funcion_principal, ingreso, egreso, fecha_creacion, estatus_exp) 
                             VALUES ('$id_detalle_usuario', '$id_dec_actual', '$col1', '$col2', '$col3', '$col4', '$col5', '$col6', '$col7', '$col8', '$col9', 
                                     '$col10', NOW(), 1)";
-            // Ejecutar la consulta de inserción
-            echo "-----------------------------------------------------------------------------------------------------------";
-            echo "\n\n" . $sql_insert . "\n\n";
-            echo "-----------------------------------------------------------------------------------------------------------";
-            $conn->query($sql_insert);
-        }
+                // Ejecutar la consulta de inserción
+                echo "-----------------------------------------------------------------------------------------------------------";
+                echo "\n\n" . $sql_insert . "\n\n";
+                echo "-----------------------------------------------------------------------------------------------------------";
+                $conn->query($sql_insert);
+            }
             // echo $conn->query($sql_insert);
             header("Location: $_SERVER[PHP_SELF]");
         }
@@ -106,7 +106,7 @@ if (isset($_POST['boton'])) {
 
         <div class="col-md-11" style="margin-top: -16px;">
             <p class="alert alert-dark" role="alert" style="font-size: 13px; font-weight:600">
-                <span style="font-weight: bold; color: firebrick;">IMPORTANTE:</span> Si no harás ninguna modificación o adición de tus datos curriculares, presiona el botón "Continuar" para que se agreguen automáticamente los datos ingresados en declaraciones anteriores a la declaración actual. Si agregarás información curricular nueva, haz clic en "Continuar" y, posteriormente en "Agregar información" registra la nueva información.
+                <span style="font-weight: bold; color: firebrick;">IMPORTANTE:</span> Si no harás ninguna modificación o adición de tus datos de experiencia laboral, presiona el botón "Continuar" para que se agreguen automáticamente los datos ingresados en declaraciones anteriores a la declaración actual. Si agregarás información laboral nueva, haz clic en "Continuar" y, posteriormente en "Agregar información" registra la nueva información.
             </p>
         </div>
     </div>
