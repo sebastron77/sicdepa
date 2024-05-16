@@ -1424,7 +1424,44 @@ function find_all_dec_conc($id)
   global $db;
   // $id = (int)$id;
   $sql = $db->query("SELECT * FROM rel_declaracion WHERE id_detalle_usuario = '{$db->escape($id)}' AND concluida = 1 ORDER BY fecha_creacion DESC LIMIT 1");
-          
+
+  if ($result = $db->fetch_assoc($sql))
+    return $result;
+  else
+    return null;
+}
+
+function find_by_id_acuse($id)
+{
+  global $db;
+  // $id = (int)$id;
+  $sql = $db->query("SELECT decl.id_rel_declaracion, decl.tipo_declaracion, decl.periodo, decl.fecha_conclusion, 
+                  du.nombre, du.apellido_materno, du.apellido_paterno, du.rfc
+          FROM rel_declaracion decl
+          LEFT JOIN detalles_usuario du
+          ON du.id_det_usuario = decl.id_detalle_usuario
+          WHERE decl.id_rel_declaracion = '$id'");
+  if ($result = $db->fetch_assoc($sql))
+    return $result;
+  else
+    return null;
+}
+
+function find_by_id_dec_comp($id)
+{
+  global $db;
+  // $id = (int)$id;
+  $sql = $db->query("SELECT decl.id_rel_declaracion, decl.tipo_declaracion, decl.periodo, decl.fecha_conclusion, 
+                  du.nombre, du.apellido_materno, du.apellido_paterno, du.rfc, du.curp, du.correo_laboral, du.correo_personal, du.telefono, du.tel_part, 
+                  du.id_cat_estado_civil, du.pais_nac, du.nacionalidad, ec.descripcion as eciv, nac.descripcion as nac                 
+                      FROM rel_declaracion decl
+                      LEFT JOIN detalles_usuario du
+                      ON du.id_det_usuario = decl.id_detalle_usuario
+                      LEFT JOIN cat_estado_civil ec
+                      ON du.id_cat_estado_civil = ec.id_cat_estado_civil
+                      LEFT JOIN cat_nacionalidades nac
+                      ON du.nacionalidad = nac.id_cat_nacionalidad
+                      WHERE decl.id_rel_declaracion = '$id'");
   if ($result = $db->fetch_assoc($sql))
     return $result;
   else

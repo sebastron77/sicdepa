@@ -124,7 +124,7 @@ if (isset($_POST['add_obs_acla'])) {
         $declaracion = (int)$id_rel_declaracion['id_rel_declaracion'];
         $observaciones = $_POST['observaciones'];
 
-        $sql = "UPDATE rel_declaracion SET observaciones='{$observaciones}' WHERE id_rel_declaracion ='{$db->escape($declaracion)}'";
+        $sql = "UPDATE rel_declaracion SET observaciones='{$observaciones}', fecha_conclusion = NOW() WHERE id_rel_declaracion ='{$db->escape($declaracion)}'";
         $sql2 = "UPDATE bandera_continuacion SET fecha_actualizacion = NOW() WHERE id_rel_declaracion ='{$db->escape($declaracion)}'";
         $result = $db->query($sql);
         $result2 = $db->query($sql2);

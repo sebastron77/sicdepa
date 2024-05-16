@@ -24,7 +24,28 @@ page_require_level(3);
 				var blob = this.response;
 				var link = document.createElement("a");
 				link.href = window.URL.createObjectURL(blob);
-				link.download = "datos.pdf"; // Nombre del archivo PDF
+				link.download = "acuse.pdf"; // Nombre del archivo PDF
+				document.body.appendChild(link);
+				link.click();
+				document.body.removeChild(link);
+			}
+		};
+		xhr.send();
+	}
+
+	function generarPDF2(id) {
+		// Realizar una solicitud AJAX al servidor al hacer clic en el botón
+		var xhr = new XMLHttpRequest();
+		var declaracionID = id;
+		xhr.open("GET", "generar_pdf2.php?id=" + declaracionID, true);
+		xhr.responseType = "blob"; // La respuesta será un archivo binario (el PDF)
+		xhr.onload = function() {
+			if (this.status === 200) {
+				// Crear un enlace para descargar el PDF
+				var blob = this.response;
+				var link = document.createElement("a");
+				link.href = window.URL.createObjectURL(blob);
+				link.download = "declaracion.pdf"; // Nombre del archivo PDF
 				document.body.appendChild(link);
 				link.click();
 				document.body.removeChild(link);
@@ -68,6 +89,11 @@ page_require_level(3);
 	.content.active {
 		display: block;
 	}
+
+	.botones {
+		border: none;
+		background: none;
+	}
 </style>
 
 <div class="row">
@@ -75,13 +101,13 @@ page_require_level(3);
 		<?php echo display_msg($msg); ?>
 	</div>
 </div>
-
 <div class="panel panel-default" style="width: 80%; margin-left: 10%">
 	<div class="panel-body">
 		<div class="tabs">
 			<div class="tab active" data-tab="1">Declaraciones pendientes</div>
 			<div class="tab" data-tab="2">Declaraciones presentadas</div>
 		</div>
+		
 
 		<div id="content-1" class="content active">
 			<table class="table table-bordered">
@@ -114,8 +140,8 @@ page_require_level(3);
 						<th style=" width: 15%;" class="text-center">Tipo de Declaración</th>
 						<th style=" width: 15%;" class="text-center">Fecha de encargo/ejercicio</th>
 						<th style="width: 5%;" class="text-center">Fecha de presentación</th>
-						<th style="width: 5%;" class="text-center">Delcaración</th>
 						<th style="width: 5%;" class="text-center">Acuse</th>
+						<th style="width: 5%;" class="text-center">Delcaración</th>
 						<th style="width: 5%;" class="text-center">Nota aclaratoria</th>
 					</tr>
 				</thead>
@@ -137,18 +163,18 @@ page_require_level(3);
 							<td class="text-center"><?php echo $a_dec['fecha_actualizacion'] ?>
 								<!-- Sería la fecha de la última actualización de la declaración-->
 							<td class="text-center">
-								<button id="descargar-pdf" data-declaracion-id="<?php echo $a_dec['id_rel_declaracion'] ?>" onclick="generarPDF(<?php echo $a_dec['id_rel_declaracion'] ?>)">
-									<span class="material-symbols-outlined" style="color:#349491">description</span>
+								<button class="botones" id="descargar-pdf" data-declaracion-id="<?php echo $a_dec['id_rel_declaracion'] ?>" onclick="generarPDF(<?php echo $a_dec['id_rel_declaracion'] ?>)">
+									<span class="material-symbols-outlined" style="color:#349491; font-size: 25px;">description</span>
 								</button>
 							</td>
 							<td class="text-center">
-								<button id="descargar-pdf1">
-									<span class="material-symbols-outlined" style="color:#CD282E">description</span>
+								<button class="botones" id="descargar-pdf2" data-declaracion-id="<?php echo $a_dec['id_rel_declaracion'] ?>" onclick="generarPDF2(<?php echo $a_dec['id_rel_declaracion'] ?>)">
+									<span class="material-symbols-outlined" style="color:#CD282E; font-size: 25px;">description</span>
 								</button>
 							</td>
 							<td class="text-center">
-								<button id="descargar-pdf2">
-									<span class="material-symbols-outlined">description</span>
+								<button class="botones" id="descargar-pdf2">
+									<span class="material-symbols-outlined" style="font-size: 25px;">description</span>
 								</button>
 							</td>
 						</tr>

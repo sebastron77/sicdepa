@@ -43,6 +43,7 @@ $fecha_actual = date('Y-m-d');
 $fecha_ano_anterior = strtotime('-1 year', strtotime($fecha_actual));
 // Formatear la fecha al formato de año (Y)
 $ano_anterior = date('Y', $fecha_ano_anterior);
+$ano_actual = date('Y');
 
 if (isset($_POST['add_rel_declaracion'])) {
     if (empty($errors)) {
@@ -119,6 +120,7 @@ include_once('layouts/header.php'); ?>
                                         <label style="font-size: 14px;">Fecha de encargo/ejercicio</label>
                                         <select class="form-control" name="periodo" style="width: 40%; margin-left:30%; margin-top:3%;">
                                             <option value="<?php echo $ano_anterior;?>" style="text-align: center;"><?php echo $ano_anterior;?></option>
+                                            <option value="<?php echo $ano_actual;?>" style="text-align: center;"><?php echo $ano_actual;?></option>
                                         </select>
                                     </div>
                                 </div>
