@@ -26,6 +26,7 @@ if (isset($_POST['update'])) {
         $fecha_toma_pos_enc = $_POST['fecha_toma_pos_enc'];
         $lugar_ubica = $_POST['lugar_ubica'];
         $si_extranjero_pais = $_POST['si_extranjero_pais'];
+        $calle_num = remove_junk($db->escape($_POST['calle_num']));
         $localidad_colonia = $_POST['localidad_colonia'];
         $id_cat_ent_fed = $_POST['id_cat_ent_fed'];
         $id_cat_mun = $_POST['id_cat_mun'];
@@ -42,13 +43,13 @@ if (isset($_POST['update'])) {
         $sql = "UPDATE encargo_ini_mod_conc SET id_rel_declaracion='{$declaracion}', dependencia_entidad='{$dependencia_entidad}', 
                 nombre_emp_car_com='{$nombre_emp_car_com}', honorarios='{$honorarios}', no_hono_niv_encargo='{$no_hono_niv_encargo}', 
                 id_area_adscripcion='{$id_area_adscripcion}', fecha_toma_pos_enc='{$fecha_toma_pos_enc}', lugar_ubica='{$lugar_ubica}', 
-                si_extranjero_pais='{$si_extranjero_pais}', localidad_colonia='{$localidad_colonia}', id_cat_ent_fed='{$id_cat_ent_fed}', 
-                id_cat_mun='{$id_cat_mun}', cod_post='{$cod_post}', tel_oficina='{$tel_oficina}', extension='{$extension}',
+                si_extranjero_pais='{$si_extranjero_pais}', calle_num='{$calle_num}', localidad_colonia='{$localidad_colonia}', 
+                id_cat_ent_fed='{$id_cat_ent_fed}', id_cat_mun='{$id_cat_mun}', cod_post='{$cod_post}', tel_oficina='{$tel_oficina}', extension='{$extension}',
                 id_cat_func_realiza='{$id_cat_func_realiza}', otro='{$otro}'
                 WHERE id_encargo_inicia ='{$db->escape($id)}'";
 
         $sql2 = "UPDATE bandera_continuacion SET fecha_actualizacion = NOW() WHERE id_rel_declaracion ='{$db->escape($declaracion)}'";
-        
+
         $result = $db->query($sql);
         $result2 = $db->query($sql2);
 
@@ -166,6 +167,12 @@ include_once('layouts/header.php'); ?>
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
+                        <label for="calle_num">Calle, num. ext./int.</label>
+                        <input type="text" class="form-control" id="calle_num" name="calle_num" value="<?php echo $detalle_encargo['calle_num'] ?>">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
                         <label for="localidad_colonia">Localidad o colonia</label>
                         <input type="text" class="form-control" id="localidad_colonia" name="localidad_colonia" value="<?php echo $detalle_encargo['localidad_colonia'] ?>">
                     </div>
@@ -191,13 +198,15 @@ include_once('layouts/header.php'); ?>
                             <option value="">Escoge una opción</option>
                             <?php foreach ($municipios as $mun) : ?>
                                 <option <?php if ($mun['id_cat_mun'] === $detalle_encargo['id_cat_mun'])
-                                            echo 'selected="selected"'; ?> value="<?php echo $mun['id_cat_ent_fed']; ?>">
+                                            echo 'selected="selected"'; ?> value="<?php echo $mun['id_cat_mun']; ?>">
                                     <?php echo ucwords($mun['descripcion']) ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
                     </div>
                 </div>
+            </div>
+            <div class="row">
                 <div class="col-md-1">
                     <div class="form-group">
                         <label for="cod_post">Código Postal</label>

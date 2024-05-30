@@ -107,7 +107,6 @@ function find_by_id_user($table, $id, $nombre_id)
 /*---------------------------------------------------------------------------------*/
 /* Funcion para encontrar el cargo de un detalle de usuario (trabajador) por su ID */
 
-
 function find_by_id_detalle($id)
 {
   global $db;
@@ -324,7 +323,6 @@ function activate_grupo($table, $id, $campo_estatus)
     return ($db->affected_rows() === 1) ? true : false;
   }
 }
-
 /*----------------------------------------------------------*/
 /* Funcion para activar users en funcion del grupo activada */
 /*----------------------------------------------------------*/
@@ -444,7 +442,6 @@ function find_all_cuentas()
   $result = find_by_sql($sql);
   return $result;
 }
-
 /*-------------------------------------------------------------------------------------------------------------------------------*/
 /* Funcion que encuentra todos los cargos y se relaciona con la tabla areas, para obtener el nombre de esta en funcion del cargo */
 /*-------------------------------------------------------------------------------------------------------------------------------*/
@@ -575,7 +572,6 @@ function page_require_level_exacto($require_level)
     redirect('home.php', false);
   endif;
 }
-
 /*--------------------------------------------------------------*/
 /* Funcion para encontrar el detalle de usuario que le pertenece a un usuario */
 /*--------------------------------------------------------------*/
@@ -600,14 +596,12 @@ function find_all_trabajadores_area($area)
   $result = find_by_sql($sql);
   return $result;
 }
-
 function find_all_localidades($id)
 {
   $sql = "SELECT * FROM cat_localidades WHERE id_cat_municipios = {$id} ORDER BY nnombre_localidad ASC";
   $result = find_by_sql($sql);
   return $result;
 }
-
 /*---------------------------------------------------------*/
 /* Funcion que encuentra todas las subáreas de un área */
 /*---------------------------------------------------------*/
@@ -617,7 +611,6 @@ function find_all_subarea_area($id)
   $result = find_by_sql($sql);
   return $result;
 }
-
 function find_all_areas($id)
 {
   $sql = "SELECT * FROM area WHERE area_padre = 0 ORDER BY nombre_area ASC";
@@ -630,8 +623,6 @@ function find_all_areas2($id)
   $result = find_by_sql($sql);
   return $result;
 }
-
-
 /*------------------------------------------------------------------*/
 /* Funcion para encontrar el ultimo id de orientaciones y canalizaciones
    para despues sumarle uno y que el nuevo registro tome ese valor */
@@ -643,7 +634,6 @@ function last_id_folios()
   $result = find_by_sql($sql);
   return $result;
 }
-
 /*------------------------------------------------------------------*/
 /* Funcion para encontrar el ultimo id de orientaciones y canalizaciones
    para despues sumarle uno y que el nuevo registro tome ese valor */
@@ -655,7 +645,6 @@ function last_id_folios_general()
   $result = find_by_sql($sql);
   return $result;
 }
-
 /* ------------------------------------------------------------------------------*/
 /* Función para obtener el grupo de usuario al que pertenece el usuario logueado */
 /* ------------------------------------------------------------------------------*/
@@ -674,7 +663,6 @@ function area_usuario($id_usuario)
   else
     return null;
 }
-
 /* ------------------------------------------------------------------------------*/
 /* Función para obtener el grupo de usuario al que pertenece el usuario logueado */
 /* ------------------------------------------------------------------------------*/
@@ -692,7 +680,6 @@ function nombre_usuario($id_usuario)
   else
     return null;
 }
-
 /* --------------------------------------------------------------------*/
 /* Función para obtener el area a la que pertenece el usuario logueado */
 /* --------------------------------------------------------------------*/
@@ -712,7 +699,6 @@ function area_usuario2($id_usuario)
   else
     return null;
 }
-
 /* -------------------------------------------------------------------*/
 /* Función para obtener el cargo al que pertenece el usuario logueado */
 /* -------------------------------------------------------------------*/
@@ -728,7 +714,6 @@ function cargo_usuario($id_usuario)
   else
     return null;
 }
-
 /*----------------------------------------------------------------------*/
 /* Funcion para checar cual nivel de usuario tiene acceso a cada pagina */
 /*----------------------------------------------------------------------*/
@@ -749,7 +734,6 @@ function page_require_area($require_area)
     redirect('home.php', false);
   }
 }
-
 function insertAccion($user_id, $accion, $id_accion)
 {
   global $db;
@@ -757,7 +741,6 @@ function insertAccion($user_id, $accion, $id_accion)
   $result = $db->query($sql);
   return ($result && $db->affected_rows() === 1 ? true : false);
 }
-
 function updateLastArchivo($nombre_archivo, $id)
 {
   global $db;
@@ -765,7 +748,6 @@ function updateLastArchivo($nombre_archivo, $id)
   $result = $db->query($sql);
   return ($result && $db->affected_rows() === 1 ? true : false);
 }
-
 function concluirDeclaracion($id)
 {
   global $db;
@@ -786,7 +768,6 @@ function find_area_usuario()
   $sql .= "ORDER BY d.nombre";
   return $db->query($sql);
 }
-
 /*------------------------------------------------------------------*/
 /* Obtiene Datos generales del usuario*/
 /*------------------------------------------------------------------*/
@@ -810,7 +791,6 @@ function find_localidadesOC($tipo)
   $result = find_by_sql($sql);
   return $result;
 }
-
 function find_all_area_orden($table)
 {
   global $db;
@@ -818,7 +798,6 @@ function find_all_area_orden($table)
     return find_by_sql("SELECT * FROM " . $db->escape($table) . " ORDER BY nombre_area");
   }
 }
-
 /*------------------------------------------------------------------*/
 /* Funcion para encontrar el ultimo id la tabla */
 /*------------------------------------------------------------------*/
@@ -828,7 +807,6 @@ function last_id_table($table, $nombre_id)
   $result = find_by_sql($sql);
   return $result;
 }
-
 /*----------------------------------------------*/
 /* Funcion que encuentra los grupos vulnerables de una capacitacion */
 /*----------------------------------------------*/
@@ -842,7 +820,6 @@ function find_all_grupos($capacitacion)
   $result = find_by_sql($sql);
   return $result;
 }
-
 /*--------------------------------------------*/
 /* Funcion que encuentra la descripcion de un di */
 /*--------------------------------------------*/
@@ -855,7 +832,6 @@ function find_campo_id($table, $id, $nombre_id, $columna)
     return ($db->fetch_assoc($result));
   }
 }
-
 function find_by_id_accion($id_dif)
 {
   global $db;
@@ -869,7 +845,6 @@ function find_by_id_accion($id_dif)
   else
     return null;
 }
-
 function find_all_status($table)
 {
   global $db;
@@ -877,8 +852,6 @@ function find_all_status($table)
     return find_by_sql("SELECT * FROM " . $db->escape($table) . " WHERE estatus = 1");
   }
 }
-
-
 function find_by_detalle_tabla($tabla, $id_detalle)
 {
   global $db;
@@ -888,7 +861,6 @@ function find_by_detalle_tabla($tabla, $id_detalle)
   else
     return null;
 }
-
 function find_by_id_all_exp($id)
 {
   $id = (int)$id;
@@ -934,7 +906,6 @@ function find_all_exp_laboral()
   $result = find_by_sql($sql);
   return $result;
 }
-
 function find_all_det_estudios()
 {
   $sql = "SELECT de.id_rel_detalle_estudios, de.id_detalle_usuario, esc.descripcion as escolaridad, de.inst_educativa, pc.descripcion as periodo_cursado,
@@ -958,7 +929,6 @@ function find_all_det_estudios()
   $result = find_by_sql($sql);
   return $result;
 }
-
 function find_by_id_estudios($id)
 {
   $sql = "SELECT de.id_rel_detalle_estudios, de.id_detalle_usuario, esc.descripcion as escolaridad, de.inst_educativa, pc.descripcion as periodo_cursado,
@@ -982,7 +952,6 @@ function find_by_id_estudios($id)
   $result = find_by_sql($sql);
   return $result;
 }
-
 function find_all_conyuge()
 {
   $sql = "SELECT dc.id_rel_detalle_cony_dependientes, dc.ninguno, dc.id_detalle_usuario, dc.nombre_completo, dc.parentesco, dc.extranjero, dc.curp, 
@@ -1009,7 +978,6 @@ function find_by_id_all_cony($id)
   $result = find_by_sql($sql);
   return $result;
 }
-
 function find_all_encargo_ini()
 {
   $sql = "SELECT enc.id_encargo_inicia, enc.id_detalle_usuario, enc.dependencia_entidad, enc.nombre_emp_car_com, enc.honorarios, enc.no_hono_niv_encargo, 
@@ -1028,7 +996,6 @@ function find_all_encargo_ini()
   $result = find_by_sql($sql);
   return $result;
 }
-
 function find_by_id_all_encargo_ini($id)
 {
   $sql = "SELECT enc.id_encargo_inicia, enc.id_detalle_usuario, enc.dependencia_entidad, enc.nombre_emp_car_com, enc.honorarios, 
@@ -1048,7 +1015,6 @@ function find_by_id_all_encargo_ini($id)
   $result = find_by_sql($sql);
   return $result;
 }
-
 function find_all_remun_cargo()
 {
   $sql = "SELECT rr.id_rel_detalle_renum, rr.id_detalle_usuario, rr.renum_mens, rr.nombre_act_indus, rr.act_indus, rr.nombre_act_fin, rr.act_finan, 
@@ -1073,7 +1039,6 @@ function find_by_id_all_remun($id)
   $result = find_by_sql($sql);
   return $result;
 }
-
 function find_all_remun_anio_ant()
 {
   $sql = "SELECT rr.id_rel_detalle_renum_anio_ant, rr.id_detalle_usuario, rr.ing_anual_dec_cony, rr.inicio_periodo, rr.fin_periodo, rr.renum_anual_neta, 
@@ -1167,7 +1132,6 @@ function find_by_id_vehiculos($id)
   $result = find_by_sql($sql);
   return $result;
 }
-
 function find_all_bienes_muebles()
 {
   $sql = "SELECT rr.id_rel_detalle_bien_mueble, rr.id_detalle_usuario, rr.ninguno, rr.id_cat_tipo_operacion, rr.id_cat_tipo_bien, rr.id_cat_titular, 
@@ -1205,7 +1169,6 @@ function find_by_id_bienes_muebles($id)
   $result = find_by_sql($sql);
   return $result;
 }
-
 function find_all_cuentasBanc()
 {
   $sql = "SELECT rr.id_rel_detal_inv_cbanc, rr.id_detalle_usuario, rr.id_cat_tipo_operacion, rr.id_cat_tipo_inversion, rr.id_cat_titular, rr.ninguno, 
@@ -1243,7 +1206,6 @@ function find_by_id_cuentasBanc($id)
   $result = find_by_sql($sql);
   return $result;
 }
-
 function find_all_adeudos()
 {
   $sql = "SELECT rr.id_cat_rel_detalle_adeudos, rr.id_detalle_usuario, rr.id_cat_tipo_operacion, rr.id_cat_titular, rr.ninguno, rr.id_cat_tipo_adeudo,
@@ -1281,7 +1243,6 @@ function find_by_id_adeudos($id)
   $result = find_by_sql($sql);
   return $result;
 }
-
 function find_all_conflicto()
 {
   $sql = "SELECT rr.id_rel_detalle_conflicto_declarante, rr.id_detalle_usuario, rr.id_cat_tipo_operacion, rr.ninguno, cto.descripcion as tipo_operacion, 
@@ -1372,7 +1333,6 @@ function find_by_id_conflicto_econ($id)
   $result = find_by_sql($sql);
   return $result;
 }
-
 function find_all_obs_acla()
 {
   $sql = "SELECT rd.id_rel_declaracion, rd.id_detalle_usuario, du.nombre, du.apellido_paterno, du.apellido_materno, rd.observaciones, rd.fecha_creacion
@@ -1394,7 +1354,6 @@ function find_by_id_obs_acla($id)
   $result = find_by_sql($sql);
   return $result;
 }
-
 function find_all_pub_dec()
 {
   $sql = "SELECT rd.id_rel_datos_dec_pub, rd.id_detalle_usuario, du.nombre, du.apellido_paterno, du.apellido_materno, rd.de_acuerdo, rd.ingresos_netos, 
@@ -1418,7 +1377,6 @@ function find_by_id_pub_dec($id)
   $result = find_by_sql($sql);
   return $result;
 }
-
 function find_all_dec_conc($id)
 {
   global $db;
@@ -1430,7 +1388,6 @@ function find_all_dec_conc($id)
   else
     return null;
 }
-
 function find_by_id_acuse($id)
 {
   global $db;
@@ -1446,14 +1403,14 @@ function find_by_id_acuse($id)
   else
     return null;
 }
-
 function find_by_id_dec_comp($id)
 {
   global $db;
-  // $id = (int)$id;
   $sql = $db->query("SELECT decl.id_rel_declaracion, decl.tipo_declaracion, decl.periodo, decl.fecha_conclusion, 
-                  du.nombre, du.apellido_materno, du.apellido_paterno, du.rfc, du.curp, du.correo_laboral, du.correo_personal, du.telefono, du.tel_part, 
-                  du.id_cat_estado_civil, du.pais_nac, du.nacionalidad, ec.descripcion as eciv, nac.descripcion as nac                 
+                      du.nombre, du.apellido_materno, du.apellido_paterno, du.rfc, du.curp, du.correo_laboral, du.correo_personal, du.telefono, du.tel_part, 
+                      du.id_cat_estado_civil, du.pais_nac, du.nacionalidad, du.calle_num, du.colonia, du.municipio, du.tel_part, du.entidad_resid, du.cod_post,
+                      du.cod_post, decl.observaciones,
+                      ec.descripcion as eciv, nac.descripcion as nac, mun.descripcion as mun, ent.descripcion as ent
                       FROM rel_declaracion decl
                       LEFT JOIN detalles_usuario du
                       ON du.id_det_usuario = decl.id_detalle_usuario
@@ -1461,9 +1418,75 @@ function find_by_id_dec_comp($id)
                       ON du.id_cat_estado_civil = ec.id_cat_estado_civil
                       LEFT JOIN cat_nacionalidades nac
                       ON du.nacionalidad = nac.id_cat_nacionalidad
+                      LEFT JOIN cat_municipios mun
+                      ON du.municipio = mun.id_cat_mun
+                      LEFT JOIN cat_entidad_fed ent
+                      ON du.entidad_resid = ent.id_cat_ent_fed
                       WHERE decl.id_rel_declaracion = '$id'");
   if ($result = $db->fetch_assoc($sql))
     return $result;
   else
     return null;
+}
+function find_by_id_dec_enc($id)
+{
+  global $db;
+  $sql = $db->query("SELECT imc.dependencia_entidad, imc.nombre_emp_car_com, imc.honorarios, imc.no_hono_niv_encargo, imc.fecha_toma_pos_enc,
+                      imc.tel_oficina, imc.extension, imc.localidad_colonia, imc.cod_post, imc.calle_num,
+                      a.nombre_area, ef.descripcion as ent_fed, mun.descripcion as municipio
+                      FROM encargo_ini_mod_conc imc
+                      LEFT JOIN area a
+                      ON a.id_area = imc.id_area_adscripcion
+                      LEFT JOIN cat_entidad_fed ef
+                      ON ef.id_cat_ent_fed = imc.id_cat_ent_fed
+                      LEFT JOIN cat_municipios mun
+                      ON mun.id_cat_mun = imc.id_cat_mun
+                      WHERE imc.id_rel_declaracion = '$id'");
+  if ($result = $db->fetch_assoc($sql))
+    return $result;
+  else
+    return null;
+}
+function find_by_id_dec_rem($id)
+{
+  global $db;
+  $sql = $db->query("SELECT ren.renum_anual_neta, ren.fecha_creacion, ren.act_indus, ren.act_finan, ren.serv_prof, ren.otros
+                    FROM rel_detalle_renum_anio_ant ren
+                    LEFT JOIN rel_declaracion decl
+                    ON decl.id_rel_declaracion = ren.id_rel_declaracion
+                    WHERE ren.id_rel_declaracion = '$id'
+                    ORDER BY ren.fecha_creacion DESC
+                    LIMIT 1");
+  if ($result = $db->fetch_assoc($sql))
+    return $result;
+  else
+    return null;
+}
+function find_by_estudios($id)
+{
+  $sql = "SELECT de.inst_educativa, de.ubic_inst, de.carrera_area_con, esc.descripcion as escolaridad, ee.descripcion as estatus_estudios, 
+          do.descripcion as doc_obt
+          FROM rel_detalle_estudios de
+          LEFT JOIN detalles_usuario du
+          ON de.id_detalle_usuario = du.id_det_usuario
+          LEFT JOIN cat_escolaridad esc
+          ON de.id_cat_escolaridad = esc.id_cat_escolaridad
+          LEFT JOIN cat_estatus_estudios ee
+          ON de.id_cat_estatus_estudios = ee.id_cat_estatus_estudios
+          LEFT JOIN cat_documento_obtenido do
+          ON de.id_cat_documento_obtenido = do.id_cat_documento_obtenido
+          WHERE de.id_detalle_usuario = '$id'
+          ORDER BY de.id_cat_escolaridad ASC";
+  $result = find_by_sql($sql);
+  return $result;
+}
+function find_de_acuerdo($id)
+{
+  $sql = "SELECT dp.de_acuerdo
+          FROM rel_datos_pub_dec dp
+          LEFT JOIN rel_declaracion decl
+          ON dp.id_rel_declaracion = decl.id_rel_declaracion
+          WHERE dp.id_rel_declaracion = '$id'";
+  $result = find_by_sql($sql);
+  return $result;
 }

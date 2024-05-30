@@ -49,6 +49,7 @@ if (isset($_POST['add_encargo_inicia'])) {
         $fecha_toma_pos_enc = remove_junk($db->escape($_POST['fecha_toma_pos_enc']));
         $lugar_ubica = remove_junk($db->escape($_POST['lugar_ubica']));
         $si_extranjero_pais = remove_junk($db->escape($_POST['si_extranjero_pais']));
+        $calle_num = remove_junk($db->escape($_POST['calle_num']));
         $localidad_colonia = remove_junk($db->escape($_POST['localidad_colonia']));
         $id_cat_ent_fed = remove_junk($db->escape($_POST['id_cat_ent_fed']));
         $id_cat_mun = remove_junk($db->escape($_POST['id_cat_mun']));
@@ -61,12 +62,11 @@ if (isset($_POST['add_encargo_inicia'])) {
         $declaracion = (int)$id_rel_declaracion['id_rel_declaracion'];
 
         $query = "INSERT INTO encargo_ini_mod_conc (";
-        $query .= "id_detalle_usuario, id_rel_declaracion, dependencia_entidad, nombre_emp_car_com, honorarios, no_hono_niv_encargo, id_area_adscripcion, fecha_toma_pos_enc, 
-                        lugar_ubica, si_extranjero_pais, localidad_colonia, id_cat_ent_fed, id_cat_mun, cod_post, tel_oficina, extension, id_cat_func_realiza,
-                        otro, fecha_creacion";
+        $query .= "id_detalle_usuario, id_rel_declaracion, dependencia_entidad, nombre_emp_car_com, honorarios, no_hono_niv_encargo, id_area_adscripcion,
+                    fecha_toma_pos_enc, lugar_ubica, si_extranjero_pais, calle_num, localidad_colonia, id_cat_ent_fed, id_cat_mun, cod_post, tel_oficina, extension, id_cat_func_realiza, otro, fecha_creacion";
         $query .= ") VALUES (";
         $query .= " '{$id_detalle_usuario}', '{$declaracion}', '{$dependencia_entidad}', '{$nombre_emp_car_com}', '{$honorarios}', '{$no_hono_niv_encargo}', 
-                    '{$id_area_adscripcion}', '{$fecha_toma_pos_enc}', '{$lugar_ubica}', '{$si_extranjero_pais}', '{$localidad_colonia}', 
+                    '{$id_area_adscripcion}', '{$fecha_toma_pos_enc}', '{$lugar_ubica}', '{$si_extranjero_pais}', '{$calle_num}', '{$localidad_colonia}', 
                     '{$id_cat_ent_fed}', '{$id_cat_mun}', '{$cod_post}', '{$tel_oficina}', '{$extension}', '{$id_cat_func_realiza}', '{$otro}', 
                     NOW()";
         $query .= ")";
@@ -176,6 +176,12 @@ include_once('layouts/header.php'); ?>
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
+                                    <label for="calle_num">Calle, num. ext./int.</label>
+                                    <input type="text" class="form-control" id="calle_num" name="calle_num">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
                                     <label for="localidad_colonia">Localidad o colonia</label>
                                     <input type="text" class="form-control" id="localidad_colonia" name="localidad_colonia">
                                 </div>
@@ -202,6 +208,8 @@ include_once('layouts/header.php'); ?>
                                     </select>
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-1">
                                 <div class="form-group">
                                     <label for="cod_post">Código Postal</label>
@@ -220,6 +228,7 @@ include_once('layouts/header.php'); ?>
                                     <input type="text" class="form-control" id="extension" name="extension">
                                 </div>
                             </div>
+
                         </div>
                         <div class="row">
                             <label for="id_cat_func_realiza">Marca la(s) función(es) principal(es) que realiza según el siguiente catálogo</label>

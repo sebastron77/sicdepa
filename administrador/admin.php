@@ -142,7 +142,6 @@ page_require_level(3);
 						<th style="width: 5%;" class="text-center">Fecha de presentación</th>
 						<th style="width: 5%;" class="text-center">Acuse</th>
 						<th style="width: 5%;" class="text-center">Delcaración</th>
-						<th style="width: 5%;" class="text-center">Nota aclaratoria</th>
 					</tr>
 				</thead>
 				<tbody style="background-color: #EDF8FE;">
@@ -170,11 +169,6 @@ page_require_level(3);
 							<td class="text-center">
 								<button class="botones" id="descargar-pdf2" data-declaracion-id="<?php echo $a_dec['id_rel_declaracion'] ?>" onclick="generarPDF2(<?php echo $a_dec['id_rel_declaracion'] ?>)">
 									<span class="material-symbols-outlined" style="color:#CD282E; font-size: 25px;">description</span>
-								</button>
-							</td>
-							<td class="text-center">
-								<button class="botones" id="descargar-pdf2">
-									<span class="material-symbols-outlined" style="font-size: 25px;">description</span>
 								</button>
 							</td>
 						</tr>

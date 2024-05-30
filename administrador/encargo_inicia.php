@@ -58,7 +58,7 @@ page_require_level(3);
                                     <td class="text-center"><?php echo remove_junk($a_detalle2['fecha_creacion']) ?></td>
                                     <td class="text-center">
                                         <div class="btn-group">
-                                            <a href="edit_exp_laboral.php?id=<?php echo (int)$a_detalle2['id_encargo_inicia']; ?>" class="btn btn-warning btn-md" title="Editar" data-toggle="tooltip" style="height: 32px; width: 32px;">
+                                            <a href="edit_encargo_inicia.php?id=<?php echo (int)$a_detalle2['id_encargo_inicia']; ?>" class="btn btn-warning btn-md" title="Editar" data-toggle="tooltip" style="height: 32px; width: 32px;">
                                                 <span class="material-symbols-rounded" style="font-size: 20px; color: black; margin-top: 2px; margin-left: -3px;">edit</span>
                                             </a>
                                         </div>
@@ -76,7 +76,7 @@ page_require_level(3);
                                     <td class="text-center"><?php echo remove_junk($a_detalle['area']) ?></td>
                                     <td class="text-center"><?php echo remove_junk($a_detalle['fecha_creacion']) ?></td>
                                     <td class="text-center">
-                                        <div class="btn-group">
+                                        <div class="btn-group">                                            
                                             <a href="edit_encargo_inicia.php?id=<?php echo (int)$a_detalle['id_encargo_inicia']; ?>" class="btn btn-warning btn-md" title="Editar" data-toggle="tooltip" style="height: 32px; width: 32px;">
                                                 <span class="material-symbols-rounded" style="font-size: 20px; color: black; margin-top: 2px; margin-left: -3px;">edit</span>
                                             </a>

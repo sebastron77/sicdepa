@@ -180,8 +180,8 @@ include_once('layouts/header.php'); ?>
                     </a>
 
                     <?php if (
-                        ($tot_estudios['total'] > 0) && ($tot_exp_laboral['total'] > 0) && ($tot_datos_pat_pub['total'] > 0) && 
-                        ($tot_datos_cony['total'] > 0) && ($tot_encargo_ini['total'] > 0) && ($tot_rem_mens['total'] > 0) && ($tot_rem_anio['total'] > 0) && 
+                        ($tot_estudios['total'] > 0) && ($tot_exp_laboral['total'] > 0) && ($tot_datos_pat_pub['total'] > 0) &&
+                        ($tot_datos_cony['total'] > 0) && ($tot_encargo_ini['total'] > 0) && ($tot_rem_mens['total'] > 0) && ($tot_rem_anio['total'] > 0) &&
                         ($tot_bienes_in['total'] > 0) && ($tot_vehi['total'] > 0) && ($tot_biene_mue['total'] > 0) && ($tot_cuentas['total'] > 0) &&
                         ($tot_adeudos['total'] > 0) && ($tot_conf['total'] > 0) && ($tot_conf_ec['total'] > 0)
                     ) : ?>
